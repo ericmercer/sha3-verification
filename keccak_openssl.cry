@@ -1,0 +1,130 @@
+module keccak_openssl where
+//Sha3-256(Msg) == keccak[512](Msg||0b01,256)
+//keccak[c](N,out_len) == sponge[keccak-p[block_len,12*2*l],pad10*1,block_len-c](N, out_len)
+//keccak-p[block_len,n_rounds](S)
+//sha3-256(M) == sponge[keccak-p[1600,24],pad10*1,1088](M||0b01,256)
+
+//TYPES
+type B = 1600					//{25, 50, 100, 200, 400, 800, 1600}, bits in state array
+type W = B / 25
+type L = lg2 W
+type COL = 5
+type OUT_LEN = 256				//Bits in digest
+type RATE = B - OUT_LEN * 2		//OUT_LEN + RATE = B
+type STATE_ARR = [COL][COL][W]
+type N_R = 12 + 2 * L - 1		//Number of rounds of keccak-p
+
+
+
+//LISTS
+LIST4 = [0..4]:[_][8]			//COL iterator
+LIST4INT = [0..4]:[_]Integer
+LIST63 = [0..63]:[_][8]			//W iterator
+LISTROUNDS = [0..N_R]:[_][64]	//ROUNDS iterator
+ONE = ~[zero:[W] | y <- LIST4] //[5][64] of all 1 bits
+
+//Table of values computed from RC and step 3 of iota in the NIST spec
+LISTIOTAS = [0x0000000000000001, 0x0000000000008082, 0x800000000000808a,
+ 0x8000000080008000, 0x000000000000808b, 0x0000000080000001,
+ 0x8000000080008081, 0x8000000000008009, 0x000000000000008a,
+ 0x0000000000000088, 0x0000000080008009, 0x000000008000000a,
+ 0x000000008000808b, 0x800000000000008b, 0x8000000000008089,
+ 0x8000000000008003, 0x8000000000008002, 0x8000000000000080,
+ 0x000000000000800a, 0x800000008000000a, 0x8000000080008081,
+ 0x8000000000008080, 0x0000000080000001, 0x8000000080008008]:[_][64]
+	
+//(x, y, t:[0..23], RHOTATESLIST[x][y]) = (y, (2x+3y)%5, t+1, (t+1)*(t+2) / 2)
+RHOTATESLIST = [[0,1,62,28,27],[36,44,6,55,20],[3,10,43,25,39],[41,45,15,21,8],[18,2,61,56,14]]:[_][_][8]
+
+
+
+//MULTIDIMENSIONAL ARRAY
+//Splits arrIn into multidim arrOu
+to_state_arr : [B]Bit -> STATE_ARR
+to_state_arr m = groupBy`{COL}(groupBy`{W}(m))
+
+//Joins array together
+to_bits : STATE_ARR -> [B]
+to_bits a = join (join (a))
+
+//ROUNDS
+//c = XORpancake(a), d = c>>1 ^ ((c>>1)[x]>>1), result = a[x][y][z]^d[x][z]
+theta_fast : STATE_ARR -> STATE_ARR
+theta_fast a = [(a @y) ^ d | y <- LIST4]
+	where d = (c >>> 2) ^ [(c @x) <<< 1 | x <- LIST4]
+	where c = ((a @0) ^(a @1) ^(a @2) ^(a @3) ^(a @4)) <<< 1
+
+theta: STATE_ARR -> STATE_ARR
+theta a = [[[(a @y @x @z) ^ (d @x @z) | z <- LIST63] | x <- LIST4] | y <-LIST4]
+	where d = [[(c @((x - 1) % `COL) @z) ^ (c @((x + 1) % `COL) @((z + 1) % 64)) | z <- LIST63] | x <-LIST4INT]//[[(c @((x - 1) % `COL) @z) ^ (c @((x + 1) % `COL) @((z + 1) % `W)) | z <- LIST63] | x <- LIST4]
+	where c = [[(a @0 @x @z) ^(a @1 @x @z) ^(a @2 @x @z) ^(a @3 @x @z) ^(a @4 @x @z) | z <- LIST63] | x <- LIST4]
+
+//a = a[x][y] >>> RHOTATESLIST[x][y]
+rho_fast : STATE_ARR -> STATE_ARR
+rho_fast arr = [[(arr @y @x) <<< (RHOTATESLIST @y @x) | x <- LIST4] | y <- LIST4]
+rho: STATE_ARR -> STATE_ARR
+rho arr = [[[arr @y @x @((z + (RHOTATESLIST @y @x)) % `W) | z <- LIST63]| x <- LIST4] | y <- LIST4]
+
+//a[x][y] = a[(x+3y)%COL][x]
+pi_fast : STATE_ARR -> STATE_ARR
+pi_fast a = [[a @x @((x + 3*y) % `COL) | x <- LIST4] | y <- LIST4]
+pi: STATE_ARR -> STATE_ARR
+pi a = [[[a @x @((x + 3*y) % `COL) @z | z <-LIST63] | x <- LIST4] | y <- LIST4]
+
+//a = a ^ (((a<<1)^ONE) & a<<2)
+chi_fast : STATE_ARR -> STATE_ARR
+chi_fast a = [(a@y) ^ ((((a @y) <<< 1) ^ ONE) && ((a @y) <<< 2)) | y <- LIST4]
+chi: STATE_ARR -> STATE_ARR
+chi a = [[[(a @y @x @z) ^ (((a @y @((x + 1) % `COL) @z) ^ True) && (a @y @((x + 2) %`COL) @z)) | z <- LIST63] | x <- LIST4] | y <- LIST4]
+
+//a[0][0] = a[0][0] ^ LISTIOTAS[i]
+iota : STATE_ARR -> [64] -> STATE_ARR
+iota a i = [if y == 0
+	then [if x == 0
+		then (a @0 @0) ^  (LISTIOTAS @i)
+		else (a @y @x) | x <- LIST4]
+	else a @y | y <- LIST4]
+
+//Runs all round functions on a
+rnd : STATE_ARR -> [64] -> STATE_ARR
+rnd a i = iota (chi (pi (rho (theta a)))) i
+
+
+
+//KECCAK
+//keccak-p[1600, 24](S) = foldl of rnd on state_arr over LISTROUNDS
+keccakp : STATE_ARR -> STATE_ARR
+keccakp m = arr !0 where arr = [m] # [rnd (arr @i) i | i <- LISTROUNDS]
+
+//10*1 so that (len m + len padding) % B == 0
+padding : {length, k} (fin length, 64 >= width length, k == RATE - ((length + 2) % RATE)) => [length] -> [k + 2]
+padding m = 0b1 # (zero:[k]) # 0b1
+
+//Pads message and breaks it up into [N][RATE]
+pad_list : {length, N} (fin length, 64 >= width length, N == (length + RATE - ((length + 2) % RATE) + 2) / RATE) => [length] -> [N][RATE]
+pad_list msg = groupBy`{RATE}(reverse_64int (msg # (padding msg)))
+
+//sponge[keccak-p, pad10*1, 1088](N, 256) = foldl with modified-keccak-p on 0:[B] over [0..R]
+sponge : {length, R, C}
+	(fin length, 64 >= width length,
+	R == (RATE - ((length + 2) % RATE) + length + 2) / RATE - 1,
+	C == B - RATE)
+	=> [length] -> [OUT_LEN]
+sponge msg = (take`{OUT_LEN}(reverse_64int (to_bits (b !0)))
+	where b = [to_state_arr (zero:[B])] # [keccakp ((b @i) ^ (to_state_arr ((pads @i) # (zero:[C])))) | i <- [0..R]])
+	where pads = pad_list msg
+
+//Computes digest
+sha3_256 : {length} (fin length, 64 >= width length + 2) => [length] -> [OUT_LEN]
+sha3_256 m = sponge (m # 0b01)
+
+//Converts message string to SHA-3 strings
+h2b : {length} (fin length, 64 >= width length) => [8*length] -> [8*length]
+h2b m = join [reverse b | b <- groupBy`{8}(m)]
+
+//Computes digest of given NIST test vector
+test_vector : {length} (fin length, 64 >= width (8 * length) + 2) => [8 * length] -> [OUT_LEN]
+test_vector m = h2b (sha3_256 (h2b m))
+
+reverse_64int : {length} (fin length, 64 >= width length) => [64*length] -> [64*length]
+reverse_64int m = join [reverse i | i <- groupBy`{W}(m)] 

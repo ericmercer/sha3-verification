@@ -17,7 +17,7 @@ let ptr_to_fresh name typ = do {
 };
 
 
-//PI function comparison
+//Pi function comparison
 let pi_setup = do {
     (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
 
@@ -26,11 +26,8 @@ let pi_setup = do {
     let res = crucible_term {{ pi arr}};
     crucible_points_to arrp res;
 };
-
-//Tests against more optimized version using pre-calculated versions
 pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
-//Tests against basic version that loops and calculates on the fly
-pi_loop_ov <- time (crucible_llvm_verify keccak_module "pi_loop" [] false pi_setup yices);
+
 
 //Rho Function Comparison
 let rho_setup = do {
@@ -41,7 +38,6 @@ let rho_setup = do {
     let res = crucible_term {{ rho arr}};
     crucible_points_to arrp res;
 };
-
 rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);
 
 
@@ -55,7 +51,6 @@ let theta_setup = do {
     let res = crucible_term {{ theta arr}};
     crucible_points_to arrp res;
 };
-
 theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup yices);
 
 
@@ -68,7 +63,6 @@ let chi_setup = do {
     let res = crucible_term {{ chi arr}};
     crucible_points_to arrp res;
 };
-
 chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup yices);
 
 
@@ -84,7 +78,6 @@ let iota_setup = do {
     let res = crucible_term {{ iota arr i}};
     crucible_points_to arrp res;
 };
-
 iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup yices);
 
 //Keccak Function Comparison
@@ -96,6 +89,4 @@ let keccak_setup = do {
     let res = crucible_term {{ keccakp arr}};
     crucible_points_to arrp res;
 };
-
-//Runs round proof using overrides.  Completes in about 3 seconds.
-keccak_ov <- time (crucible_llvm_verify keccak_module "Keccak" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
+keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);

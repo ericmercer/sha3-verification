@@ -3,9 +3,6 @@
 #include <string.h>
 #include <stdio.h>
 
-//typedef unsigned int uint32_t;
-//typedef unsigned int64_t uint64_t;
-
 # define BIT_INTERLEAVE (0)
 
 #define ROL32(a, offset) (((a) << (offset)) | ((a) >> ((32 - (offset)) & 31)))
@@ -128,23 +125,6 @@ void Pi(uint64_t A[5][5])
     A[4][4] = T[4][1];
 }
 
-void pi_loop(uint64_t A[5][5])
-{
-    uint64_t T[5][5];
-
-    /*
-     * T = A
-     * A[y][x] = T[x][(3*y+x)%5]
-     */
-    memcpy(T, A, sizeof(T));
-
-    for (int y = 0; y < 5; y++) {
-        for (int x = 0; x < 5; x++) {
-            A[y][x] = T[x][(3*y+x)%5];
-        }
-    }
-}
-
 
 void Chi(uint64_t A[5][5])
 {
@@ -214,7 +194,7 @@ void Round_Functions(uint64_t A[5][5], size_t i) {
     Iota(A, i);
 }
 
-void Keccak(uint64_t A[5][5])
+void KeccakF1600(uint64_t A[5][5])
 {
     size_t i;
 
@@ -226,33 +206,4 @@ void Keccak(uint64_t A[5][5])
         Iota(A, i);
         
     }
-}
-
-int main() {
-    printf("%ld, %ld", sizeof(iotas), sizeof(iotas[0]));
-    /*uint64_t arr[5][5];
-    int num = 0;
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            arr[i][j] = num;
-            num++;
-        }
-    }
-
-    printf("Original Array:\n");
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            printf("arr[%d][%d]: %lx\n", i, j, arr[i][j]);
-        }
-    }
-    printf("\n\n");
-    Pi(arr);
-    printf("Updated Array:\n");
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            printf("arr[%d][%d]: %lx\n", i, j, arr[i][j]);
-        }
-    }
-    */
-
 }

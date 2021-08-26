@@ -36,7 +36,7 @@ clang -g -emit-llvm -o keccak.bc -c keccak.c
 ##### Run SAW script
 saw keccak.saw
 ##### Run Test Vectors:
-cryptol <PATH>.cry
+cryptol \<PATH\>.cry  
 result
 
 ### Description of files in repository

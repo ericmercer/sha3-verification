@@ -36,7 +36,8 @@ clang -g -emit-llvm -o keccak.bc -c keccak.c
 ##### Run SAW script
 saw keccak.saw
 ##### Run Test Vectors:
-PARKER WILL YOU COVER THIS SINCE YOU WROTE THAT PART OF THE CODE?
+cryptol <PATH>.cry
+result
 
 ### Description of files in repository
 * [keccak.bc](keccak.bc): Bitcode of OpenSSL's C implementation compiled through Clang.

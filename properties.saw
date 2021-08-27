@@ -1,0 +1,7 @@
+import "cryptol_property.cry";
+
+let check_sha3_256 n = do {
+    print (str_concat "Checking sha3_256 equivalent for byte count " (show n));
+    time (prove_print abc {{ sha3_256_equiv : [n * 8] -> Bit}});
+};
+for [0, 1, 2, 63, 64, 65, 257] check_sha3_256;

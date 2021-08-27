@@ -1,0 +1,6 @@
+module cryptol_property where
+
+import keccak_spec as CSpec
+import keccak_spec_no_reverse as CSpecNR
+
+property sha3_256_equiv = (CSpec::sha3_256 === CSpecNR::sha3_256)

@@ -1,0 +1,201 @@
+//Matches the NIST specification as closely as possible.
+//https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
+
+//Contents:
+//(15-27) - Types and list constants
+//(31-36) - To/From State Array
+//(40-47) - Loop Syntactic Sugar Functions
+//(51-125) - Round Functions
+//(129-159) - Sponge/Pad/Keccak Functions
+//(163 - 182) - Hash Functions
+//(186 - 206) Test Functions
+
+//Implements SHA3-224/256/384/512 and (Raw)SHAKE128/256
+
+module keccak_spec_no_reverse where
+
+type B = 1600					//State array bit length
+type W = B / 25                 //State array lane length 
+type L = lg2 W
+type COL = 5                    //State array column and row length 
+type STATE_ARR = [COL][COL][W]
+type NUMROUNDS = 12 + 2 * L	    //Number of rounds of keccak-p
+
+//LISTS
+LIST4 = [0..COL-1]:[_][8]				//COL iterator
+LIST63 = [0..W-1]:[_][8]				//W iterator
+LISTROUNDS = [0..NUMROUNDS-1]	//ROUNDS iterator
+
+
+
+//MULTIDIMENSIONAL ARRAY
+to_state_arr : [B]Bit -> STATE_ARR
+to_state_arr m = groupBy`{COL}(groupBy`{W}(m))
+
+to_bits : STATE_ARR -> [B]
+to_bits a = join (join a)
+
+
+
+//PROPOSED LOOPS
+for : {n, a, b} [n]a -> (a -> b) -> [n]b
+for vals loop = [loop index | index <- vals]
+
+while : {a} a -> (a -> Bit) -> (a -> a) -> a
+while state cond f = if (cond state)
+	then (while (f state) cond f)	
+	else state
+
+
+
+//ROUNDS
+theta: STATE_ARR -> STATE_ARR
+theta a = for LIST4 (\y -> 
+            for LIST4 (\x -> 
+                for LIST63 (\z -> 
+                    (a @y @x @z) ^ (d @x @z))))
+	where d = for LIST4 (\x ->
+                for LIST63 (\z ->
+                    (c @((x +`COL - 1) % `COL) @z) ^ (c @((x + 1) % `COL) @((z - 1) % `W))))
+    where c = for LIST4 (\x ->
+                for LIST63 (\z ->
+                    (a @0 @x @z) ^(a @1 @x @z) ^(a @2 @x @z) ^(a @3 @x @z) ^(a @4 @x @z)))
+
+rho: STATE_ARR -> STATE_ARR
+rho a = (while {arr = a, x = 1:[8], y = 0:[8], t = 0} //STATE
+    (\state -> state.t < `NUMROUNDS) //COND
+    (\state -> { //LOOP
+        arr = for LIST4 (\y ->
+                for LIST4 (\x ->
+                    for LIST63 (\z ->
+                        if (x == state.x) && (y == state.y)
+                            then (state.arr @y @x) @((z - ((state.t+1)*(state.t+2) / 2)) % `W)
+                            else state.arr @y @x @z))),
+        x = state.y,
+        y = (2*state.x + 3*state.y) % `COL,
+        t = state.t + 1
+    })).arr
+
+pi: STATE_ARR -> STATE_ARR
+pi a = for LIST4 (\y -> 
+            for LIST4 (\x -> 
+                for LIST63 (\z -> 
+                    a @x @((x + 3*y) % `COL) @z)))
+
+chi: STATE_ARR -> STATE_ARR
+chi a = for LIST4 (\y -> 
+            for LIST4 (\x -> 
+                for LIST63 (\z -> 
+                    (a @y @x @z) ^ ((~(a @y @((x + 1) % `COL) @z)) && (a @y @((x + 2) %`COL) @z)))))
+
+iota : STATE_ARR -> [64] -> STATE_ARR
+iota a i = for LIST4 (\y ->
+                for LIST4 (\x ->
+                    for LIST63 (\z ->
+                        if ((x == 0) && (y == 0))
+                            then (a @0 @0 @z) ^ (LISTIOTAS @i @z)
+	                        else a @y @x @z)))
+
+LISTIOTAS = [(while {RC = 0:[W], j = 0} //STATE
+                (\state -> state.j <= `L) //COND
+                (\state -> { //LOOP
+                    RC = for LIST63 (\z ->
+                        if z == index
+                            then rc (state.j + 7*i)
+                            else state.RC @z)
+                        where index = ((1:[8]) << state.j) - 1,
+                    j = state.j + 1})
+            ).RC | i <- LISTROUNDS:[_][64]]
+
+rc : [64] -> Bit
+rc t = if (t % 255) == 0 
+	then True 
+	else (while {i = 1, R = 128:[8]} //STATE
+		(\state -> state.i <= t % 255) //COND
+		(\state -> { //LOOP
+			i = state.i + 1, 
+			R = (take`{8} ([(r@0)^(r@8), r@1, r@2, r@3, (r@4)^(r@8), (r@5)^(r@8), (r@6)^(r@8), r@7, r@8]) 
+				where r = [False] # state.R)
+		    })
+		).R @0
+
+//Runs all round functions on a
+rnd : STATE_ARR -> [64] -> STATE_ARR
+rnd a i = iota (chi (pi (rho (theta a)))) i
+
+
+
+//KECCAK
+//keccak-p[1600, 24](S) = foldl of rnd on state_arr over LISTROUNDS
+keccakp : STATE_ARR -> STATE_ARR
+keccakp m = (
+	while {i = 0:[64], arr = m} //STATE
+		(\state -> state.i < (`NUMROUNDS:[64])) //COND
+		(\state -> {i = state.i + 1:[64], arr = rnd state.arr state.i}) //LOOP
+	).arr
+
+//Padded message as array of [N][RATE]
+pad : {len, k, C, RATE} 
+    (fin len, 64 >= width len,
+    fin C, B >= C,
+    fin RATE, RATE > 0, RATE == B - C,
+    k == RATE - ((len + 2) % RATE) + 2)
+    => [len] -> [C] -> [len + k]
+pad msg capacity = msg # 0b1 # (zero:[k - 2]) # 0b1
+
+//sponge[keccak-p, pad10*1, 1088](N, 256) = foldl with modified-keccak-p on 0:[B] over [0..R]
+sponge : {len, out_len, c, RATE, R}
+	(fin len, fin out_len, fin c, 64 >= width len,
+    B >= c, B >= out_len,
+    RATE == B - c, RATE > 0, len % RATE == 0,
+    R == len / RATE)
+	=> [len] -> [out_len] -> [c] -> [out_len]
+sponge pad_msg out capacity = take`{out_len}(to_bits 
+	(while {i = 0:[W], arr = to_state_arr (0:[B])} //STATE
+		(\state -> state.i < (`R:[W])) //COND
+		(\state -> {i = state.i + 1:[W], arr = keccakp (state.arr ^ (to_state_arr ((pads @state.i) # (zero:[c]))))}) //LOOP
+	).arr)
+	where pads = split`{R}(pad_msg)
+
+
+
+//HASH FUNCTIONS
+hash msg end out capacity = sponge (pad (msg # end) capacity) out capacity
+
+shake msg out capacity = hash msg 0b1111 out capacity
+rawshake msg out capacity = hash msg 0b11 out capacity
+sha3 msg out = hash msg 0b01 out (out # out)
+
+LENGTH = 0
+
+//Sha3
+sha3_224 msg = sha3 msg (LENGTH:[224])
+sha3_256 msg = sha3 msg (LENGTH:[256])
+sha3_384 msg = sha3 msg (LENGTH:[384])
+sha3_512 msg = sha3 msg (LENGTH:[512])
+
+//(Raw)Shake
+shake_128 msg out = shake msg out (LENGTH:[256])
+shake_256 msg out = shake msg out (LENGTH:[512])
+rawshake_128 msg out = rawshake msg out (LENGTH:[256])
+rawshake_256 msg out = rawshake msg out (LENGTH:[512])
+
+
+
+//TEST FUNCTIONS
+//Converts message string to SHA-3 strings
+h2b : {length} (fin length, 64 >= width length) => [8 * length] -> [8 * length]
+h2b m = join [reverse b | b <- groupBy`{8}(m)]
+
+//Computes digest of given Sha3 function and NIST test vector
+test_sha : {out_bytes, msg_bytes} 
+    (64 >= width msg_bytes, fin msg_bytes, 
+    64 >= width out_bytes, fin out_bytes) =>
+    ([8 * msg_bytes] -> [8 * out_bytes]) -> [8 * msg_bytes] -> [8 * out_bytes]
+test_sha sha3_n msg = h2b (sha3_n (h2b msg))
+
+//Computes digest of given (raw)shake function, NIST test vector, and digest length
+test_shake : {out_bytes, msg_bytes} 
+    (64 >= width msg_bytes, 64 >= width out_bytes, fin msg_bytes, fin out_bytes)
+    => ([8 * msg_bytes] -> [8 * out_bytes] -> [8 * out_bytes]) -> [8 * msg_bytes] -> [8 * out_bytes] -> [8 * out_bytes]
+test_shake shake_n msg out = h2b (shake_n (h2b msg) out)

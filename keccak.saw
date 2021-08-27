@@ -90,3 +90,29 @@ let keccak_setup = do {
     crucible_points_to arrp res;
 };
 keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
+
+
+
+pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
+rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);
+theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup yices);
+chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup yices);
+iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup yices);
+keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
+
+/*
+pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup z3);
+rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup z3);
+theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup z3);
+chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup z3);
+iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup z3);
+keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup z3);
+*/
+/*
+pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup abc);
+rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup abc);
+theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup abc);
+chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup abc);
+iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup abc);
+keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup abc);
+*/

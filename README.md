@@ -28,7 +28,7 @@ Our TCB includes the following:
 * The Yices SMT solver.
 
 ### Downloading SAW and Solvers
-We recommend that you use the binaries provided by Galois to download SAW.  You can find these binaries on the [SAW tool website](https://saw.galois.com/downloads.html).  Links to each of the solvers we used can also be found on this site.  The Cryptol compiler and interpreter is included in the SAW binary, or can be downloaded separately [here] (https://cryptol.net/downloads.html). 
+We recommend that you use the binaries provided by Galois to download SAW.  You can find these binaries on the [SAW tool website](https://saw.galois.com/downloads.html).  Links to each of the solvers we used can also be found on this site.  The Cryptol compiler and interpreter is included in the SAW binary, or can be downloaded separately [here](https://cryptol.net/downloads.html). 
 
 ### Commands to run proof
 ##### C code compile command

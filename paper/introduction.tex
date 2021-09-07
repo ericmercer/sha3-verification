@@ -18,7 +18,13 @@ They were also able to connect up their proof with the code used by Galois’ to
 Their work showed the viability and limitations of creating proofs of functional equivalence for legacy cryptographic implementations.
 
 \subsection{SHA 3}
-Modern Cryptography.  Talk about what it is and it's uses.
+This work shows that this same methodology can be extended to modern cryptographic algorithms.
+The SHA 3 family of algorithms is defined by NIST in the FIPS 202 publication.
+It specifies a block hashing algorithm, Keccak, that is used by each of the different SHA and SHAKE algorithms.
+In comparison to the SHA 2 family of algorithms, Keccak features significantly more complex and robust computations.
+This increase in computation was of interest, because it presses the limits of SAW's capabilities.
 
 \subsection{Results}
-Brief description of our results.
+This work shows a complete proof of functional equivalence from a verified implementation of the NIST standard to OpenSSL's C code for the Keccak function.
+In doing so, it shows SAW's ability to stand up against more difficult computations.
+It also provides insights into using Cryptol's functional nature to further simplify the step of visually verifying Cryptol code to the NIST standard.

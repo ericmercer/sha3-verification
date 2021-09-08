@@ -30,10 +30,10 @@ LISTROUNDS = [0..NUMROUNDS-1]	//ROUNDS iterator
 
 //MULTIDIMENSIONAL ARRAY
 to_state_arr : [B]Bit -> STATE_ARR
-to_state_arr m = groupBy`{COL}(groupBy`{W}(m))
+to_state_arr m = transpose(groupBy`{COL}(groupBy`{W}(m)))
 
 to_bits : STATE_ARR -> [B]
-to_bits a = join (join a)
+to_bits a = join (join (transpose a))
 
 
 
@@ -50,51 +50,51 @@ while state cond f = if (cond state)
 
 //ROUNDS
 theta: STATE_ARR -> STATE_ARR
-theta a = for LIST4 (\y -> 
-            for LIST4 (\x -> 
+theta a = for LIST4 (\x -> 
+            for LIST4 (\y -> 
                 for LIST63 (\z -> 
-                    (a @y @x @z) ^ (d @x @z))))
+                    (a @x @y @z) ^ (d @x @z))))
 	where d = for LIST4 (\x ->
                 for LIST63 (\z ->
                     (c @((x +`COL - 1) % `COL) @z) ^ (c @((x + 1) % `COL) @((z - 1) % `W))))
     where c = for LIST4 (\x ->
                 for LIST63 (\z ->
-                    (a @0 @x @z) ^(a @1 @x @z) ^(a @2 @x @z) ^(a @3 @x @z) ^(a @4 @x @z)))
+                    (a @x @0 @z) ^(a @x @1 @z) ^(a @x @2 @z) ^(a @x @3 @z) ^(a @x @4 @z)))
 
 rho: STATE_ARR -> STATE_ARR
 rho a = (while {arr = a, x = 1:[8], y = 0:[8], t = 0} //STATE
     (\state -> state.t < `NUMROUNDS) //COND
     (\state -> { //LOOP
-        arr = for LIST4 (\y ->
-                for LIST4 (\x ->
+        arr = for LIST4 (\x ->
+                for LIST4 (\y ->
                     for LIST63 (\z ->
                         if (x == state.x) && (y == state.y)
-                            then (state.arr @y @x) @((z - ((state.t+1)*(state.t+2) / 2)) % `W)
-                            else state.arr @y @x @z))),
+                            then (state.arr @x @y) @((z - ((state.t+1)*(state.t+2) / 2)) % `W)
+                            else state.arr @x @y @z))),
         x = state.y,
         y = (2*state.x + 3*state.y) % `COL,
         t = state.t + 1
     })).arr
 
 pi: STATE_ARR -> STATE_ARR
-pi a = for LIST4 (\y -> 
-            for LIST4 (\x -> 
+pi a = for LIST4 (\x -> 
+            for LIST4 (\y -> 
                 for LIST63 (\z -> 
-                    a @x @((x + 3*y) % `COL) @z)))
+                    a @((x + 3*y) % `COL) @x @z)))
 
 chi: STATE_ARR -> STATE_ARR
-chi a = for LIST4 (\y -> 
-            for LIST4 (\x -> 
+chi a = for LIST4 (\x -> 
+            for LIST4 (\y -> 
                 for LIST63 (\z -> 
-                    (a @y @x @z) ^ ((~(a @y @((x + 1) % `COL) @z)) && (a @y @((x + 2) %`COL) @z)))))
+                    (a @x @y @z) ^ ((~(a @((x + 1) % `COL) @y @z)) && (a @((x + 2) %`COL) @y @z)))))
 
 iota : STATE_ARR -> [64] -> STATE_ARR
-iota a i = for LIST4 (\y ->
-                for LIST4 (\x ->
+iota a i = for LIST4 (\x ->
+                for LIST4 (\y ->
                     for LIST63 (\z ->
                         if ((x == 0) && (y == 0))
                             then (a @0 @0 @z) ^ (LISTIOTAS @i @z)
-	                        else a @y @x @z)))
+	                        else a @x @y @z)))
 
 LISTIOTAS = [(while {RC = 0:[W], j = 0} //STATE
                 (\state -> state.j <= `L) //COND

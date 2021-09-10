@@ -17,6 +17,13 @@ This paper details the following contributions.
   \item Early evidence that modular cryptographic specifications such as \texttt{SHA3} lend themselves to efficient \texttt{SAW} verification against C implementations as opposed to flattened specifications such as \texttt{SHA2} 
 \end{compactitem}
 
+\noindent \textbf{Limitations}
+\begin{compactitem}
+  \item Visual inspection and limited test vectors for (1) and (2)
+  \item Only provide proof certificates for message sizes of X to Y for digest sizes of … for (3)
+  \item Visual inspection only for anything above Keccak for (3) in OpenSSLs C-code
+\end{compactitem}
+
 \subsection{Related Work}
   Previously, Galois’ Inc. worked with Amazon to prove out parts of Amazon’s s2n HMAC code to the NIST specification.  
 In their work they stubbed out use of the SHA2 algorithm because their HMAC allows for customization of the algorithm type and implementation.

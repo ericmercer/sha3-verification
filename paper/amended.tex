@@ -1,6 +1,7 @@
-\section{Amended Cryptol}\label{sec:amended}
+\section{Amended Cryptol}
+\label{sec:amended}
 Initially it appeared that visual inspection with Cryptol’s standard syntax was subpar.
-Cryptol’s functional folds and list comprehensions do not align easily with the imperative 
+The language's functional folds and list comprehensions do not align easily with the imperative 
 and array-based NIST standard. By leveraging Cryptol’s versatility, however, we produced a couple 
 utility functions to visually mimic the sequential nature of the NIST specification. 
 
@@ -52,20 +53,20 @@ type STATE_ARR = [COL][COL][W]
 LIST4 = [0..COL-1]
 LIST63 = [0..W-1]
 pi : STATE_ARR -> STATE_ARR
-pi a = for LIST4 (\y ->
-          for LIST4 (\x -> 
+pi a = for LIST4 (\x ->
+          for LIST4 (\y -> 
             for LIST4 (\z -> 
               a @x @((x + 3*y) % `COL) @z)))
 \end{verbatim}
-\caption{Ammended Cryptol Pi definition}
-\label{fig:cryptolAmmendedPi}
+\caption{Amended Cryptol Pi definition}
+\label{fig:cryptolAmendedPi}
 \end{figure}
 
 The ‘for’ utility function follows the same intuition as the implementation in most 
-imperative languages. That is, it iterates over the list provided. It is similar to the 
-Array.prototype.map method in JavaScript in that it takes in a function and a list of 
-arguments and returns a list of results from calling the function on every element of the 
-input array. It is implemented as so:
+imperative languages in that it iterates and runs a loop body over defined elements. 
+It is similar to the Array.prototype.map method in JavaScript in that it takes in a 
+function and a list of arguments and returns a list of results from calling the function 
+on every element of the input array. It is implemented as so:
 
 \begin{figure}[h]
   \centering
@@ -118,13 +119,13 @@ rc t = if (t % 255) == 0
     rs = [128:[8]] # [
       if i <= t % 255
         then (take`{8} ([
-          (r@0)^(r@8),
+          (r@0) ^ (r@8),
           r@1,
           r@2,
           r@3, 
-          (r@4)^(r@8),
-          (r@5)^(r@8),
-          (r@6)^(r@8),
+          (r@4) ^ (r@8),
+          (r@5) ^ (r@8),
+          (r@6) ^ (r@8),
           r@7,
           r@8])
             where r = [False] # (rs @(i - 1)))
@@ -154,20 +155,20 @@ rc t = if (t % 255) == 0
     (\state -> {                   //LOOP
       i = state.i + 1, 
       R = (take`{8} ([
-        (r@0)^(r@8),
+        (r@0) ^ (r@8),
         r@1,
         r@2,
         r@3,
-        (r@4)^(r@8),
-        (r@5)^(r@8),
-        (r@6)^(r@8),
+        (r@4) ^ (r@8),
+        (r@5) ^ (r@8),
+        (r@6) ^ (r@8),
         r@7, 
         r@8]) 
           where r = [False] # state.R)})
     ).R @0
 \end{verbatim}
-\caption{Ammended Cryptol RC definition}
-\label{fig:cryptolAmmendedRC}
+\caption{Amended Cryptol RC definition}
+\label{fig:cryptolamendedRC}
 \end{figure}
 
 The final state is returned by the ‘while’ function. This iterates only until the 

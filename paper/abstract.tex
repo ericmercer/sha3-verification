@@ -1,10 +1,12 @@
 \begin{abstract}
-The Keccak function in the SHA-3 NIST standard is responsible for the major computations of all SHA-3 hashes and Shake functions.
-These functions are a key piece in modern secure hash functions. 
-This work extends and improves on the methodology used in the verification of Amazon’s s2n HMAC and OpenSSL’s SHA2-256 inner hash function. 
-It uses the Software Analysis Workbench (SAW) to prove out functional equivalence between OpenSSL’s SHA-3 Keccak function and a verified implementation of SHA-3 in the domain-specific language Cryptol. 
-SAW creates contracts (called overrides), a functions input to output relationship, which allows for a modular approach to writing proofs. 
-This work leverages SAW by creating overrides to block out computation and creating a compositional proof that remains within the capacity of an SMT solver. 
-This work amends Cryptol through utility functions to handle looping which greatly simplifies the visual inspection the Cryptol implementation to provide strong assurance of correctness. 
-The results of this work indicate that this methodology works with modern cryptographic specifications and that a modular approach in cryptographic algorithm design greatly simplifies the verification process.
+The Keccak function in the SHA-3 NIST standard is responsible for the major computations of all SHA-3 hash constructs.
+These constructs form the basis for modern secure hashing.
+This work extends and improves the methodology used to verify Amazon’s s2n HMAC and OpenSSL’s SHA2-256 inner hash function. 
+It uses the Software Analysis Workbench (SAW) to prove out functional equivalence between OpenSSL’s SHA-3 Keccak function and a verified implementation of SHA-3 in Cryptol, a domain-specific language for cryptography. 
+SAW allows for a modular approach to writing proofs through the use of contracts, which define a functions input to output relationship.
+Each contract, also called an override, is an obligation in the full proof.
+This work leverages SAW by creating overrides to decompose computation and create a compositional proof that is within the capacity of an SMT solver. 
+Visual inspection between Cryptol and the NIST standard is simplified through the creation of Cryptol utility functions.
+These utility functions wrap the complex list comprehensions required for looping in Cryptol.
+The results of this work indicates that a modular approach in cryptographic algorithm design greatly simplifies the verification process, as exemplified by SHA-3.
 \end{abstract}

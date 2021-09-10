@@ -7,7 +7,17 @@
   Many implementations of the SHA algorithms go through major rewrites and optimizations which make visual inspection of the code nearly impossible. (Not sure if that’s too strong a claim).
   This work bridges that gap between optimized c code, and the NIST standard.
 
-  \subsection{Related Work}
+\noindent \textbf{Contributions}:
+This paper details the following contributions.
+\begin{compactitem}
+  \item  A Cryptol specification for \texttt{SHA3} that directly corresponds to the \texttt{FIPS} 202 specification and passes the test vectors provided by the same specification.
+  \item A Cryptol specification based on the OpenSSL implementation of \texttt{SHA3} that uses a reordered state vector and precomputed tables in Keccak for performance gains and passes test vectors
+  \item A \texttt{SAW} proof that the \texttt{FIPS} 202 specification is equivalent to the OpenSSL specification
+  \item A \texttt{SAW} proof that the OpenSSL Keccak specification is equivalent to the OpenSSL C-implementation of the same function for all possible state vector input
+  \item Early evidence that modular cryptographic specifications such as \texttt{SHA3} lend themselves to efficient \texttt{SAW} verification against C implementations as opposed to flattened specifications such as \texttt{SHA2} 
+\end{compactitem}
+
+\subsection{Related Work}
   Previously, Galois’ Inc. worked with Amazon to prove out parts of Amazon’s s2n HMAC code to the NIST specification.  
 In their work they stubbed out use of the SHA2 algorithm because their HMAC allows for customization of the algorithm type and implementation.
 

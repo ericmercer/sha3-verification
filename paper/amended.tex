@@ -5,59 +5,61 @@ The language's functional folds and list comprehensions do not align easily with
 and array-based NIST standard. By leveraging Cryptol’s versatility, however, we produced a couple 
 utility functions to visually mimic the sequential nature of the NIST specification. 
 
+\subsection{For Utility Function}
 The phrase “for all” indicates a looping structure and is quite common in the NIST standard. 
-It is used in the definition of the pi function.
+It is used in the definition of the pi function shown in Figure \ref{fig:nistPi}.
 
 \begin{figure}[h]
   \centering
-  \begin{verbatim}
+  \begin{lstlisting}[basewidth = {.5em}]
 1. For all triples (x,y,z) such that 
   0 <= x < 5, 0 <= y < 5, and 0 <= z < w,
   let A'[x, y, z] = A[(x + 3y) mod 5, x, z].
 2. Return A'.
-  \end{verbatim}
+  \end{lstlisting}
   \caption{NIST Pi definition}
   \label{fig:nistPi}
 \end{figure}
     
-Using Cryptol's list comprehensions, we find the following syntax for the pi function:
+By nesting Cryptol's list comprehensions, we easily implemented the pi function in Figure 
+\ref{fig:cryptolPi}. 
 
 \begin{figure}[h]
   \centering
-\begin{verbatim}
+\begin{lstlisting}[language=Cryptol]
 type COL = 5 
 type W = 64
 type STATE_ARR = [COL][COL][W]
-LIST4 = [0..COL-1]
-LIST63 = [0..W-1]
+LIST4 = [0..COL - 1]
+LIST63 = [0..W - 1]
 pi : STATE_ARR -> STATE_ARR
-pi a = [[[a @x @((x + 3y) % COL) @z 
+pi a = [[[a @x @((x + 3*y) % 'COL) @z 
             | z <- LIST63] 
           | y <- LIST4] 
         | x <- LIST4]
-\end{verbatim}
+\end{lstlisting}
 \caption{Cryptol Pi definition}
 \label{fig:cryptolPi}
 \end{figure}
 
 Cryptol declares list comprehension variables after they are used, and the order of the
 nested loops is not as apparent. Using a helper function, ‘for’, we were able to provide
-the following syntax:
+a more clear definition seen in Figure \ref{fig:cryptolAmendedPi}.
 
 \begin{figure}[h]
   \centering
-\begin{verbatim}
+\begin{lstlisting}[language=Cryptol]
 type COL = 5 
 type W = 64
 type STATE_ARR = [COL][COL][W]
-LIST4 = [0..COL-1]
-LIST63 = [0..W-1]
+LIST4 = [0..COL - 1]
+LIST63 = [0..W - 1]
 pi : STATE_ARR -> STATE_ARR
-pi a = for LIST4 (\x ->
-          for LIST4 (\y -> 
-            for LIST4 (\z -> 
-              a @x @((x + 3*y) % `COL) @z)))
-\end{verbatim}
+pi a = for LIST4 (&x ->
+          for LIST4 (&y -> 
+            for LIST4 (&z -> 
+              a @x @((x + 3*y) % 'COL) @z)))
+\end{lstlisting}
 \caption{Amended Cryptol Pi definition}
 \label{fig:cryptolAmendedPi}
 \end{figure}
@@ -66,30 +68,32 @@ The ‘for’ utility function follows the same intuition as the implementation 
 imperative languages in that it iterates and runs a loop body over defined elements. 
 It is similar to the Array.prototype.map method in JavaScript in that it takes in a 
 function and a list of arguments and returns a list of results from calling the function 
-on every element of the input array. It is implemented as so:
+on every element of the input array. Figure \ref{fig:cryptolFor} shows it's implementation.
 
 \begin{figure}[h]
   \centering
-\begin{verbatim}
+\begin{lstlisting}[language=Cryptol]
 for : {n, a, b} [n]a -> (a -> b) -> [n]b
 for vals loop = [loop index | index <- vals]
-\end{verbatim}
+\end{lstlisting}
 \caption{Cryptol For utility function}
 \label{fig:cryptolFor}
 \end{figure}
 
-While simple to implement, it reorders and structures the arguments in a very elegant way.
+Though it is simple to implement, it reorders and structures the arguments in a very elegant way.
 In constrast with standard cryptol syntax, the list to iterate over and the iterating 
 variable are visible before the loop body. List comprehensions are hidden away behind this 
 function call and visual equivalence is clearer.
 
+\subsection{While Utility Function}
 Another common phrasing is the “let...for...let”. This defines a state upon which a folding 
-occurs, which is most comparable to a while loop. Here is the rc function as defined in the 
-NIST spec:
+occurs, iteratively condensing the information into a final state. Imperatively, it is most 
+comparable to a while loop. As shown by Figure \ref{fig:nistRC}, is present in the rc function 
+defined by the NIST specification.
 
 \begin{figure}[h]
   \centering
-\begin{verbatim}
+\begin{lstlisting}[basewidth = {.5em}]
 1. If t mod 255 = 0, return 1.
 2. Let R = 10000000.
 3. For i from 1 to t mod 255, let:
@@ -100,25 +104,29 @@ NIST spec:
   e. R[6] = R[6] ^ R[8];
   f. R =Trunc8[R].
 4. Return R[0].
-\end{verbatim}
+\end{lstlisting}
 \caption{NIST RC definition}
 \label{fig:nistRC}
 \end{figure}
 
-Cryptol list comprehensions require a list to iterate over. Our ‘for’ utility function does 
-as well. Knowing that the number of iterations is bounded by [1, 254], we can construct the 
-following ungainly Cryptol definition:
+Maintaining this state through Cryptol's list comprehensions can be difficult.
+The comprehensions require a list to iterate through.Since our ‘for’ utility 
+function is simply a wrapper for list comprehensions, it is equally unsuited for 
+visual verification on such steps. The condition to stop iterating in the RC function
+bounds the number of iterations by [1, 254], which lets us construct such a list to 
+iterate through. This leads to a rather ungainly Cryptol definition, however, as 
+shown by Figure \ref{fig:cryptolRC}.
 
 \begin{figure}[h]
   \centering
-\begin{verbatim}
+\begin{lstlisting}[language=Cryptol]
 rc : [64] -> Bit
 rc t = if (t % 255) == 0 
   then True 
   else rs !0 @0 where
     rs = [128:[8]] # [
       if i <= t % 255
-        then (take`{8} ([
+        then (take'{8} ([
           (r@0) ^ (r@8),
           r@1,
           r@2,
@@ -131,30 +139,29 @@ rc t = if (t % 255) == 0
             where r = [False] # (rs @(i - 1)))
         else rs @(i - 1)
       | i <- [1..254]]
-\end{verbatim}
+\end{lstlisting}
 \caption{Cryptol RC definition}
 \label{fig:cryptolRC}
 \end{figure}
 
-Not only is this computationally slower since it runs 255 loops every time rc is called, 
-is stores the previous states in a list and indexes into it. This differs vastly from the 
+Not only is this definition computationally slower as it runs 255 loops every time it is called, 
+it also awkwardly indexes into a list of previous states. This differs vastly from the 
 NIST specificiation both visually and functionally. Using a new ‘while’ utility function, we 
 can declare an initial state, condition function, and body function that will recursively 
 be called until the condition is met. It consolodates the information of the previous state 
-until the condition is sastified. Here is the rc function with the use of this utility 
-function:
+until the condition is sastified. This definition is foudn in Figure \ref{fig:cryptolamendedRC}.
 
 \begin{figure}[h]
   \centering
-\begin{verbatim}
+\begin{lstlisting}[language=Cryptol]
 rc : [64] -> Bit
 rc t = if (t % 255) == 0 
   then True 
-  else (while {i = 1, R = 128:[8]} //STATE
-    (\state -> state.i <= t % 255) //COND
-    (\state -> {                   //LOOP
+  else (while {i = 1, R = 128:[8]}
+    (&state -> state.i <= t % 255)
+    (&state -> {
       i = state.i + 1, 
-      R = (take`{8} ([
+      R = (take'{8} ([
         (r@0) ^ (r@8),
         r@1,
         r@2,
@@ -166,24 +173,24 @@ rc t = if (t % 255) == 0
         r@8]) 
           where r = [False] # state.R)})
     ).R @0
-\end{verbatim}
+\end{lstlisting}
 \caption{Amended Cryptol RC definition}
 \label{fig:cryptolamendedRC}
 \end{figure}
 
 The final state is returned by the ‘while’ function. This iterates only until the 
 condition is met, avoids the clutter of indexing within a larger array of all previous 
-states, and places the condition in a more obvious location before the loop body. Here 
-is the definition of the ‘while’ utility function:
+states, and places the condition in a more obvious location before the loop body. This 
+utility function is defined in Figure \ref{fig:cryptolWhile}.
 
 \begin{figure}[h]
   \centering
-\begin{verbatim}
+\begin{lstlisting}[language=Cryptol]
 while : {a} a -> (a -> Bit) -> (a -> a) -> a
 while state cond f = if (cond state)
   then (while (f state) cond f)	
   else state
-\end{verbatim}
+\end{lstlisting}
 \caption{Cryptol While utility function}
 \label{fig:cryptolWhile}
 \end{figure}

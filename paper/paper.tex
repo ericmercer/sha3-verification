@@ -38,6 +38,45 @@
 \documentclass[sigplan, 10pt, anonymous, review]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
 \usepackage{subcaption}
 \usepackage{paralist}
+\usepackage{color}
+\definecolor{blue}{RGB}{42,0,255}
+\definecolor{green}{RGB}{63,127,95}
+\definecolor{purple}{RGB}{127,0,85}
+\definecolor{lime}{RGB}{114, 148, 0}
+\usepackage{listings}
+\lstdefinelanguage{Cryptol}{
+  keywordstyle=[1]\color{blue}\bfseries,
+  keywordstyle=[2]\color{purple}\bfseries,
+  keywordstyle=[3]\color{black}\bfseries,
+  basicstyle={\color{lime}\tiny},
+  literate=*
+  {*}{{{\color{black}$*$}}}{1}
+  {=}{{{\color{black}=}}}{1}
+  {+}{{{\color{black}+}}}{1}
+  {-}{{{\color{black}$-$}}}{1}
+  {\%}{{{\color{black}\%}}}{1}
+  {(}{{{\color{black}(}}}{1}
+  {)}{{{\color{black})}}}{1}
+  {\{}{{{\color{black}\{}}}{1}
+  {\}}{{{\color{black}\}}}}{1}
+  {[}{{{\color{black}[}}}{1}
+  {]}{{{\color{black}]}}}{1}
+  {|}{{{\color{black}$|$}}}{1}
+  {>}{{{\color{black}$>$}}}{1}
+  {<}{{{\color{black}$<$}}}{1}
+  {\#}{{{\color{black}\#}}}{1}
+  {@}{{{\color{black}@}}}{1}
+  {.}{{{\color{black}.}}}{1}
+  {\'}{{{\color{black}'}}}{1}
+  {:}{{{\color{black}:}}}{1}
+  {^}{{{\color{black}$\char`\^$}}}{1}
+  {&}{{{\color{black}\textbackslash}}}{1},
+  morekeywords=[1]{Bit, Integer, STATE_ARR, W, COL, type, LIST4, LIST63, True, False},
+  morekeywords=[2]{if, then, else, where},
+  morekeywords=[3]{pi, rc, cond, a, b, x, y, z, for, n, r, R, f, rs, i, index, t, 
+    vals, loop, state, while, take}
+}
+
 
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs

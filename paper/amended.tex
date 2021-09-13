@@ -11,7 +11,7 @@ It is used in the definition of the pi function shown in Figure \ref{fig:nistPi}
 
 \begin{figure}[h]
   \centering
-  \begin{lstlisting}[basewidth = {.5em}]
+  \begin{lstlisting}[basewidth = {.5em},basicstyle={\scriptsize}]
 1. For all triples (x,y,z) such that 
   0 <= x < 5, 0 <= y < 5, and 0 <= z < w,
   let A'[x, y, z] = A[(x + 3y) mod 5, x, z].
@@ -74,7 +74,7 @@ on every element of the input array. Figure \ref{fig:cryptolFor} shows it's impl
   \centering
 \begin{lstlisting}[language=Cryptol]
 for : {n, a, b} [n]a -> (a -> b) -> [n]b
-for vals loop = [loop index | index <- vals]
+for vals loop = [loop i | i <- vals]
 \end{lstlisting}
 \caption{Cryptol For utility function}
 \label{fig:cryptolFor}
@@ -93,7 +93,7 @@ defined by the NIST specification.
 
 \begin{figure}[h]
   \centering
-\begin{lstlisting}[basewidth = {.5em}]
+\begin{lstlisting}[basewidth = {.5em},basicstyle={\scriptsize}]
 1. If t mod 255 = 0, return 1.
 2. Let R = 10000000.
 3. For i from 1 to t mod 255, let:
@@ -102,7 +102,7 @@ defined by the NIST specification.
   c. R[4] = R[4] ^ R[8];
   d. R[5] = R[5] ^ R[8];
   e. R[6] = R[6] ^ R[8];
-  f. R =Trunc8[R].
+  f. R = Trunc8[R].
 4. Return R[0].
 \end{lstlisting}
 \caption{NIST RC definition}

@@ -1,0 +1,123 @@
+@inproceedings{bacchelli,
+  author={A. {Bacchelli} and C. {Bird}},
+  title={Expectations, outcomes, and challenges of modern code review}, 
+  booktitle={2013 35th International Conference on Software Engineering (ICSE)}, 
+  year={2013},
+  volume={},
+  number={},
+  pages={712-721},
+  doi={10.1109/ICSE.2013.6606617}
+}
+
+@inproceedings {beringer,
+    author = {Lennart Beringer and Adam Petcher and Katherine Q. Ye and Andrew W. Appel},
+    title = {Verified Correctness and Security of OpenSSL {HMAC}},
+    booktitle = {24th {USENIX} Security Symposium ({USENIX} Security 15)},
+    year = {2015},
+    isbn = {978-1-939133-11-3},
+    address = {Washington, D.C.},
+    pages = {207--221},
+    url = {https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/beringer},
+    publisher = {{USENIX} Association},
+    month = aug,
+}
+
+@inproceedings{chudnov,
+    author="Chudnov, Andrey
+    and Collins, Nathan
+    and Cook, Byron
+    and Dodds, Joey
+    and Huffman, Brian
+    and MacC{\'a}rthaigh, Colm
+    and Magill, Stephen
+    and Mertens, Eric
+    and Mullen, Eric
+    and Tasiran, Serdar
+    and Tomb, Aaron
+    and Westbrook, Eddy",
+    editor="Chockler, Hana
+    and Weissenbacher, Georg",
+    title="Continuous Formal Verification of Amazon s2n",
+    booktitle="Computer Aided Verification",
+    year="2018",
+    publisher="Springer International Publishing",
+    address="Cham",
+    pages="430--446",
+    abstract="We describe formal verification of s2n, the open source TLS implementation used in numerous Amazon services. A key aspect of this proof infrastructure is continuous checking, to ensure that properties remain proven during the lifetime of the software. At each change to the code, proofs are automatically re-established with little to no interaction from the developers. We describe the proof itself and the technical decisions that enabled integration into development.",
+    isbn="978-3-319-96142-2"
+}
+
+@inproceedings{saw,
+    author="Dockins, Robert
+    and Foltzer, Adam
+    and Hendrix, Joe
+    and Huffman, Brian
+    and McNamee, Dylan
+    and Tomb, Aaron",
+    editor="Blazy, Sandrine
+    and Chechik, Marsha",
+    title="Constructing Semantic Models of Programs with the Software Analysis Workbench",
+    booktitle="Verified Software. Theories, Tools, and Experiments",
+    year="2016",
+    publisher="Springer International Publishing",
+    address="Cham",
+    pages="56--72",
+    abstract="The Software Analysis Workbench (SAW) is a system for translating programs into logical expressions, transforming these expressions, and using external reasoning tools (such as SAT and SMT solvers) to prove properties about them. In the implementation of this translation, SAW combines efficient symbolic execution techniques in a novel way. It has been used most extensively to prove that implementations of cryptographic algorithms are functionally equivalent to referencespecifications, but can also be used to identify inputs to programs that will lead to outputs with particular properties, and prove other properties about programs. In this paper, we describe the structure of the SAW system and present experimental results demonstrating the benefits of its implementation techniques.",
+    isbn="978-3-319-48869-1"
+}
+
+@inproceedings{cryptol,
+author = {Erk\"{o}k, Levent and Matthews, John},
+title = {Pragmatic Equivalence and Safety Checking in Cryptol},
+year = {2009},
+isbn = {9781605583303},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1481848.1481860},
+doi = {10.1145/1481848.1481860},
+abstract = {Cryptol is programming a language designed for specifying and programming cryptographic algorithms. In order to meet high-assurance requirements, Cryptol comes with a suite of formal-methods based tools allowing users to perform various program verification tasks. In the fully automated mode, Cryptol uses modern off-the-shelf SAT and SMT solvers to perform verification in a push-button manner. In the manual mode, Cryptol produces Isabelle/HOL specifications that can be interactively verified using the Isabelle theorem prover. In this paper, we provide an overview of Cryptol's verification toolset, describing our experiences with building a practical programming environment with dedicated support for formal verification.},
+booktitle = {Proceedings of the 3rd Workshop on Programming Languages Meets Program Verification},
+pages = {73–82},
+numpages = {10},
+keywords = {size polymorphism, formal methods, theorem proving, equivalence checking, sat/smt solving, cryptography},
+location = {Savannah, GA, USA},
+series = {PLPV '09}
+}
+
+@InProceedings{nfm-us,
+author="Decker, Brett
+and Winters, Benjamin
+and Mercer, Eric",
+editor="Dutle, Aaron
+and Moscato, Mariano M.
+and Titolo, Laura
+and Mu{\~{n}}oz, C{\'e}sar A.
+and Perez, Ivan",
+title="Towards Verifying SHA256 in OpenSSL with the Software Analysis Workbench",
+booktitle="NASA Formal Methods",
+year="2021",
+publisher="Springer International Publishing",
+address="Cham",
+pages="72--78",
+abstract="The Software Analysis Workbench (SAW) is a verification tool that has shown promise in verifying cryptographic implementations in C and Java as evidenced by the verification of Amazon's s2n HMAC. That result uses an idealized abstraction for SHA256 to simplify the proof obligations. The OpenSSL SHA256 implementation supported by s2n presents verification problems for SAW because some functions do not complete SAW's symbolic execution or verification in the backend Satisfiability Modulo Theories (SMT) solvers. Fortunately, SAW provides a compositional framework to reduce the proof complexity, replacing function calls with overrides which are nothing more than contracts stating the input to output relation of the functions. This paper illustrates the SAW compositional framework applied to the OpenSSL SHA256 implementation. It shows a refactoring of the implementation that manages symbolic variables to work with the symbolic execution engine and lends itself to overrides while preserving its connection to the original source. Early results suggest the approach effective in applying SAW to legacy cryptographic implementations that are critical to the security of almost all existing applications.",
+isbn="978-3-030-76384-8"
+}
+
+
+@misc{s2n,
+  title  = "Amazon.com, {I}nc. s2n",
+  howpublished = "\url{https://github.com/awslabs/s2n}"
+  %year   = "(accessed 2020)"
+}
+
+@misc{galois,
+  title  = "Galois, {I}nc. {T}he software analysis workbench",
+  howpublished = "\url{https://saw.galois.com/index.html}"
+  %year   = "(accessed 2020)"
+}
+
+@misc{repo,
+  title  = "{SAW} Verified Crypto",
+  howpublished = "\url{https://bitbucket.org/byu-vv/saw-verified-crypto}"
+  %year   = "(accessed 2020)"
+}

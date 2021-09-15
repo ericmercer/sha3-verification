@@ -5,8 +5,3 @@ Have to make small concession because we do prove that it computes all 24 values
 
 Assert function is not useable in the Symbolic Execution Engine.
 To fix this, we replace it with an if statement that checks the same expression and only runs code if it returns true.
-\subsection{Array Storage}
-OpenSSL switches the ordering of their x/y's for the array.
-Because we're proving the small inner parts of the code, we have to match memory structures.
-
-Whatever we decided for the bit reversal (still might try to get a cryptol->cryptol proof running).

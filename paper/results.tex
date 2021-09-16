@@ -2,14 +2,18 @@
 
 Talk about the cost of the verification. The amount of effort required to write the specification. Make clear the limits of the result proof.
 
-* Visual inspection and limited test vectors for (1) and (2)
-* Only provide proof certificates for message sizes of X to Y for digest sizes of … for (3)
-* Visual inspection only for anything above Keccak for (3) in OpenSSLs C-code
+\begin{compactitem}
+\item Visual inspection and limited test vectors for (1) and (2)
+\item Only provide proof certificates for message sizes of X to Y for digest sizes of \textbf{FIXME} for (3)
+\item Visual inspection only for anything above Keccak for (3) in OpenSSLs C-code
+\end{compactitem}
 
 Effort (see above and then consider below):
- - How long were we working on the Cryptol code?
- - How long were we working on the SAW proofs?
- - How long did it take to understand the OpenSSL code?
+\begin{compactitem}
+ \item How long were we working on the Cryptol code?
+ \item How long were we working on the SAW proofs?
+ \item How long did it take to understand the OpenSSL code?
+\end{compactitem}
 We'll want to determine how long it took us and then try to infer how long that would have taken had we been working full time (40 hours/week).
 
 Because of the modular design of the SHA-3 specification, the Cryptol implementation and OpenSSL implementation are programmatically more similar. 
@@ -17,7 +21,7 @@ The only strong discrepancy is that the OpenSSL implementation organizes the bit
 The affect of modular cryptographic design can be seen by the proof completing successfully in the Yices, Z3, and ABC SMT-solvers. 
 Previous work on SHA2-256 was only successful with Yices \ref{cite:nfm-us}. Full results are show in table \ref{finaltable}. 
 
-\begin{table}[b]
+\begin{table*}[b]
 \caption{Proof Runtimes for SHA-3 with SMT-solvers}\label{finaltable}
 \setlength{\tabcolsep}{13.5pt}
 \begin{tabular}{|l|r|r|r|}
@@ -32,4 +36,4 @@ Iota        &  11.048 secs &     8.801 secs &  612.497 secs \\
 KeccakF1600 & 745.206 secs & 15187.671 secs & 2910.549 secs \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}

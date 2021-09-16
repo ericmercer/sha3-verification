@@ -1,5 +1,5 @@
 \section{Introduction}\label{sec:introduction}
-  The Secure Hashing Algorithm (SHA) family of cryptography is widely used as a means of providing increased security through generating/verifying digital signatures, deriving keys, and generating pseudorandom bits. (NIST: https://csrc.nist.gov/publications/detail/fips/202/final)  
+  The Secure Hashing Algorithm (SHA) family of cryptography is widely used as a means of providing increased security through generating/verifying digital signatures, deriving keys, and generating pseudorandom bits (\href{https://csrc.nist.gov/publications/detail/fips/202/final}{NIST specification}).  
   The structure and computations of these algorithms is defined by NIST in mathematical specifications.  
   Because these specifications are just figures on a page, any assurance of correctness of an algorithm’s implementation is dependent on a visual review of the code coupled with a small sampling of test vectors.
   
@@ -20,18 +20,18 @@ This paper details the following contributions.
 \noindent \textbf{Limitations}
 \begin{compactitem}
   \item Visual inspection and limited test vectors for (1) and (2)
-  \item Only provide proof certificates for message sizes of X to Y for digest sizes of … for (3)
-  \item Visual inspection only for anything above Keccak for (3) in OpenSSLs C-code
+  \item Only provide proof certificates for message sizes of X to Y for digest sizes of \textbf{FIXME} for (3)
+  \item Visual inspection only for anything above Keccak for (3) in OpenSSL's C-code
 \end{compactitem}
 
 \subsection{Related Work}
-  Previously, Galois’ Inc. worked with Amazon to prove out parts of Amazon’s s2n HMAC code to the NIST specification.  
+  Previously, Galois' Inc. worked with Amazon to prove out parts of Amazon's s2n HMAC code to the NIST specification.  
 In their work they stubbed out use of the SHA2 algorithm because their HMAC allows for customization of the algorithm type and implementation.
 
 The work by Decker et. al, extended on Galois' work by choosing a single SHA2 implementation to prove out.  
-They chose OpenSSL’s SHA 256 implementation, as that is a commonly used library (and one that is usable in s2n).  
+They chose OpenSSL's SHA 256 implementation, as that is a commonly used library (and one that is usable in s2n).  
 They were able to prove out the inner hash computations of that implementation using a methodology of compositional proofs to do so.  
-They were also able to connect up their proof with the code used by Galois’ to stub out the SHA2 algorithm, which implies that the functional equivalence property established with the OpenSSL code applies to Galois' Cryptol implementation as well.  
+They were also able to connect up their proof with the code used by Galois' to stub out the SHA2 algorithm, which implies that the functional equivalence property established with the OpenSSL code applies to Galois' Cryptol implementation as well.  
 Their work showed the viability and limitations of creating proofs of functional equivalence for legacy cryptographic implementations.
 
 

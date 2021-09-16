@@ -1,8 +1,8 @@
 \begin{abstract}
 The Keccak function in the SHA-3 NIST standard is responsible for the major computations of all SHA-3 hash constructs.
 These constructs form the basis for modern secure hashing.
-This work extends and improves the methodology used to verify Amazon’s s2n HMAC and OpenSSL’s SHA2-256 inner hash function. 
-It uses the Software Analysis Workbench (SAW) to prove out functional equivalence between OpenSSL’s SHA-3 Keccak function and a verified implementation of SHA-3 in Cryptol, a domain-specific language for cryptography. 
+This work extends and improves the methodology used to verify Amazon's s2n HMAC and OpenSSL's SHA2-256 inner hash function. 
+It uses the Software Analysis Workbench (SAW) to prove out functional equivalence between OpenSSL's SHA-3 Keccak function and a verified implementation of SHA-3 in Cryptol, a domain-specific language for cryptography. 
 SAW allows for a modular approach to writing proofs through the use of contracts, which define a functions input to output relationship.
 Each contract, also called an override, is an obligation in the full proof.
 This work leverages SAW by creating overrides to decompose computation and create a compositional proof that is within the capacity of an SMT solver. 

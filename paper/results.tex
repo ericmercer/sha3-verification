@@ -12,7 +12,10 @@ Effort (see above and then consider below):
  - How long did it take to understand the OpenSSL code?
 We'll want to determine how long it took us and then try to infer how long that would have taken had we been working full time (40 hours/week).
 
-Because of the modular design of the SHA-3 specification, the Cryptol implementation and OpenSSL implementation are programmatically more similar. The only strong discrepancy is that the OpenSSL implemenation organizes the bits of the sponge construction. The affect of modular cryptographic design can be seen by the proof completing successfully in the Yices, Z3, and ABC SMT-solvers. Previous work on SHA2-256 was only successful with Yices \ref{cite:nfm-us}. Full results are show in table \ref{finaltable}. 
+Because of the modular design of the SHA-3 specification, the Cryptol implementation and OpenSSL implementation are programmatically more similar. 
+The only strong discrepancy is that the OpenSSL implementation organizes the bits of the sponge construction. 
+The affect of modular cryptographic design can be seen by the proof completing successfully in the Yices, Z3, and ABC SMT-solvers. 
+Previous work on SHA2-256 was only successful with Yices \ref{cite:nfm-us}. Full results are show in table \ref{finaltable}. 
 
 \begin{table}[b]
 \caption{Proof Runtimes for SHA-3 with SMT-solvers}\label{finaltable}

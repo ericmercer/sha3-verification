@@ -2,20 +2,3 @@
 
 
 \subsection{Tools}
-The Software Analysis Workbench (SAW) provides a verification environment for compositional proofs of functional equivalence between two pieces of supported code.  
-SAW uses symbolic execution to create computational models of the code and creates problems of functional equivalence between those two models that can be pushed off to an SMT solver.  
-The difficulty of these SMT problems is directly affected by the size and complexity of the computations that are being compared.  
-This can lead to drastic increases in proof times and sometimes even prevents completion as computations increase.  
-SAW’s solution to this is to create contracts (called overrides) of a functions input to output relationship which allows for a modular approach to writing the proof.  
-By breaking up computation into smaller pieces, and creating overrides for these pieces, SAW can often simplify an otherwise complex (and thus incompletable) proof to remain within the capacity of an SMT solver.
-
-CRYPTOL!!!!!!
-
-\subsection{Trusted Code Base}
-This work relies on the correctness of several tools, including language compilers.  
-Our Trusted Code Base consists of:
-\begin{itemize}
-  \item LLVM bitcode compiler
-  \item The Software Analysis Workbench (SAW) including the conversion from LLVM bitcode to SAWCore terms, the Cryptol compiler to SAWCore terms, and SAW's interface with SMT solvers.
-  \item The z3, abc, and yices SMT solvers.
-\end{itemize}

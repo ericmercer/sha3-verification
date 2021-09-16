@@ -1,9 +1,8 @@
 \section{SHA3 FIPS Specification in Cryptol}
 \label{sec:fips}
 Initially it appeared that visual inspection with Cryptol's standard syntax was subpar.
-The language's functional folds and list comprehensions do not align easily with the imperative 
-and array-based NIST standard. By leveraging Cryptol's versatility, however, we produced a couple 
-utility functions to visually mimic the sequential nature of the NIST specification. 
+The language's functional folds and list comprehensions do not align easily with the imperative and array-based NIST standard. 
+By leveraging Cryptol's versatility, utility functions can visually mimic the sequential nature of the NIST specification. 
 
 \subsection{For Utility Function}
 The phrase \emph{for all} indicates a looping structure and is quite common in the NIST standard. 
@@ -21,8 +20,8 @@ It is used in the definition of the pi function shown in Figure \ref{fig:nistPi}
   \label{fig:nistPi}
 \end{figure}
     
-By nesting Cryptol's list comprehensions, we easily implemented the pi function in Figure 
-\ref{fig:cryptolPi}. 
+By nesting Cryptol's list comprehensions, the pi function can be easily implemented.
+This is illustrated in Figure \ref{fig:cryptolPi}. 
 
 \begin{figure}[h]
   \centering
@@ -42,9 +41,8 @@ pi a = [[[a @x @((x + 3*y) % 'COL) @z
 \label{fig:cryptolPi}
 \end{figure}
 
-Cryptol declares list comprehension variables after they are used, and the order of the
-nested loops is not as apparent. Using a helper function, \emph{for}, we were able to provide
-a more clear definition seen in Figure \ref{fig:cryptolAmendedPi}.
+Cryptol declares list comprehension variables after they are used, and the order of the nested loops is not as apparent. 
+Using a helper function, \emph{for}, a clearer definition seen in Figure \ref{fig:cryptolAmendedPi}.
 
 \begin{figure}[h]
   \centering
@@ -64,10 +62,9 @@ pi a = for LIST4 (&x ->
 \label{fig:cryptolAmendedPi}
 \end{figure}
 
-The \emph{for} utility function follows the same intuition as the implementation in most 
-imperative languages in that it iterates and runs a loop body over defined elements. 
-It recieves a function and a list of arguments and returns a list of results from calling the function 
-on every element of the input array. Figure \ref{fig:cryptolFor} shows it's implementation.
+The \emph{for} utility function follows the same intuition as the implementation in most imperative languages in that it iterates and runs a loop body over defined elements. 
+It recieves a function and a list of arguments and returns a list of results from calling the function on every element of the input array. 
+Figure \ref{fig:cryptolFor} shows it's implementation.
 
 \begin{figure}[h]
   \centering
@@ -80,15 +77,14 @@ for vals loop = [loop i | i <- vals]
 \end{figure}
 
 Though it is simple to implement, it reorders and structures the arguments in a very elegant way.
-In constrast with standard cryptol syntax, the list to iterate over and the iterating 
-variable are visible before the loop body. List comprehensions are hidden away behind this 
-function call and visual equivalence is clearer.
+In constrast with standard cryptol syntax, the list to iterate over and the iterating variable are visible before the loop body. 
+List comprehensions are hidden away behind this function call and visual equivalence is clearer.
 
 \subsection{While Utility Function}
-Another common phrasing is the \emph{let...for...let}. This defines a state upon which a folding 
-occurs, iteratively condensing the information into a final state. Imperatively, it is most 
-comparable to a while loop. As shown by Figure \ref{fig:nistRC}, is present in the rc function 
-defined by the NIST specification.
+Another common phrasing is the \emph{let...for...let}. 
+This defines a state upon which a folding occurs, iteratively condensing the information into a final state. 
+Imperatively, it is most comparable to a while loop. 
+As shown by Figure \ref{fig:nistRC}, is present in the rc function defined by the NIST specification.
 
 \begin{figure}[h]
   \centering
@@ -109,12 +105,12 @@ defined by the NIST specification.
 \end{figure}
 
 Maintaining this state through Cryptol's list comprehensions can be difficult.
-The comprehensions require a list to iterate through.Since our \emph{for} utility 
-function is simply a wrapper for list comprehensions, it is equally unsuited for 
-visual verification on such steps. The condition to stop iterating in the RC function
-bounds the number of iterations by [1, 254], which lets us construct such a list to 
-iterate through. This leads to a rather ungainly Cryptol definition, however, as 
-shown by Figure \ref{fig:cryptolRC}.
+The comprehensions require a list to iterate through. 
+Since the \emph{for} utility function is simply a wrapper for list comprehensions, it is equally unsuited for visual verification on such steps. 
+The number of iterations in the RC function is bounded by [1, 254] by its modular condition.
+This range provides the list to iterate over as required by Cryptol list comprehensions. 
+From these observations, a rather ungainly Cryptol definition results.
+This definition is shown in Figure \ref{fig:cryptolRC}.
 
 \begin{figure}[h]
   \centering
@@ -143,12 +139,11 @@ rc t = if (t % 255) == 0
 \label{fig:cryptolRC}
 \end{figure}
 
-Not only is this definition computationally slower as it runs 255 loops every time it is called, 
-it also awkwardly indexes into a list of previous states. This differs vastly from the 
-NIST specificiation both visually and functionally. Using a new \emph{while} utility function, we 
-can declare an initial state, condition function, and body function that will recursively 
-be called until the condition is met. It consolodates the information of the previous state 
-until the condition is sastified. This definition is foudn in Figure \ref{fig:cryptolamendedRC}.
+Not only is this definition computationally slower as it runs 255 loops every time it is called, it also awkwardly indexes into a list of previous states. 
+This differs vastly from the NIST specificiation both visually and functionally. 
+The \emph{while} utility function, accepts an initial state, condition function, and body function to recursively loop. 
+It consolodates the information of the previous state until the condition is sastified. 
+This definition is found in Figure \ref{fig:cryptolamendedRC}.
 
 \begin{figure}[h]
   \centering
@@ -177,10 +172,9 @@ rc t = if (t % 255) == 0
 \label{fig:cryptolamendedRC}
 \end{figure}
 
-The final state is returned by the \emph{while} function. This iterates only until the 
-condition is met, avoids the clutter of indexing within a larger array of all previous 
-states, and places the condition in a more obvious location before the loop body. This 
-utility function is defined in Figure \ref{fig:cryptolWhile}.
+The final state is returned by the \emph{while} function. 
+This iterates only until the condition is met, avoids the clutter of indexing within a larger array of all previous states, and places the condition in a more obvious location before the loop body. 
+This utility function is defined in Figure \ref{fig:cryptolWhile}.
 
 \begin{figure}[h]
   \centering

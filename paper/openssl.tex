@@ -1,8 +1,7 @@
 \section{SHA3 OpenSSL in Cryptol}\label{sec:openssl}
-NIST specification invokes the rc method seven times for each iota function call.
-As the rc inputs are the same for each round, OpenSSL's optimized implementation of keccak stores 
-the output values as a constant table. Initially, we matched out Cryptol execution of the NIST standard 
-as closely as possible--including rc method calls in the iota function. We soon found that SAW was unable 
-to map our implementation of keccak to OpenSSL's without the use of a constant table.
-Our final Cryptol implementation uses the rc definition found in the NIST specification to generate a table 
-that is easiy compared to OpenSSL. This allows SAW to generate a proof and permits visual inspection of equivalence.
+The NIST specification invokes the rc method seven times for each iota function call.
+As the rc inputs are the same for each round, OpenSSL's optimized implementation of keccak stores the output values as a constant table rather than repeatedly compute them. 
+Initially, the Cryptol code to the NIST standard as closely as possible\textemdash including RC method calls in the iota function. 
+SAW was unable to map such an implementation of keccak to OpenSSL's implementation without the use of a constant table. 
+The final Cryptol implementation uses the RC definition found in the NIST specification to generate a table that is easiy compared to OpenSSL. 
+This allows SAW to generate a proof and permits visual inspection of equivalence.

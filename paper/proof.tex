@@ -2,18 +2,43 @@
 \section{Proof Approach}\label{sec:proof}
 
 
-The Software Analysis Workbench (SAW) provides a verification environment for compositional proofs of functional equivalence between two pieces of supported code.  
+The Software Analysis Workbench (SAW) provides a verification environment for compositional proofs of functional equivalence between two pieces of supported code (C, Java, or Cryptol).  
 SAW uses symbolic execution to create computational models of the code and creates problems of functional equivalence between those two models that can be pushed off to an SMT solver.  
 The difficulty of these SMT problems is directly affected by the size and complexity of the computations that are being compared.  
 This can lead to drastic increases in proof times and sometimes even prevents completion as computations increase.  
 SAW’s solution to this is to create contracts (called overrides) of a functions input to output relationship which allows for a modular approach to writing the proof.  
 By breaking up computation into smaller pieces, and creating overrides for these pieces, SAW can often simplify an otherwise complex (and thus incompletable) proof to remain within the capacity of an SMT solver.
 
-CRYPTOL!!!!!!
+Cryptol is a domain-specific specification language, which has been used in the previously mentioned works by Galois' and by Decker et. al to write visually reviewable implementations of NIST standards.
+It has strong ties to the SAW tool and, in fact, can be compiled directly down to the SAW Terms (computational models) which are used by SAW in proving functional equivalence.
+Because of the interwoven nature of Cryptol with SAW, the Terms created from Cryptol are in most cases significantly simpler than any created through symbolic execution of C/Java code.
 
+The published NIST standards provide no compileable implementation that can be used as a starting point for proving out the algorithm.
+As a result, any proof of correctness with a NIST standard is limited in strength to how simple it is use visual review to connect code used in the proof to the NIST standard, coupled with a small sampling of test vectors.
+As shown in \ref{proofStructure}, The proof flow starts with a specification of the SHA3 algorithm in Cryptol with the goal of being as similar visually to the NIST standard as possible.
+This work discusses significant ways that Cryptol's functional nature can be leveraged to aid in this goal.
+Along with simplifying the visual inspection process, this Cryptol specification also passes all test vectors provided by NIST.
 
-This work relies on the correctness of several tools, including language compilers.  
-Our Trusted Code Base consists of:
+The end goal of this proof is to show functional equivalence between this visually reviewable specifications Keccak function, and that of OpenSSL's C code.
+Unfortunately, a direct proof between this specification, and OpenSSL's implementation proved unfeasible, because OpenSSL varies from the NIST standard in how it stores the bits of the intermediate state array in memory.
+These minor modifications in memory storage put such a proof out of SAW's capabilities, because it relies on strict typing, and comparison of a Cryptol functions input/output to a C functions memory state.
+In order to bridge that gap, a second Cryptol specification is included in the proof flow.
+It matches in every way the first Cryptol code, except when it comes to how the state array is stored and accessed (at which point it follows OpenSSL's form).
+Because of the efficient nature of Cryptol's compilation to SAW Terms, proving equivalence between these Cryptol implementations was possible at the top level of the SHA3 algorithm (which allows for the differences in state array storage to be fully abstracted out).
+Due to the strict typing nature required for writing SAW proofs, the scope of this equivalence proof is limited to a given input message size.
+The only computations that change in the SHA3 algorithm due to message size are in the padding and sponging of a block.
+With this in mind, an exhaustive proof run over each input message byte count from 1 to the block size is sufficient to cover the differences in computation.
+The artifact repository accompanying this work contains the receipts of this exhaustive proof. (REFERENCE TO PROOF!!!!)
+
+INNER GREEK FUNCTIONS:
+
+CONTRACTS CAN BE USED TO OVERRIDE AND REPLACE C WITH Cryptol
+
+WITH THESE CONTRACTS SAW CAN COMPLETE A PROOF OF EQUIVALENCE BETWEEN TWO PIECES OF CODE.
+
+This work relies on the correctness of several tools, including language compilers. 
+
+\noindent \textbf{Trusted Code Base}:
 \begin{itemize}
   \item LLVM bitcode compiler
   \item The Software Analysis Workbench (SAW) including the conversion from LLVM bitcode to SAWCore terms, the Cryptol compiler to SAWCore terms, and SAW's interface with SMT solvers.

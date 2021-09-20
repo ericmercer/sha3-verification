@@ -1,0 +1,540 @@
+Byte Count 0-70 run on following specs:
+Processor: Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz
+Ram: 16.0 GB
+
+[05:44:06.510] Checking sha3_256 equivalent for byte count 0
+[06:08:24.053] Valid
+[06:08:24.053] Time: 1457.5192749s
+
+[06:08:24.053] Checking sha3_256 equivalent for byte count 1
+[06:32:35.732] Valid
+[06:32:35.732] Time: 1451.6668218s
+
+[06:32:35.732] Checking sha3_256 equivalent for byte count 2
+[06:56:46.789] Valid
+[06:56:46.789] Time: 1451.0455337s
+
+[06:56:46.789] Checking sha3_256 equivalent for byte count 3
+[07:20:57.711] Valid
+[07:20:57.711] Time: 1450.9102204s
+
+[07:20:57.711] Checking sha3_256 equivalent for byte count 4
+[07:45:11.147] Valid
+[07:45:11.147] Time: 1453.4253901s
+
+[07:45:11.147] Checking sha3_256 equivalent for byte count 5
+[08:09:21.790] Valid
+[08:09:21.790] Time: 1450.6313357s
+
+[08:09:21.790] Checking sha3_256 equivalent for byte count 6
+[08:33:34.543] Valid
+[08:33:34.543] Time: 1452.7414745s
+
+[08:33:34.543] Checking sha3_256 equivalent for byte count 7
+[08:57:50.743] Valid
+[08:57:50.743] Time: 1456.1882331s
+
+[08:57:50.743] Checking sha3_256 equivalent for byte count 8
+[09:22:04.093] Valid
+[09:22:04.093] Time: 1453.3376015s
+
+[09:22:04.093] Checking sha3_256 equivalent for byte count 9
+[09:46:21.472] Valid
+[09:46:21.472] Time: 1457.3689655s
+
+[09:46:21.472] Checking sha3_256 equivalent for byte count 10
+[10:10:35.885] Valid
+[10:10:35.885] Time: 1454.4013758s
+
+[10:10:35.885] Checking sha3_256 equivalent for byte count 11
+[10:34:50.445] Valid
+[10:34:50.445] Time: 1454.5481042s
+
+[10:34:50.445] Checking sha3_256 equivalent for byte count 12
+[10:59:08.299] Valid
+[10:59:08.299] Time: 1457.8419372s
+
+[10:59:08.300] Checking sha3_256 equivalent for byte count 13
+[11:23:21.157] Valid
+[11:23:21.158] Time: 1452.8466378s
+
+[11:23:21.158] Checking sha3_256 equivalent for byte count 14
+[11:47:38.779] Valid
+[11:47:38.779] Time: 1457.6098573s
+
+[14:39:23.860] Checking sha3_256 equivalent for byte count 15
+[15:03:41.791] Valid
+[15:03:41.791] Time: 1457.9203853s
+
+[15:03:41.791] Checking sha3_256 equivalent for byte count 16
+[15:27:48.598] Valid
+[15:27:48.598] Time: 1446.7954459s
+
+[15:27:48.598] Checking sha3_256 equivalent for byte count 17
+[15:51:59.314] Valid
+[15:51:59.314] Time: 1450.70486s
+
+[15:51:59.314] Checking sha3_256 equivalent for byte count 18
+[16:16:07.660] Valid
+[16:16:07.660] Time: 1448.3339718s
+
+[16:16:07.660] Checking sha3_256 equivalent for byte count 19
+[16:40:16.116] Valid
+[16:40:16.116] Time: 1448.4451294s
+
+[16:40:16.116] Checking sha3_256 equivalent for byte count 20
+[17:04:26.607] Valid
+[17:04:26.607] Time: 1450.478092s
+
+[17:04:26.607] Checking sha3_256 equivalent for byte count 21
+[17:28:36.193] Valid
+[17:28:36.193] Time: 1449.5743838s
+
+[17:28:36.193] Checking sha3_256 equivalent for byte count 22
+[17:52:49.368] Valid
+[17:52:49.368] Time: 1453.1636176s
+
+[17:52:49.368] Checking sha3_256 equivalent for byte count 23
+[18:17:00.590] Valid
+[18:17:00.590] Time: 1451.2099219s
+
+[18:17:00.590] Checking sha3_256 equivalent for byte count 24
+[18:41:17.626] Valid
+[18:41:17.626] Time: 1457.0243035s
+
+[18:41:17.626] Checking sha3_256 equivalent for byte count 25
+[19:05:31.630] Valid
+[19:05:31.630] Time: 1453.9933606s
+
+[17:31:45.373] Checking sha3_256 equivalent for byte count 26
+[17:56:22.214] Valid
+[17:56:22.214] Time: 1476.8288278s
+
+[08:42:05.117] Checking sha3_256 equivalent for byte count 27
+[09:07:28.591] Valid
+[09:07:28.591] Time: 1523.4524912s
+
+[09:07:28.591] Checking sha3_256 equivalent for byte count 28
+[09:32:31.243] Valid
+[09:32:31.243] Time: 1502.6402775s
+
+[09:32:31.243] Checking sha3_256 equivalent for byte count 29
+[09:56:57.535] Valid
+[09:56:57.535] Time: 1466.2810922s
+
+[09:56:57.535] Checking sha3_256 equivalent for byte count 30
+[10:21:31.283] Valid
+[10:21:31.283] Time: 1473.7354219s
+
+[18:24:44.114] Checking sha3_256 equivalent for byte count 31
+[18:49:00.436] Valid
+[18:49:00.437] Time: 1456.3114622s
+
+[18:49:00.437] Checking sha3_256 equivalent for byte count 32
+[19:13:08.090] Valid
+[19:13:08.090] Time: 1447.6418326s
+
+[19:13:08.090] Checking sha3_256 equivalent for byte count 33
+[19:37:19.033] Valid
+[19:37:19.034] Time: 1450.9321357s
+
+[19:37:19.034] Checking sha3_256 equivalent for byte count 34
+[20:01:27.615] Valid
+[20:01:27.615] Time: 1448.5689914s
+
+[20:01:27.615] Checking sha3_256 equivalent for byte count 35
+[20:25:36.452] Valid
+[20:25:36.452] Time: 1448.8248187s
+
+[20:25:36.452] Checking sha3_256 equivalent for byte count 36
+[20:49:48.729] Valid
+[20:49:48.729] Time: 1452.2638575s
+
+[20:49:48.729] Checking sha3_256 equivalent for byte count 37
+[21:13:59.879] Valid
+[21:13:59.880] Time: 1451.13858s
+
+[21:50:05.614] Checking sha3_256 equivalent for byte count 38
+[22:14:38.843] Valid
+[22:14:38.843] Time: 1473.2182442s
+
+[22:14:38.843] Checking sha3_256 equivalent for byte count 39
+[22:38:44.209] Valid
+[22:38:44.209] Time: 1445.3544793s
+
+[22:38:44.209] Checking sha3_256 equivalent for byte count 40
+[23:02:58.011] Valid
+[23:02:58.011] Time: 1453.7897644s
+
+[23:02:58.011] Checking sha3_256 equivalent for byte count 41
+[23:27:00.659] Valid
+[23:27:00.659] Time: 1442.6360413s
+
+[23:27:00.659] Checking sha3_256 equivalent for byte count 42
+[23:51:04.462] Valid
+[23:51:04.462] Time: 1443.7925633s
+
+[23:51:04.463] Checking sha3_256 equivalent for byte count 43
+[00:15:09.569] Valid
+[00:15:09.569] Time: 1445.0950739s
+
+[00:15:09.569] Checking sha3_256 equivalent for byte count 44
+[00:39:15.809] Valid
+[00:39:15.809] Time: 1446.2294232s
+
+[00:39:15.809] Checking sha3_256 equivalent for byte count 45
+[01:03:24.228] Valid
+[01:03:24.228] Time: 1448.4073112s
+
+[01:03:24.228] Checking sha3_256 equivalent for byte count 46
+[01:27:30.795] Valid
+[01:27:30.795] Time: 1446.5549753s
+
+[01:27:30.795] Checking sha3_256 equivalent for byte count 47
+[01:51:37.053] Valid
+[01:51:37.053] Time: 1446.2466267s
+
+[01:51:37.053] Checking sha3_256 equivalent for byte count 48
+[02:15:45.104] Valid
+[02:15:45.105] Time: 1448.0418825s
+
+[02:15:45.105] Checking sha3_256 equivalent for byte count 49
+[02:39:50.666] Valid
+[02:39:50.666] Time: 1445.5505662s
+
+[02:39:50.666] Checking sha3_256 equivalent for byte count 50
+[03:04:01.845] Valid
+[03:04:01.846] Time: 1451.167674s
+
+[13:17:43.934] Checking sha3_256 equivalent for byte count 51
+[13:42:04.860] Valid
+[13:42:04.860] Time: 1460.9142423s
+
+[13:42:04.860] Checking sha3_256 equivalent for byte count 52
+[14:06:06.775] Valid
+[14:06:06.775] Time: 1441.9031262s
+
+[14:06:06.775] Checking sha3_256 equivalent for byte count 53
+[14:30:07.488] Valid
+[14:30:07.488] Time: 1440.7016068s
+
+[14:30:07.488] Checking sha3_256 equivalent for byte count 54
+[14:54:11.222] Valid
+[14:54:11.222] Time: 1443.7224401s
+
+[14:54:11.222] Checking sha3_256 equivalent for byte count 55
+[15:18:14.395] Valid
+[15:18:14.395] Time: 1443.1612162s
+
+[15:18:14.395] Checking sha3_256 equivalent for byte count 56
+[15:42:18.472] Valid
+[15:42:18.473] Time: 1444.0655029s
+
+[15:42:18.473] Checking sha3_256 equivalent for byte count 57
+[16:06:25.739] Valid
+[16:06:25.739] Time: 1447.254406s
+
+[16:06:25.739] Checking sha3_256 equivalent for byte count 58
+[16:30:29.702] Valid
+[16:30:29.702] Time: 1443.950143s
+
+[16:30:29.702] Checking sha3_256 equivalent for byte count 59
+[16:54:36.491] Valid
+[16:54:36.491] Time: 1446.7770684s
+
+[21:07:52.984] Checking sha3_256 equivalent for byte count 60
+[21:32:33.238] Valid
+[21:32:33.238] Time: 1480.2432093s
+
+[21:32:33.238] Checking sha3_256 equivalent for byte count 61
+[21:57:25.867] Valid
+[21:57:25.867] Time: 1492.6180083s
+
+[21:57:25.867] Checking sha3_256 equivalent for byte count 62
+[22:21:57.003] Valid
+[22:21:57.003] Time: 1471.1240642s
+
+[22:21:57.003] Checking sha3_256 equivalent for byte count 63
+[22:46:48.604] Valid
+[22:46:48.604] Time: 1491.5896479s
+
+[23:02:56.750] Checking sha3_256 equivalent for byte count 64
+[23:27:14.209] Valid
+[23:27:14.209] Time: 1457.447742s
+
+[23:27:14.209] Checking sha3_256 equivalent for byte count 65
+[23:51:25.435] Valid
+[23:51:25.436] Time: 1451.2152559s
+
+[23:51:25.436] Checking sha3_256 equivalent for byte count 66
+[00:15:34.360] Valid
+[00:15:34.360] Time: 1448.9112611s
+
+[00:15:34.360] Checking sha3_256 equivalent for byte count 67
+[00:39:44.887] Valid
+[00:39:44.887] Time: 1450.5151243s
+
+[00:39:44.887] Checking sha3_256 equivalent for byte count 68
+[01:03:56.551] Valid
+[01:03:56.551] Time: 1451.6514879s
+
+[01:03:56.551] Checking sha3_256 equivalent for byte count 69
+[01:28:07.760] Valid
+[01:28:07.760] Time: 1451.1988997s
+
+[01:28:07.760] Checking sha3_256 equivalent for byte count 70
+[01:52:23.970] Valid
+[01:52:23.970] Time: 1456.1986194s
+
+PARKER YOUR OUTPUT GOES HERE! :)
+Throw in your machine specs like ours are before your proof results.
+
+
+
+Byte Count 140-200 run on following specs:
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+RAM: 32.0 GB
+ 
+[13:40:02.178] Checking sha3_256 equivalent for byte count 140
+[14:25:42.462] Valid
+[14:25:42.462] Time: 2740.2256517s
+
+[14:25:42.462] Checking sha3_256 equivalent for byte count 141
+[15:15:38.696] Valid
+[15:15:38.696] Time: 2996.1769178s
+
+[15:46:16.306] Checking sha3_256 equivalent for byte count 142
+[16:31:49.127] Valid
+[16:31:49.127] Time: 2732.7664717s
+
+[16:31:49.127] Checking sha3_256 equivalent for byte count 143
+[17:17:05.868] Valid
+[17:17:05.868] Time: 2716.6784284s
+
+[18:03:45.808] Checking sha3_256 equivalent for byte count 144
+[18:48:59.331] Valid
+[18:48:59.331] Time: 2713.4650987s
+
+[18:48:59.331] Checking sha3_256 equivalent for byte count 145
+[19:37:30.595] Valid
+[19:37:30.595] Time: 2911.2006017s
+
+[19:37:30.595] Checking sha3_256 equivalent for byte count 146
+[20:26:08.673] Valid
+[20:26:08.673] Time: 2918.0118808s
+
+[20:26:08.674] Checking sha3_256 equivalent for byte count 147
+[21:15:13.576] Valid
+[21:15:13.576] Time: 2944.8448646s
+
+[21:15:13.577] Checking sha3_256 equivalent for byte count 148
+[22:01:07.170] Valid
+[22:01:07.170] Time: 2753.5251349s
+
+[22:01:07.170] Checking sha3_256 equivalent for byte count 149
+[22:56:51.549] Valid
+[22:56:51.549] Time: 3344.3154334s
+
+[22:56:51.549] Checking sha3_256 equivalent for byte count 150
+[00:02:04.500] Valid
+[00:02:04.500] Time: 3912.8660146s
+
+[00:02:04.500] Checking sha3_256 equivalent for byte count 151
+[01:11:09.881] Valid
+[01:11:09.881] Time: 4145.3114982s
+
+[01:11:09.882] Checking sha3_256 equivalent for byte count 152
+[02:06:41.162] Valid
+[02:06:41.162] Time: 3331.1860699s
+
+[02:06:41.163] Checking sha3_256 equivalent for byte count 153
+[02:57:03.492] Valid
+[02:57:03.492] Time: 3022.259292s
+
+[02:57:03.492] Checking sha3_256 equivalent for byte count 154
+[03:56:44.201] Valid
+[03:56:44.201] Time: 3580.6443598s
+
+[03:56:44.201] Checking sha3_256 equivalent for byte count 155
+[04:43:35.941] Valid
+[04:43:35.941] Time: 2811.6707828s
+
+[04:43:35.941] Checking sha3_256 equivalent for byte count 156
+[05:29:38.825] Valid
+[05:29:38.826] Time: 2762.8190604s
+
+[05:29:38.826] Checking sha3_256 equivalent for byte count 157
+[06:15:24.629] Valid
+[06:15:24.629] Time: 2745.735099s
+
+[06:15:24.630] Checking sha3_256 equivalent for byte count 158
+[07:01:16.404] Valid
+[07:01:16.404] Time: 2751.7128033s
+
+[07:01:16.404] Checking sha3_256 equivalent for byte count 159
+[07:47:41.925] Valid
+[07:47:41.925] Time: 2785.4601518s
+
+[07:47:41.925] Checking sha3_256 equivalent for byte count 160
+[08:33:25.527] Valid
+[08:33:25.528] Time: 2743.5431248s
+
+[08:33:25.528] Checking sha3_256 equivalent for byte count 161
+[09:19:46.240] Valid
+[09:19:46.240] Time: 2780.6511385s
+
+[09:19:46.240] Checking sha3_256 equivalent for byte count 162
+[10:05:42.417] Valid
+[10:05:42.417] Time: 2756.0850553s
+
+[10:05:42.417] Checking sha3_256 equivalent for byte count 163
+[10:51:51.068] Valid
+[10:51:51.068] Time: 2768.588122s
+
+[10:51:51.068] Checking sha3_256 equivalent for byte count 164
+[11:37:59.021] Valid
+[11:37:59.021] Time: 2767.8951669s
+
+[11:37:59.021] Checking sha3_256 equivalent for byte count 165
+[12:23:50.806] Valid
+[12:23:50.806] Time: 2751.7247515s
+
+[12:23:50.806] Checking sha3_256 equivalent for byte count 166
+[13:09:35.984] Valid
+[13:09:35.985] Time: 2745.1194002s
+
+[13:09:35.985] Checking sha3_256 equivalent for byte count 167
+[13:55:27.983] Valid
+[13:55:27.983] Time: 2751.9350776s
+
+[13:55:27.984] Checking sha3_256 equivalent for byte count 168
+[14:41:04.426] Valid
+[14:41:04.426] Time: 2736.3831746s
+
+[14:41:04.426] Checking sha3_256 equivalent for byte count 169
+[15:32:16.383] Valid
+[15:32:16.384] Time: 3071.8958367s
+
+[16:12:48.663] Checking sha3_256 equivalent for byte count 170
+[16:48:28.392] Valid
+[16:48:28.392] Time: 2139.6950678s
+
+[16:48:28.392] Checking sha3_256 equivalent for byte count 171
+[17:25:59.806] Valid
+[17:25:59.806] Time: 2251.3714597s
+
+[17:25:59.806] Checking sha3_256 equivalent for byte count 172
+[18:00:24.982] Valid
+[18:00:24.982] Time: 2065.1406965s
+
+[18:00:24.982] Checking sha3_256 equivalent for byte count 173
+[18:33:41.822] Valid
+[18:33:41.822] Time: 1996.8056296s
+
+[18:33:41.822] Checking sha3_256 equivalent for byte count 174
+[19:06:39.668] Valid
+[19:06:39.668] Time: 1977.8117646s
+
+[19:06:39.668] Checking sha3_256 equivalent for byte count 175
+[19:39:43.326] Valid
+[19:39:43.326] Time: 1983.617801s
+
+[19:39:43.326] Checking sha3_256 equivalent for byte count 176
+[20:12:44.726] Valid
+[20:12:44.726] Time: 1981.3583363s
+
+[20:12:44.726] Checking sha3_256 equivalent for byte count 177
+[20:45:50.414] Valid
+[20:45:50.414] Time: 1985.6488514s
+
+[20:45:50.414] Checking sha3_256 equivalent for byte count 178
+[21:19:24.758] Valid
+[21:19:24.758] Time: 2014.3037744s
+
+[21:19:24.758] Checking sha3_256 equivalent for byte count 179
+[21:52:28.963] Valid
+[21:52:28.964] Time: 1984.1629036s
+
+[21:52:28.964] Checking sha3_256 equivalent for byte count 180
+[22:25:36.622] Valid
+[22:25:36.622] Time: 1987.6203978s
+
+[22:25:36.622] Checking sha3_256 equivalent for byte count 181
+[23:01:30.185] Valid
+[23:01:30.185] Time: 2153.5229969s
+
+[23:01:30.185] Checking sha3_256 equivalent for byte count 182
+[23:39:15.172] Valid
+[23:39:15.173] Time: 2264.9418064s
+
+[23:39:15.173] Checking sha3_256 equivalent for byte count 183
+[00:18:33.250] Valid
+[00:18:33.250] Time: 2357.9474329s
+
+[00:18:33.250] Checking sha3_256 equivalent for byte count 184
+[00:56:07.705] Valid
+[00:56:07.705] Time: 2254.3941084s
+
+[00:56:07.705] Checking sha3_256 equivalent for byte count 185
+[01:30:43.093] Valid
+[01:30:43.093] Time: 2075.3478065s
+
+[01:30:43.093] Checking sha3_256 equivalent for byte count 186
+[02:03:49.519] Valid
+[02:03:49.519] Time: 1986.383993s
+
+[02:03:49.519] Checking sha3_256 equivalent for byte count 187
+[02:36:54.163] Valid
+[02:36:54.164] Time: 1984.6038239s
+
+[02:36:54.164] Checking sha3_256 equivalent for byte count 188
+[03:10:00.550] Valid
+[03:10:00.550] Time: 1986.3470798s
+
+[03:10:00.550] Checking sha3_256 equivalent for byte count 189
+[03:44:09.178] Valid
+[03:44:09.178] Time: 2048.5863354s
+
+[03:44:09.178] Checking sha3_256 equivalent for byte count 190
+[04:17:13.996] Valid
+[04:17:13.996] Time: 1984.7790528s
+
+[04:17:13.996] Checking sha3_256 equivalent for byte count 191
+[04:50:20.090] Valid
+[04:50:20.090] Time: 1986.0532264s
+
+[04:50:20.090] Checking sha3_256 equivalent for byte count 192
+[05:23:24.318] Valid
+[05:23:24.318] Time: 1984.1890389s
+
+[05:23:24.318] Checking sha3_256 equivalent for byte count 193
+[05:56:29.341] Valid
+[05:56:29.342] Time: 1984.9816987s
+
+[05:56:29.342] Checking sha3_256 equivalent for byte count 194
+[06:29:34.736] Valid
+[06:29:34.736] Time: 1985.3535677s
+
+[06:29:34.737] Checking sha3_256 equivalent for byte count 195
+[07:02:39.860] Valid
+[07:02:39.860] Time: 1985.0841048s
+
+[07:02:39.860] Checking sha3_256 equivalent for byte count 196
+[07:35:45.233] Valid
+[07:35:45.233] Time: 1985.328659s
+
+[07:35:45.233] Checking sha3_256 equivalent for byte count 197
+[08:08:50.474] Valid
+[08:08:50.474] Time: 1985.2005811s
+
+[08:08:50.474] Checking sha3_256 equivalent for byte count 198
+[08:41:57.047] Valid
+[08:41:57.047] Time: 1986.5305859s
+
+[08:41:57.047] Checking sha3_256 equivalent for byte count 199
+[09:15:04.421] Valid
+[09:15:04.422] Time: 1987.3325332s
+
+[09:15:04.422] Checking sha3_256 equivalent for byte count 200
+[09:48:09.885] Valid
+[09:48:09.885] Time: 1985.4281747s

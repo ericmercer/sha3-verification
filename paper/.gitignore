@@ -5,4 +5,8 @@
 *.gz
 *.cut
 *.fls
+*.bbl
+*.blg
+*.synctex.gz
+*.out
 paper.pdf

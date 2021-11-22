@@ -186,13 +186,7 @@ void Iota(uint64_t A[5][5], size_t i)
 }
 
 
-void Round_Functions(uint64_t A[5][5], size_t i) {
-    Theta(A);
-    Rho(A);
-    Pi(A);
-    Chi(A);
-    Iota(A, i);
-}
+
 
 void KeccakF1600(uint64_t A[5][5])
 {

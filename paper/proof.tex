@@ -1,12 +1,33 @@
+SHA 3 Details
+\begin{compactitem}
+  \item Process 1600 bits at a time: $5 * 5 * 64$
+  \item State vector is $5*5*64*$
+  \item Incoming message padded out to whole number of 1600 bit bit-strings
+  \item Processed in order by \texttt{KECCAK}
+  \item Keccak turns each block into a state vector (rearranges bit layout in memory)
+  \item Keccak has 24 rounds for state vector. 
+  \item There are 5 hash functions sequentially applied in each round to iteratively update the state vector
+  \item After the last round, keccak turns the state vector back into the bit-string./\item The next unprocessed block is \emph{sponged} (e.g., absorbed) into the current bit-string from the latest keccak and the process is repeated 
+  \item The max digest (hash) size is 512 bits in the standard
+  \item The final bit-string from keccak after sponging and processing every block in the original message is truncated to the desired digest size 
+\end{compactitem}
 
-\section{Proof Approach}\label{sec:proof}
+SAW Details
+\begin{compactitem}
+  \item Cryptol is a specification language specifically for defining crypto-primitives
+  \item It has a compiler to turn Cryptol to SAW core terms
+  \item It has an execution environment to run test vectors on specifications
+  \item SAW is a tool to prove equivalence between SAW core terms
+  \item It uses symbolic execution and must unroll every loop to a fixed length
+  \item It can take as input C and Java code and compile those to core terms
+  \item It can use overides to replace C and Java code in the term
+\end{compactitem}
 
-
-SAW provides a verification environment for compositional proofs of functional equivalence between two pieces of supported code (C, Java, or Cryptol).  
+SAW provides a verification environment for compositional proofs of functional equivalence between two pieces of supported code (C, Java, or Cryptol).
 SAW uses symbolic execution to create computational models of the code and creates problems of functional equivalence between those two models that can be pushed off to an SMT solver.  
-The difficulty of these SMT problems is directly affected by the size and complexity of the computations that are being compared.  
+The difficulty of these SMT problems is directly affected by the size and complexity of the computations that are being compared.
 This can lead to drastic increases in proof times and sometimes even prevents completion as computations increase.  
-SAW's solution to this is to create contracts (called overrides) of a functions input to output relationship which allows for a modular approach to writing the proof.  
+SAW's solution to this is to create contracts (called overrides) of a functions input to output relationship which allows for a modular approach to writing the proof.
 By breaking up computation into smaller pieces, and creating overrides for these pieces, SAW can often simplify an otherwise complex (and thus incompletable) proof to remain within the capacity of an SMT solver.
 
 Cryptol is a domain-specific specification language, which has been used in the previously mentioned works by Galois' and by Decker et. al to write visually reviewable implementations of NIST standards.

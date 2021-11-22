@@ -1,6 +1,7 @@
 \documentclass[runningheads]{llncs}
 %
 \usepackage{paralist}
+\usepackage{comment}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{color}
@@ -73,10 +74,11 @@
 % If you use the hyperref package, please uncomment the following line
 % to display URLs in blue roman font according to Springer's eBook style:
 \renewcommand\UrlFont{\color{blue}\rmfamily}
+\newcommand\keccak{\textsc{Keccak}}
 
 \begin{document}
 %
-\title{Verification of OpenSSL's SHA3 Keccak function using the Software Analysis Workbench}
+\title{Verification of OpenSSL's SHA3 \keccak\ function using the Software Analysis Workbench}
 %
 %\titlerunning{Abbreviated paper title}
 % If the paper title is too long for the running head, you can set
@@ -85,7 +87,7 @@
 \author{
   Parker Hanson\inst{1} \and
   Benjamin Winters\inst{1} \and
-  Eric Mercer\inst{1}\orcidID{0000--0002-2264-2958} \and
+  Eric Mercer\inst{1}\orcidID{0000-0002-2264-2958} \and
   Bret Decker\inst{1}
 }
 %
@@ -107,19 +109,17 @@
 \section{Introduction}\label{sec:introduction}
 \input{introduction}
 
-% \input{preliminaries}
+\section{SHA-3 Overview}
+\input{sha-3}
 
-\section{Proof Overview and Results}\label{sec:proof}
+\section{Proof Outline and Results}\label{sec:proof}
 \input{proof}
 
-\section{SHA3 FIPS Specification in Cryptol}\label{sec:fips}
-\input{fips}
+\section{FIPS 202 Specification in Cryptol}\label{sec:fips}
+\input{fips202}
 
 \section{SHA3 OpenSSL in Cryptol}\label{sec:openssl}
 \input{openssl}
-
-\section{Results and Discussion}\label{sec:results}
-\input{results}
 
 \section{Related Work}\label{sec:related}
 \input{related}

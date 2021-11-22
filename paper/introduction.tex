@@ -1,3 +1,5 @@
+  
+  
   The Secure Hashing Algorithm (SHA) family of cryptography is widely used as a means of providing increased security through generating/verifying digital signatures, deriving keys, and generating pseudorandom bits (\href{https://csrc.nist.gov/publications/detail/fips/202/final}{NIST specification}).  
   The structure and computations of these algorithms is defined by NIST in mathematical specifications.  
   Because these specifications are just figures on a page, any assurance of correctness of an algorithm’s implementation is dependent on a visual review of the code coupled with a small sampling of test vectors.
@@ -16,6 +18,7 @@ This paper details the following contributions.
   \item Early evidence that modular cryptographic specifications such as \texttt{SHA3} lend themselves to efficient \texttt{SAW} verification against C implementations as opposed to flattened specifications such as \texttt{SHA2} 
 \end{compactitem}
 
+\begin{comment}
 \noindent \textbf{Limitations}
 \begin{compactitem}
   \item Visual inspection and limited test vectors for (1) and (2)
@@ -51,3 +54,4 @@ Because of how NIST defines the standard, the keccak function is used for each d
 This means that the proof of correctness for this function extends usefulness beyond just the SHA3-256 level which we focused on.
 In our repository, we wrote the Cryptol specification to be able to run any of the SHA3 family of algorithms using the same keccak.
 A simple extension of this work would be to take that already created and verified Cryptol specification, and prove it up against OpenSSL's slightly modified keccak versions.
+\end{comment}

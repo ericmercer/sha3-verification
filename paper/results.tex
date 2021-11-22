@@ -1,5 +1,3 @@
-\section{Results and Discussion}\label{sec:results}
-
 Talk about the cost of the verification. The amount of effort required to write the specification. Make clear the limits of the result proof.
 
 \begin{compactitem}
@@ -19,7 +17,7 @@ We'll want to determine how long it took us and then try to infer how long that 
 Because of the modular design of the SHA-3 specification, the Cryptol implementation and OpenSSL implementation are programmatically more similar. 
 The only strong discrepancy is that the OpenSSL implementation organizes the bits of the sponge construction. 
 The affect of modular cryptographic design can be seen by the proof completing successfully in the Yices, Z3, and ABC SMT-solvers. 
-Previous work on SHA2-256 was only successful with Yices \ref{cite:nfm-us}. Full results are show in table \ref{finaltable}. 
+Previous work on SHA2-256 was only successful with Yices \cite{nfm-us}. Full results are show in table \ref{finaltable}. 
 
 \begin{table*}[b]
 \caption{Proof Runtimes for SHA-3 with SMT-solvers}\label{finaltable}

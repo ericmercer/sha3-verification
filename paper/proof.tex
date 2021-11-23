@@ -25,8 +25,9 @@ SHA 3 Details
   \item Keccak has 24 rounds for state vector. 
   \item There are 5 hash functions sequentially applied in each round to iteratively update the state vector
   \item After the last round, keccak turns the state vector back into the bit-string./\item The next unprocessed block is \emph{sponged} (e.g., absorbed) into the current bit-string from the latest keccak and the process is repeated 
-  \item The max digest (hash) size is 512 bits in the standard
-  \item The final bit-string from keccak after sponging and processing every block in the original message is truncated to the desired digest size 
+  \item The digest size is defined in pairs by the standard.
+  \item The final bit-string from keccak after sponging and processing every block in the original message is truncated to the desired digest size
+  \item The brute force proof is for a digest of 256-bits.
 \end{compactitem}
 
 SAW Details

@@ -14,10 +14,14 @@
 \end{algorithm}
 
 \shaThree\ uses \emph{sponge construction} to generate hashes as shown in \algoref{alg:sha3} (see \nist\ \fips\ \cite{fips202}).
-Sponge construction \emph{absorbs} data into an internal state $S$ at a rate of $r$-bits per cycle (\lineref{line:absorb} and \lineref{line:keccak}), transforming the state on each cycle, and once all the data is absorbed, then it \emph{squeezes} out a final $d$-bit hash (\lineref{line:squeeze}).
-The transformation function, \keccak-f[1600], simply \keccak\ in the rest of this presentation, defines the size of the state $S$ to be $s = 1600$-bits, which is initialized to 0 (\lineref{line:init}).
+Sponge construction \emph{absorbs} data into an internal state $S$ at a rate of $r$ bits per cycle (\lineref{line:absorb} and \lineref{line:keccak}), transforming the state on each cycle, and once all the data is absorbed, then it \emph{squeezes} out a final $d$-bit digest (\lineref{line:squeeze}).
+The transformation function, \keccak-f[1600], simply \keccak\ in the rest of this presentation, defines the size of the state $S$ to be $s = 1600$ bits, which is initialized to 0 (\lineref{line:init}).
 
-The state itself consists of $r$-bits that are written or read plus a capacity of $c = s - r$ that is untouched by input or output.
-The \nist\ standard defines pairs of allowed hash sizes and rates as required in \algoref{alg:sha3}. The input $N$ is padded with $10^*1$ such that its final size is a multiple of $r$ bits, and it is partitioned into $r$-bit size blocks (\lineref{line:pad}) for the absorption phase.
+The state itself consists of $r$ bits that are written or read plus a capacity of $c = s - r$ bits that are untouched by input or output.
+The \nist\ standard defines pairs of allowed hash sizes and rates.
+These are defined in the requires statement in \algoref{alg:sha3}. 
+The input $N$ is padded such that its final size is a multiple of $r$ bits, and it is partitioned into $r$-bit size blocks (\lineref{line:pad}) for the absorption phase.
+The padding is defined by the regular expression $10^*1$.
+An extra block is added for the padding if needed since every $N$ must be a multiple of $r$-bit size blocks matching the $10^*1$ regular expression at the end of the last block.
 
 The \keccak\ transformation function takes place over twenty-four rounds with each round consisting of five steps: $\theta$, $\rho$, $\pi$, $\chi$, and $\iota$. The state $S$ itself is viewed as a $5 \times 5$ array of $64$-bit words (e.g. $5 * 5 * 64 = 1600$) in each of the steps. $\theta$ computes a parity over the columns in the state. $\rho$ is a bitwise rotate over the state. $\pi$ is a permutation on the state. $\chi$ is a non-linear operation that combines along the rows in the state. And $\iota$ mixes in twenty-four different constants, one for each iteration, into portions of the state.

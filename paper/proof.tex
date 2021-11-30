@@ -31,15 +31,7 @@ SHA 3 Details
 \end{compactitem}
 
 SAW Details
-\begin{compactitem}
-  \item Cryptol is a specification language specifically for defining crypto-primitives
-  \item It has a compiler to turn Cryptol to SAW core terms
-  \item It has an execution environment to run test vectors on specifications
-  \item SAW is a tool to prove equivalence between SAW core terms
-  \item It uses symbolic execution and must unroll every loop to a fixed length
-  \item It can take as input C and Java code and compile those to core terms
-  \item It can use overides to replace C and Java code in the term
-\end{compactitem}
+
 
 SAW provides a verification environment for compositional proofs of functional equivalence between two pieces of supported code (C, Java, or Cryptol).
 SAW uses symbolic execution to create computational models of the code and creates problems of functional equivalence between those two models that can be pushed off to an SMT solver.  

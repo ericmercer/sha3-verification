@@ -1,0 +1,22 @@
+\cryptol\ is a domain specific language for describing cryptographic primitives, such as algorithms to compute digests, at the bit-level.
+Cryptographic primitives are the building blocks for complex cryptographic protocols, such as SSL, that provide a broad range of security guarantees.
+\cryptol\ is executable, being able to run test vectors to validate specifications, and more importantly, it compiles directly to \saw\ core terms for formal reasoning.
+
+\saw\ is a tool to extract formal models from programs with support for C, Java, and \cryptol\ input.
+These formal models are referred to as core terms in \saw.
+\saw's function, among other things, is to prove input to output equivalence between core terms.
+It accomplishes such proofs with equivalence preserving rewrites on the core terms and symbolic execution.
+The rewrites simplify the terms for symbolic execution as core term size correlates with complexity. 
+The rewrites also try to structurally reduce one term to the other thus avoiding symbolic execution altogether.
+Symbolic execution reasons about all computation paths in the core terms and proves equivalence in computation over all inputs.
+Symbolic execution must unroll loops in any core term a static number of times to accomplish the equivalence proof.
+As such the number of iterations in any loop must be statically known at compile time.
+
+\saw\ supports hierarchical reasoning with \emph{overrides}.
+An override replaces one core term with another in the formal analysis.
+As an example, consider a Java method that itself calls another Java method as part of its implementation.
+Suppose that \saw\ is able to prove that a \cryptol\ specification for the called method and the Java implementation of the same method are equivalent.
+If that is possible, then an override is able to replace the called Java method with the core term from the \cryptol\ in the model extraction from Java.
+Core terms from \cryptol\ are smaller in size and simpler in structure than equivalent terms extracted from C or Java thereby reducing the size and complexity of the extracted core term in \saw.
+As such, proving a property about a complex C function or Java method generally requires the use of overrides from \cryptol\ in order for symbolic execution to be successful.
+Indeed, the use of overrides are key to the \saw\ proof in this paper showing equivalence between the \shaThree\ specification and the \openssl\ C implementation.

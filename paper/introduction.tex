@@ -1,13 +1,16 @@
   
   
-  The Secure Hashing Algorithm (SHA) family of cryptography is widely used as a means of providing increased security through generating/verifying digital signatures, deriving keys, and generating pseudorandom bits (\href{https://csrc.nist.gov/publications/detail/fips/202/final}{NIST specification}).  
-  The structure and computations of these algorithms is defined by NIST in mathematical specifications.  
-  Because these specifications are just figures on a page, any assurance of correctness of an algorithm’s implementation is dependent on a visual review of the code coupled with a small sampling of test vectors.
-  
-  The reliability of this correctness check is often weakened because of the difficulty of performing that visual review.  
-  Many implementations of the SHA algorithms go through major rewrites and optimizations which make visual inspection of the code nearly impossible. (Not sure if that’s too strong a claim).
-  This work bridges that gap between optimized c code, and the NIST standard.
-  
+The Secure Hashing Algorithm (SHA) family of cryptography is widely used as a means of providing increased security through generating/verifying digital signatures, deriving keys, and generating pseudorandom bits (\href{https://csrc.nist.gov/publications/detail/fips/202/final}{NIST specification}).  
+The structure and computations of these algorithms is defined by NIST in mathematical specifications.  
+Because these specifications are just figures on a page, any assurance of correctness of an algorithm’s implementation is dependent on a visual review of the code coupled with a small sampling of test vectors.
+
+The reliability of this correctness check is often weakened because of the difficulty of performing that visual review.  
+Many implementations of the SHA algorithms go through major rewrites and optimizations which make visual inspection of the code nearly impossible. (Not sure if that’s too strong a claim).
+This work bridges that gap between optimized c code, and the NIST standard.
+
+Give a brief history of \shaThree. Introduce briefly SAW and Cryptol.
+
+
 \noindent \textbf{Contributions}:
 This paper details the following contributions.
 \begin{compactitem}

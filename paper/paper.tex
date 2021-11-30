@@ -80,6 +80,9 @@
 \newcommand\shaThree{\texttt{SHA-3}}
 \newcommand\nist{\texttt{NIST}}
 \newcommand\fips{\texttt{FIPS 202}}
+\newcommand\saw{\texttt{SAW}}
+\newcommand\cryptol{Cryptol}
+\newcommand\openssl{OpenSSL}
 \newcommand{\figref}[1]{Fig.~\ref{#1}}
 \newcommand{\algoref}[1]{Alg.~\ref{#1}}
 \newcommand{\lineref}[1]{Line~\ref{#1}}
@@ -117,8 +120,16 @@
 \section{Introduction}\label{sec:introduction}
 \input{introduction}
 
-\section{SHA-3 Overview}
+\section{Background}\label{sec:background}
+\cryptol\ and \saw\ are used to prove properties of \openssl's implementation of \shaThree\ relative to the \nist\ \fips\ publication \cite{fips202}. 
+What the proofs actually say, and an understanding of their limitations, relies on (1) a basic knowledge of how \saw\ works and what \cryptol\ does relative to \saw, and (2) how the \shaThree\ algorithm constructs its digests.
+Key elements relative to understanding the proof of each (\cryptol, \saw, and \shaThree) are defined in this section. 
+
+\subsection{Cryptol and SAW}\label{subsec:saw}
+\input{saw}
+\subsection{SHA-3 Overview}\label{subsec:sha3}
 \input{sha-3}
+
 
 \section{Proof Outline and Results}\label{sec:proof}
 \input{proof}

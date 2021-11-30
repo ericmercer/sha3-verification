@@ -158,8 +158,6 @@ sponge pad_msg out capacity = take`{out_len}(reverse_64int (to_bits
 	).arr))
 	where pads = split`{R}(pad_msg)
 
-
-
 //HASH FUNCTIONS
 hash msg end out capacity = sponge (reverse_64int (pad (msg # end) capacity)) out capacity
 
@@ -204,3 +202,17 @@ test_shake : {out_bytes, msg_bytes}
     (64 >= width msg_bytes, 64 >= width out_bytes, fin msg_bytes, fin out_bytes)
     => ([8 * msg_bytes] -> [8 * out_bytes] -> [8 * out_bytes]) -> [8 * msg_bytes] -> [8 * out_bytes] -> [8 * out_bytes]
 test_shake shake_n msg out = h2b (shake_n (h2b msg) out)
+
+
+//Absorb, Squeeze, Sponge
+SHA3_absorb : {R} (fin R, 64 >= width R) => [R][B] -> STATE_ARR
+SHA3_absorb padded_msg =  (while {i = 0:[W], arr = to_state_arr (0:[B])} //STATE
+		(\state -> state.i < (`R:[W])) //COND
+		(\state -> {i = state.i + 1:[W], arr = keccakp (state.arr ^ (to_state_arr (padded_msg @state.i)))}) //LOOP
+	).arr
+
+SHA3_squeeze : {D} (fin D, 64 >= width D, B >= D) => STATE_ARR -> [D] -> [D]
+SHA3_squeeze arr d = take`{D}(reverse_64int (to_bits arr))
+
+SHA3_sponge : {R, D} (fin R, 64 >= width R, fin D, 64 >= width D, B >= D) => [R][B] -> [D] -> [D]
+SHA3_sponge padded_msg d = squeeze (absorb padded_msg) d

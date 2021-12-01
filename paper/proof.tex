@@ -68,8 +68,8 @@ The equivalence is independent of the digest size, message size, or state.
 
 In summary, the \cryptol\ specification of the \fips\ standard relies on visual inspection and test vectors for equivalence.
 The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of \openssl's implementation is limited to the 256-bit digest on input sizes from $0$ bits to $1,087$ bits.
-That is a proof that considers all of \figref{fig:sha3}.
+That is a proof that considers all of \algoref{alg:sha3}.
 The equivalence between \openssl\ \cryptol\ specification and the actual C implementation is limited to the \keccak algorithm only.
-That is a proof that only considers \lineref{line:keccak} in \figref{fig:sha3} but holds for any state and is independent of the digest size and rate.
+That is a proof that only considers \lineref{line:keccak} in \algoref{alg:sha3} but holds for any state and is independent of the digest size and rate.
 
 %% TODO: summarize the cost of the total proof in terms of time and identify the machine used for the proof.

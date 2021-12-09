@@ -211,8 +211,8 @@ SHA3_absorb padded_msg =  (while {i = 0:[W], arr = to_state_arr (0:[B])} //STATE
 		(\state -> {i = state.i + 1:[W], arr = keccakp (state.arr ^ (to_state_arr (padded_msg @state.i)))}) //LOOP
 	).arr
 
-SHA3_squeeze : {D} (fin D, 64 >= width D, B >= D) => STATE_ARR -> [D] -> [D]
-SHA3_squeeze arr d = take`{D}(reverse_64int (to_bits arr))
+SHA3_squeeze : STATE_ARR -> [32][8]
+SHA3_squeeze arr = split`{32}(take`{256}(reverse_64int (to_bits arr)))
 
-SHA3_sponge : {R, D} (fin R, 64 >= width R, fin D, 64 >= width D, B >= D) => [R][B] -> [D] -> [D]
-SHA3_sponge padded_msg d = SHA3_squeeze (SHA3_absorb padded_msg) d
+//SHA3_sponge : {R, D} (fin R, 64 >= width R, fin D, 64 >= width D, B >= D) => [R][B] -> [D] -> [D]
+//SHA3_sponge padded_msg d = SHA3_squeeze (SHA3_absorb padded_msg) d

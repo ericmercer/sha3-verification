@@ -17,6 +17,35 @@ let ptr_to_fresh name typ = do {
 };
 
 
+let squeeze_setup = do {
+    (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
+    (out, outp) <- ptr_to_fresh "out" (llvm_array 32 (llvm_int 8));
+    
+    crucible_execute_func [arrp, outp, crucible_term {{32:[64]}}, crucible_term {{1088:[64]}}];
+
+    let res = crucible_term {{SHA3_squeeze arr}};
+    crucible_points_to outp res;
+};
+squeeze_ov <- time (crucible_llvm_verify keccak_module "SHA3_squeeze" [] false squeeze_setup yices);
+
+
+/*
+let absorb_setup = do {
+    (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
+    (input, inp) <- ptr_to_fresh "input" (llvm_array 32 (llvm_int 8));
+    len <- crucible_fresh_var "len" (llvm_int 64);
+    r <- crucible_fresh_var "r" (llvm_int 64);
+
+    crucible_execute_func [arrp, inp, crucible_term len, crucible_term r];
+    let res = crucible_term {{SHA3_absorb input}};
+    crucible_points_to arrp res;
+};
+absorb_ov <- time (crucible_llvm_verify keccak_module "SHA3_absorb" [keccak_ov] false absorb_setup yices);
+
+*/
+
+
+
 //Pi function comparison
 let pi_setup = do {
     (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
@@ -92,6 +121,17 @@ let keccak_setup = do {
 keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
 
 
+let absorb_setup = do {
+    (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
+    (input, inp) <- ptr_to_fresh "input" (llvm_array 32 (llvm_int 8));
+    len <- crucible_fresh_var "len" (llvm_int 64);
+    r <- crucible_fresh_var "r" (llvm_int 64);
+
+    crucible_execute_func [arrp, inp, len, r];
+    let res = crucible_term {{SHA3_absorb input}};
+    crucible_points_to arrp res;
+};
+absorb_ov <- time (crucible_llvm_verify keccak_module "SHA3_absorb" [/*keccak_ov*/] false absorb_setup yices);
 /*
 pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
 rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);

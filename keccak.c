@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
 # define BIT_INTERLEAVE (0)
 
@@ -199,5 +200,67 @@ void KeccakF1600(uint64_t A[5][5])
         Chi(A);
         Iota(A, i);
         
+    }
+}
+
+
+size_t SHA3_absorb(uint64_t A[5][5], const unsigned char *inp, size_t len,
+                   size_t r)
+{
+    uint64_t *A_flat = (uint64_t *)A;
+    size_t i, w = r / 8;
+
+    assert(r < (25 * sizeof(A[0][0])) && (r % 8) == 0);
+
+    while (len >= r) {
+        for (i = 0; i < w; i++) {
+            uint64_t Ai = (uint64_t)inp[0]       | (uint64_t)inp[1] << 8  |
+                          (uint64_t)inp[2] << 16 | (uint64_t)inp[3] << 24 |
+                          (uint64_t)inp[4] << 32 | (uint64_t)inp[5] << 40 |
+                          (uint64_t)inp[6] << 48 | (uint64_t)inp[7] << 56;
+            inp += 8;
+
+            A_flat[i] ^= Ai; //We removed the BitInterleave call on Ai, because we are only considering the code without bit interleave.
+        }
+        KeccakF1600(A);
+        len -= r;
+    }
+
+    return len;
+}
+
+
+void SHA3_squeeze(uint64_t A[5][5], unsigned char *out, size_t len, size_t r)
+{
+    uint64_t *A_flat = (uint64_t *)A;
+    size_t i, w = r / 8;
+
+    //assert(r < (25 * sizeof(A[0][0])) && (r % 8) == 0); //we can take this out because we hard code r to the value for a 256 hash.
+
+    while (len != 0) {
+        for (i = 0; i < w && len != 0; i++) {
+            uint64_t Ai = A_flat[i]; //Took out BitDeinterleave because we are not considering this case.
+
+            if (len < 8) {
+                for (i = 0; i < len; i++) {
+                    *out++ = (unsigned char)Ai;
+                    Ai >>= 8;
+                }
+                return;
+            }
+
+            out[0] = (unsigned char)(Ai);
+            out[1] = (unsigned char)(Ai >> 8);
+            out[2] = (unsigned char)(Ai >> 16);
+            out[3] = (unsigned char)(Ai >> 24);
+            out[4] = (unsigned char)(Ai >> 32);
+            out[5] = (unsigned char)(Ai >> 40);
+            out[6] = (unsigned char)(Ai >> 48);
+            out[7] = (unsigned char)(Ai >> 56);
+            out += 8;
+            len -= 8;
+        }
+        //if (len)
+        //    KeccakF1600(A);
     }
 }

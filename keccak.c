@@ -236,13 +236,13 @@ void SHA3_squeeze(uint64_t A[5][5], unsigned char *out, size_t len, size_t r)
     size_t i, w = r / 8;
 
     //assert(r < (25 * sizeof(A[0][0])) && (r % 8) == 0); //we can take this out because we hard code r to the value for a 256 hash.
-
+    
     while (len != 0) {
         for (i = 0; i < w && len != 0; i++) {
             uint64_t Ai = A_flat[i]; //Took out BitDeinterleave because we are not considering this case.
 
             if (len < 8) {
-                for (i = 0; i < len; i++) {
+               for (i = 0; i < len; i++) {
                     *out++ = (unsigned char)Ai;
                     Ai >>= 8;
                 }
@@ -260,7 +260,31 @@ void SHA3_squeeze(uint64_t A[5][5], unsigned char *out, size_t len, size_t r)
             out += 8;
             len -= 8;
         }
-        //if (len)
-        //    KeccakF1600(A);
+        if (len)
+            KeccakF1600(A);
     }
+}
+
+
+int main() {
+    uint64_t test[5][5];
+    memset(test, 0, sizeof(test));
+    test[0][3] = 9223372036854775808;
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            printf("%lu ",test[i][j]);
+        }
+        printf("\n");
+    }
+    unsigned char out[32];
+
+    SHA3_squeeze(test, out, 32, 136);
+
+    for (int i = 0; i < 32; i++) {
+        printf("0x%x ", out[i]);
+    }
+    printf("\n");
+    size_t i;
+    
 }

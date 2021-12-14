@@ -21,7 +21,7 @@ let squeeze_setup = do {
     (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
     (out, outp) <- ptr_to_fresh "out" (llvm_array 32 (llvm_int 8));
     
-    crucible_execute_func [arrp, outp, crucible_term {{32:[64]}}, crucible_term {{1088:[64]}}];
+    crucible_execute_func [arrp, outp, crucible_term {{32:[64]}}, crucible_term {{136:[64]}}];
 
     let res = crucible_term {{SHA3_squeeze arr}};
     crucible_points_to outp res;

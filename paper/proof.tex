@@ -34,12 +34,12 @@ The change is significant enough to make it extremely difficult to argue manuall
 
 The next step of the equivalence proof creates a \cryptol\ specification that matches the state reordering in the \openssl\ implementation in an effort to show an equivalence between it and the \cryptol\ specification for the standard.
 This new specification is the box in the right middle of \figref{fig:proofStructure} labeled \emph{OpenSSL} with the \emph{CRY} annotation in the upper right corner.
-\saw\ is not able to reason symbolically about input and digest sizes to construct a general proof of equivalence between the published standard and the \openssl\ \cryptol specifications, but it is able to prove equivalence between the two specifications given specific sizes for the input and digest.
+\saw\ is not able to reason symbolically about input and digest sizes to construct a general proof of equivalence between the published standard and the \openssl\ \cryptol\ specifications, but it is able to prove equivalence between the two specifications given specific sizes for the input and digest.
 
-A series of \saw\ proofs over a range of input sizes with a digest size fixed at $256$-bits is used to prove the equivalence between the published standard and the \openssl\ \cryptol specifications.
-The series of proofs varies the input size from zero bits to $1,087$ bits to reflect the rate $1,088$ bit rate required for a 256-bit digest.
-The proofs establish the correctness of the input padding and covers the situation where the padding adds an additional $1,088$-bit block to the input 
-As such, the meaning of the equivalence arrow between the \emph{Spec} box and the \emph{OpenSSL} box in the middle of the figure is that the two specifications have equivalent computation for a $256$-bit digest for message sizes from $0$ bits to $1,087$ bits.
+A series of \saw\ proofs over a range of input sizes with the digest size fixed at $256$ bits is used to prove the equivalence between the published standard and the \openssl\ \cryptol\ specifications.
+The series of proofs varies the input size from zero bits to $1,087$ bits to reflect the $1,088$ bit rate required for a 256 bit digest.
+The proofs establish the correctness of the input padding and cover the situation where the padding adds an additional $1,088$ bit block to the input 
+As such, the meaning of the equivalence arrow between the \emph{Spec} box and the \emph{OpenSSL} box in the middle of the figure is that the two specifications have equivalent computation for a $256$ bit digest for message sizes from $0$ bits to $1,087$ bits.
 
 \begin{figure*}[t]
   \centering
@@ -55,21 +55,21 @@ The meaning of the equivalence arrow between the \keccak\ definition in the \cry
 That proof cannot be constructed directly by \saw\ since the extracted core term from the C implementation is too big for symbolic execution when considering all twenty-four rounds required by \keccak.
 The full proof requires overrides.
 
-The proof of equivalence between the specification of \keccak\ and the C implementation of \keccak\ in \openssl\ relies on overrides in \saw as shown in \figref{fig:proofStructure2}.
+The proof of equivalence between the specification of \keccak\ and the C implementation of \keccak\ in \openssl\ relies on overrides in \saw\ as shown in \figref{fig:proofStructure2}.
 Here, \saw\ proves equivalence between the \cryptol\ specification and the C implementation for each of the five functions that comprise one round of \keccak\ given some arbitrary input state.
-That is the meaning of the right hand side of \figref{fig:proofStructure2}.
+That is the meaning of the left hand side of \figref{fig:proofStructure2}.
 These are equivalent on any input.
 
 The implementations for each of the five \keccak\ functions in the C implementation are replaced by the corresponding equivalent \cryptol\ specifications in the extracted model from C.
-\saw\ is then able to prove the C implementation of \keccak equivalent to the \cryptol\ specification of the \openssl\ implementation of \keccak\ over all twenty-four rounds for any arbitrary input state.
+\saw\ is then able to prove the C implementation of \keccak\ equivalent to the \cryptol\ specification of the \openssl\ implementation of \keccak\ over all twenty-four rounds for any arbitrary input state.
 The equivalence is independent of the digest size, message size, or state.
 
 %% TODO: update the figure and text with results from the proof of the padding and the squeeze functions.
 
 In summary, the \cryptol\ specification of the \fips\ standard relies on visual inspection and test vectors for equivalence.
-The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of \openssl's implementation is limited to the 256-bit digest on input sizes from $0$ bits to $1,087$ bits.
+The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of \openssl's implementation is limited to the 256 bit digest on input sizes from $0$ bits to $1,087$ bits.
 That is a proof that considers all of \algoref{alg:sha3}.
-The equivalence between \openssl\ \cryptol\ specification and the actual C implementation is limited to the \keccak algorithm only.
+The equivalence between the \openssl\ \cryptol\ specification and the actual C implementation is limited to the \keccak\ algorithm only.
 That is a proof that only considers \lineref{line:keccak} in \algoref{alg:sha3} but holds for any state and is independent of the digest size and rate.
 
 %% TODO: summarize the cost of the total proof in terms of time and identify the machine used for the proof.

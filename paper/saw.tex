@@ -8,6 +8,7 @@ These formal models are referred to as core terms in \saw.
 It accomplishes such proofs with equivalence preserving rewrites on the core terms and symbolic execution.
 The rewrites simplify the terms for symbolic execution as core term size correlates with complexity. 
 The rewrites also try to structurally reduce one term to the other thus avoiding symbolic execution altogether.
+
 Symbolic execution reasons about all computation paths in the core terms and proves equivalence in computation over all inputs.
 Symbolic execution must unroll loops in any core term a static number of times to accomplish the equivalence proof.
 As such the number of iterations in any loop must be statically known at compile time.

@@ -1,84 +1,91 @@
-Initially it appeared that visual inspection with Cryptol's standard syntax was subpar.
-The language's functional folds and list comprehensions do not align easily with the imperative and array-based NIST standard. 
-By leveraging Cryptol's versatility, utility functions can visually mimic the sequential nature of the NIST specification. 
+This section illustrates with a few examples how the \fips\ specification is captured in \cryptol. 
+\cryptol's functional folds and list comprehensions do not directly align with the quantification and iteration in the specification. 
+This misalignment made the \cryptol\ specification difficult to read and to manually argue its equivalence relative to the published specification.
+The two specifications are realigned through a library of methods in \cryptol\ that hide the functional folds and list comprehensions so that the \cryptol\ specification reads more like the \fips\ specification. The two most common library methods are the \emph{for-method} and the \emph{while-method} discussed in this section.
 
-\subsection{For Utility Function}
-The phrase \emph{for all} indicates a looping structure and is quite common in the NIST standard. 
-It is used in the definition of the pi function shown in Figure \ref{fig:nistPi}.
+\subsection{The for-method}
 
-\begin{figure}[h]
-  \centering
-  \begin{lstlisting}[basewidth = {.5em},basicstyle={\scriptsize}]
-1. For all triples (x,y,z) such that 
-  0 <= x < 5, 0 <= y < 5, and 0 <= z < w,
-  let A'[x, y, z] = A[(x + 3y) mod 5, x, z].
-2. Return A'.
+\newsavebox{\fipsPi}
+\begin{lrbox}{\fipsPi}
+  \begin{lstlisting}[basewidth = {.5em},basicstyle={\small}]
+    1. For all triples (x,y,z) such that 
+           0 <= x < 5, 0 <= y < 5, and 0 <= z < w,
+       let A'[x, y, z] = A[(x + 3y) mod 5, x, z].
+    2. Return A'.
   \end{lstlisting}
-  \caption{NIST Pi definition}
-  \label{fig:nistPi}
-\end{figure}
-    
-By nesting Cryptol's list comprehensions, the pi function can be easily implemented.
-This is illustrated in Figure \ref{fig:cryptolPi}. 
+\end{lrbox}
 
-\begin{figure}[h]
-  \centering
-\begin{lstlisting}[language=Cryptol]
-type COL = 5 
-type W = 64
-type STATE_ARR = [COL][COL][W]
-LIST4 = [0..COL - 1]
-LIST63 = [0..W - 1]
-pi : STATE_ARR -> STATE_ARR
-pi a = [[[a @x @((x + 3*y) % 'COL) @z 
-            | z <- LIST63] 
-          | y <- LIST4] 
-        | x <- LIST4]
-\end{lstlisting}
-\caption{Cryptol Pi definition}
-\label{fig:cryptolPi}
-\end{figure}
+\newsavebox{\PiCry}
+\begin{lrbox}{\PiCry}
+  \begin{lstlisting}[language=Cryptol, numbers=left, escapeinside={;}{;}]
+    type STATE_ARR = [5][5][64];\label{line:state};
+    LIST4 = [0..4];\label{line:list4};
+    LIST63 = [0..63];\label{line:list63};
+    pi : STATE_ARR -> STATE_ARR
+    pi a = [  [  [a @x @((x + 3*y) % 5) @z;\label{line:pi};
+                 | z <- LIST63] 
+              | y <- LIST4] 
+           | x <- LIST4]
+  \end{lstlisting}
+\end{lrbox}
 
-Cryptol declares list comprehension variables after they are used, and the order of the nested loops is not as apparent. 
-Using a helper function, \emph{for}, a clearer definition seen in Figure \ref{fig:cryptolAmendedPi}.
+\newsavebox{\PiCryLib}
+\begin{lrbox}{\PiCryLib}
+  \begin{lstlisting}[language=Cryptol]
+    pi a = for LIST4 (&x ->
+             for LIST4 (&y -> 
+               for LIST63 (&z -> 
+                 a @x @((x + 3*y) % 5) @z)))
+  \end{lstlisting}
+\end{lrbox}
 
-\begin{figure}[h]
-  \centering
-\begin{lstlisting}[language=Cryptol]
-type COL = 5 
-type W = 64
-type STATE_ARR = [COL][COL][W]
-LIST4 = [0..COL - 1]
-LIST63 = [0..W - 1]
-pi : STATE_ARR -> STATE_ARR
-pi a = for LIST4 (&x ->
-          for LIST4 (&y -> 
-            for LIST4 (&z -> 
-              a @x @((x + 3*y) % 'COL) @z)))
-\end{lstlisting}
-\caption{Amended Cryptol Pi definition}
-\label{fig:cryptolAmendedPi}
-\end{figure}
+\newsavebox{\formethod}
+\begin{lrbox}{\formethod}
+  \begin{lstlisting}[language=Cryptol]
+    for : {n, a, b} [n]a -> (a -> b) -> [n]b
+    for vals f = [f i | i <- vals]
+  \end{lstlisting}
+\end{lrbox}
 
-The \emph{for} utility function follows the same intuition as the implementation in most imperative languages in that it iterates and runs a loop body over defined elements. 
-It recieves a function and a list of arguments and returns a list of results from calling the function on every element of the input array. 
-Figure \ref{fig:cryptolFor} shows it's implementation.
-
-\begin{figure}[h]
-  \centering
-\begin{lstlisting}[language=Cryptol]
-for : {n, a, b} [n]a -> (a -> b) -> [n]b
-for vals loop = [loop i | i <- vals]
-\end{lstlisting}
-\caption{Cryptol For utility function}
-\label{fig:cryptolFor}
+\begin{figure}[t]
+  \begin{center}
+    \begin{tabular}{l}
+      \usebox{\fipsPi} \\ \\
+      \multicolumn{1}{c}{(a)} \\ \\
+      \usebox{\PiCry} \\ \\
+      \multicolumn{1}{c}{(b)} \\ \\
+      \usebox{\formethod} \\ \\
+      \multicolumn{1}{c}{(d)} \\ \\ 
+      \usebox{\PiCryLib} \\ \\
+      \multicolumn{1}{c}{(c)}
+    \end{tabular}
+  \end{center}
+  \caption{The $\pi$ function. (a) The \fips\ specification. (b) The \cryptol\ with comprehensions. (c) The for-method definition. (d) The \cryptol\ with the for-method.}
+  \label{fig:pi}
 \end{figure}
 
-Though it is simple to implement, it reorders and structures the arguments in a very elegant way.
-In constrast with standard cryptol syntax, the list to iterate over and the iterating variable are visible before the loop body. 
-List comprehensions are hidden away behind this function call and visual equivalence is clearer.
+A common idiom in the \fips\ publication is using quantification over a finite domain defined by linear constraints to define input for some computation.
+The definition of the $\pi$ function for \keccak\ shown in \figref{fig:pi}(a) is one such example.
+Here the quantification is used to define the set of indices that are part of the $\pi$ computation that transforms the state array. The intent is that of a \emph{parallel-for} where order does not matter since the new state array $A^\prime$ only depends on the old state array $A$.
 
-\subsection{While Utility Function}
+The \cryptol\ definition using list comprehensions is given in \figref{fig:pi}(b).
+\lineref{line:state}) defines the state as a $5 \times 5$ array of 64-bit words.
+\lineref{line:list4} and \lineref{line:list63} are the lists for the list comprehension.
+These simple define the indices that are used in the computation.
+\lineref{line:pi} starts the definition of $\pi$. 
+Here the comprehensions are nested with the list indices appearing in reverse order to follow the nesting.
+Although the list comprehensions are not unreadable, the \cryptol\ can be improved by creating a for-method to hide some of the details.
+
+\figref{fig:pi}(c) is the \cryptol\ definition of the for-method.
+It takes two arguments: a list, \emph{vals}, for the comprehension, and a function, $f$, to apply to each element of the list.
+Its definition is as expected: it applies $f$ to each element in \emph{vals}.
+
+\figref{fig:pi}(d) is the rewritten \cryptol\ using the for-method.
+It still requires the indices list for the comprehension, but it has a more obvious correspondence to the original definition in \figref{fig:pi}(a).
+The for-method reorders and structures the arguments in a very elegant way.
+It hides the list comprehensions to simplify the task of visual inspection for equivalence.
+
+\subsection{The while-method}
 Another common phrasing is the \emph{let...for...let}. 
 This defines a state upon which a folding occurs, iteratively condensing the information into a final state. 
 Imperatively, it is most comparable to a while loop. 

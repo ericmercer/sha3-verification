@@ -11,7 +11,7 @@ The goal of the work presented in this paper is to prove the \openssl\ implement
 \figref{fig:proofStructure} illustrates the proof strategy.
 The proof begins on the left of the figure with the box labeled \emph{NIST Standard}. 
 This box represents the \fips\ standard that defines the \shaThree\ algorithm with english prose and math.
-The standard also provides several test inputs with the correspondingly  expected digests.
+The standard also provides several test inputs with the corresponding expected digests.
 The first step of the proof reproduces the \fips\ \shaThree\ description in \cryptol.
 That is the box to the right of the \emph{NIST Standard} box labeled \emph{Spec}.
 
@@ -58,7 +58,7 @@ The full proof requires overrides.
 The proof of equivalence between the specification of \keccak\ and the C implementation of \keccak\ in \openssl\ relies on overrides in \saw\ as shown in \figref{fig:proofStructure2}.
 Here, \saw\ proves equivalence between the \cryptol\ specification and the C implementation for each of the five functions that comprise one round of \keccak\ given some arbitrary input state.
 That is the meaning of the left hand side of \figref{fig:proofStructure2}.
-These are equivalent on any input.
+These are equivalent on any state $S$.
 
 The implementations for each of the five \keccak\ functions in the C implementation are replaced by the corresponding equivalent \cryptol\ specifications in the extracted model from C.
 \saw\ is then able to prove the C implementation of \keccak\ equivalent to the \cryptol\ specification of the \openssl\ implementation of \keccak\ over all twenty-four rounds for any arbitrary input state.

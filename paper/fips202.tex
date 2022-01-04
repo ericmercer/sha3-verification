@@ -70,8 +70,8 @@ Here the quantification is used to define the set of indices that are part of th
 
 The \cryptol\ definition using list comprehensions is given in \figref{fig:pi}(b).
 \lineref{line:state}) defines the state as a $5 \times 5$ array of 64-bit words.
-\lineref{line:list4} and \lineref{line:list63} are the lists for the list comprehension.
-These simple define the indices that are used in the computation.
+\lineref{line:list4} and \lineref{line:list63} are the lists for the list comprehensions.
+These are the indices that are used in the computation and correspond to the finite domains for $x$, $y$, and $z$ defined in the quantification in \figref{fig:pi}(a).
 \lineref{line:pi} starts the definition of $\pi$. 
 Here the comprehensions are nested with the list indices appearing in reverse order to follow the nesting.
 Although the list comprehensions are not unreadable, the \cryptol\ can be improved by creating a for-method to hide some of the details.
@@ -81,7 +81,7 @@ It takes two arguments: a list, \emph{vals}, for the comprehension, and a functi
 Its definition is as expected: it applies $f$ to each element in \emph{vals}.
 
 \figref{fig:pi}(d) is the rewritten \cryptol\ using the for-method.
-It still requires the indices list for the comprehension, but it has a more obvious correspondence to the original definition in \figref{fig:pi}(a).
+It still requires the indices lists for the comprehension, but it has a more obvious correspondence to the original definition in \figref{fig:pi}(a).
 The for-method reorders and structures the arguments in a very elegant way.
 It hides the list comprehensions to simplify the task of visual inspection for equivalence.
 

@@ -15,19 +15,23 @@ The standard also provides several test inputs with the corresponding expected d
 The first step of the proof reproduces the \fips\ \shaThree\ description in \cryptol.
 That is the box to the right of the \emph{NIST Standard} box labeled \emph{Spec}.
 
+\subsection{Visual Inspection and Test Vectors}
+
 The equivalence between the \fips\ standard and the \cryptol\ specification is argued by visual inspection along with tests over the published test vectors with their expected digests.
 \shaThree\ is described algorithmically in the standard making use of universal quantifiers and other looping structures in the definition.
 \cryptol\ is functional in that it uses list comprehensions for iteration, and it does not have quantifiers.
 Visually certifying a specification of \shaThree\ that uses list comprehensions directly for quantification and looping is difficult at best---the list comprehensions are too complex to read, and they obscure the algorithmic, and mathematic, structure in the published standard.
 
 The syntactic disconnect between the quantification and looping in the published standard and the list comprehensions in the \cryptol\ specification is bridged with a library that hides the list comprehensions with appropriately named functions.
-The final specification with the function hiding the list comprehensions has a one-to-one correspondence to the published standard that is easy to visually certify.
+The final specification with the function hiding the list comprehensions has a more direct correspondence to the published standard that is easy to visually certify.
 The specification is further validated by tests in \cryptol\ over the published test vectors.
 The digests computed from the \cryptol\ specification exactly match those published in the standard on each given input.
 The equivalence arrow between the \emph{NIST Standard} box and the \emph{Spec} box represents the visual certification and test vector results.
 \secref{sec:fips} details the specification and library.
 
-The extracted core term from the \openssl\ C implementation of \shaThree\ is too big and complex for \saw\ to reason about directly.
+\subsection{Equivalence between Memory Layouts}
+
+The extracted \sawcore\ from the \openssl\ C implementation of \shaThree\ is too big and complex for \saw\ to reason about directly.
 Adding to the complexity of the equivalence proof is that the \openssl\ implementation changes the meaning of the state $S$ in the algorithm so that it no longer directly matches the meaning defined in the published standard.
 The change effectively reorders the matrix definition of the state to be more amenable to memory and aspects of the \keccak\ implementation in C.
 The change is significant enough to make it extremely difficult to argue manually that the computation implemented in \openssl\ matches that defined in the standard.
@@ -50,9 +54,11 @@ As such, the meaning of the equivalence arrow between the \emph{Spec} box and th
   
 \end{figure*}
 
+\subsection{Overrides and Keccak}
+
 The rest of the equivalence proof between the standard and the \openssl\ implementation centers on the \keccak\ algorithm as shown in the bottom right of \figref{fig:proofStructure}.
 The meaning of the equivalence arrow between the \keccak\ definition in the \cryptol\ specification based on the \openssl\ implementation and the actual implemented \keccak\ algorithm in the \openssl\ C implementation is that their computation exactly matches for any input state.
-That proof cannot be constructed directly by \saw\ since the extracted core term from the C implementation is too big for symbolic execution when considering all twenty-four rounds required by \keccak.
+That proof cannot be constructed directly by \saw\ since the extracted \sawcore\ from the C implementation is too big for automated reasoning when considering all twenty-four rounds required by \keccak.
 The full proof requires overrides.
 
 The proof of equivalence between the specification of \keccak\ and the C implementation of \keccak\ in \openssl\ relies on overrides in \saw\ as shown in \figref{fig:proofStructure2}.

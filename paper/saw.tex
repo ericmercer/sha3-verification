@@ -1,23 +1,30 @@
-\cryptol\ is a domain specific language for describing cryptographic primitives, such as algorithms to compute digests, at the bit-level.
+\cryptol\ is a domain specific functional language for describing cryptographic primitives, such as algorithms to compute digests, at the bit-level.
 Cryptographic primitives are the building blocks for complex cryptographic protocols, such as SSL, that provide a broad range of security guarantees.
-\cryptol\ is executable, being able to run test vectors to validate specifications, and more importantly, it compiles directly to \saw\ core terms for formal reasoning.
+\cryptol\ is executable, being able to run test vectors to validate specifications, and more importantly, it compiles directly to \sawcore\ which is the language for formal models in \saw.
 
 \saw\ is a tool to extract formal models from programs with support for C, Java, and \cryptol\ input.
-These formal models are referred to as core terms in \saw.
-\saw's function, among other things, is to prove input to output equivalence between core terms.
-It accomplishes such proofs with equivalence preserving rewrites on the core terms and symbolic execution.
-The rewrites simplify the terms for symbolic execution as core term size correlates with complexity. 
-The rewrites also try to structurally reduce one term to the other thus avoiding symbolic execution altogether.
+These formal models are expressed in the \sawcore\ language that supports formal reasoning.
+As mentioned previously, \cryptol\ compiles directly to \sawcore, but that is not the case for C and Java.
+\saw\ uses \emph{symbolic execution} to extract \sawcore\ models from C and Java inputs.
 
-Symbolic execution reasons about all computation paths in the core terms and proves equivalence in computation over all inputs.
-Symbolic execution must unroll loops in any core term a static number of times to accomplish the equivalence proof.
-As such the number of iterations in any loop must be statically known at compile time.
+Symbolic execution reasons about all computation paths in the C or Java input.
+It must unroll all loops a static number of times to create the model in \sawcore.
+As such the number of iterations in any loop must be statically known at compile time or the symbolic execution fails to terminate.
+\sawcore\ models from symbolic execution tend to be more complex than those from \cryptol.
+
+\saw's function, among other things, is to prove input to output equivalence between \sawcore\ models.
+It accomplishes such proofs with equivalence preserving rewrites on the \sawcore\ and with automated reasoning.
+The rewrites simplify the \sawcore\ models as size correlates with complexity in the automated reasoning. 
+The rewrites also try to structurally reduce one model to the other thus avoiding automated reasoning altogether.
+When rewriting is not sufficient, the equivalence between two models is reduced to a satisfiability problem and dispatched to external backend solvers.
 
 \saw\ supports hierarchical reasoning with \emph{overrides}.
-An override replaces one core term with another in the formal analysis.
+An override replaces one \sawcore\ model with another in the formal analysis.
 As an example, consider a Java method that itself calls another Java method as part of its implementation.
 Suppose that \saw\ is able to prove that a \cryptol\ specification for the called method and the Java implementation of the same method are equivalent.
-If that is possible, then an override is able to replace the called Java method with the core term from the \cryptol\ in the model extraction from Java.
-Core terms from \cryptol\ are smaller in size and simpler in structure than equivalent terms extracted from C or Java thereby reducing the size and complexity of the extracted core term in \saw.
-As such, proving a property about a complex C function or Java method generally requires the use of overrides from \cryptol\ in order for symbolic execution to be successful.
+If that is possible, then an override is able to replace the called Java method with the \sawcore\ from the \cryptol\ and as a result avoid any symbolic execution of that method when creating the \sawcore\ model of the Java.
+
+As mentioned previously, \sawcore\ from \cryptol\ is less complex than equivalent models created by symbolic execution from C or Java; thereby overrides reduce the overall complexity of the final extracted \sawcore\ models from C or Java.
+As such, proving a property about a complex C function or Java method generally requires the use of overrides from \cryptol\ in order for the equivalence proof to be successful, and that is regardless of how that proof is accomplished.
+Overrides improve the likelihood of the rewrites showing equivalence and the likelihood of the backend solver being able to show equivalence if the rewrites fail.
 Indeed, the use of overrides are key to the \saw\ proof in this paper showing equivalence between the \shaThree\ specification and the \openssl\ C implementation.

@@ -1,7 +1,7 @@
 This section illustrates with a few examples how the \fips\ specification is captured in \cryptol. 
 \cryptol's functional folds and list comprehensions do not directly align with the quantification and iteration in the specification. 
 This misalignment made the \cryptol\ specification difficult to read and to manually argue its equivalence relative to the published specification.
-The two specifications are realigned through a library of methods in \cryptol\ that hide the functional folds and list comprehensions so that the \cryptol\ specification reads more like the \fips\ specification. The two most common library methods are the \emph{for-method} and the \emph{while-method} discussed in this section.
+The two specifications are realigned through a library of methods in \cryptol\ that hide the functional folds and list comprehensions so that the \cryptol\ specification reads more like the \fips\ specification. The two library methods are the \emph{for-method} and the \emph{while-method} discussed in this section.
 
 \subsection{The for-method}
 
@@ -190,7 +190,7 @@ As before, \figref{fig:rccry}(a) is not altogether unreadable, but it can be imp
 
 \figref{fig:rccry}(b) is a recursive definition of a \emph{while-loop}.
 It takes as input a state, a predicate on the state, \emph{cond}, that is true when it should loop and false otherwise, and a function, $f$, that computes a new state from the old state on each iteration.
-The definition makes recursive calls to the while-method until the state predicate is false which point it returns the current value of \emph{state}.
+The definition makes recursive calls to the while-method until the state predicate is false at which point it returns the current value of \emph{state}.
 
 \begin{figure}[h]
   \begin{center}
@@ -212,5 +212,6 @@ The definition makes recursive calls to the while-method until the state predica
 \lineref{line:cond} is the looping condition defined on the state.
 The body of the loop not only computes the new value of $R$ but \lineref{line:inc} increments $i$ to track the loop iteration.
 The return value is given on \lineref{line:libreturn} as the $0^\mathrm{th}$ bit from the last value of $R$.
-Here, the only computes $R$ the number of times required by $t$ which differs significantly from the definition without the while-method.
-As with the for-method, the while-method reduces the gap between how things are defined in \fips\ and in \cryptol.
+Here, $R$ is computed only the number of times required by $t$.
+This change differs significantly from the definition without the while-method.
+As with the for-method, the while-method reduces the gap between how things are defined in \fips\ and how they are defined in \cryptol.

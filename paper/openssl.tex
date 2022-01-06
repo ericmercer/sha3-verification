@@ -1,9 +1,61 @@
-Even with the highly modular approach of the SHA3 algorithm, a direct proof from the Cryptol specification that matched the NIST standard and the OpenSSL source code was unviable.
-OpenSSL's source code is often used in low-level software, and it is often optimized to improve performance and viability for embedded systems.
-One major instance of such optimization proved significant enough to prevent a direct proof from the NIST Cryptol specification to OpenSSL.
+This section details the two differences between the \openssl\ implementation of \shaThree\ and the \fips\ specification that prevented a direct proof of equivalence between the \cryptol\ and C code.
+These differences are expressed in a second \cryptol\ model derived from the \fips\ model discussed in the previous section.
+\saw\ proves these two models equivalent for the 256-bit digest size as discussed in \secref{sec:proof}.
+This equivalence considers the whole of the sponge construction algorithm proving that the digest is the same from each of them.
+That said, and as a reminder, the equivalence between the \keccak\ description in \cryptol\ and the C implementation in \openssl\ holds for any input message and any digest size.
+That proof uses the \cryptol\ definition for the model discussed in this section that includes to two differences seen in \openssl, and the overrides used in that proof also come from the model discussed in this section.
+
+\subsection{State Array Structure}
+
+The first difference in the \openssl\ \shaThree\ implementation is in the structure of the state array.
+The difference is an artifact of how C maps structured data to memory.
+The \fips\ structures the state array as a $5 \times 5$ matrix of 64-bit words with each 64-bit word being a \emph{lane}.
+It assumes the memory layout of the data follows a normal cartesian three dimensional coordinate system with $x$ being the horizontal axis, $y$ being the vertical axis, and $z$ being the depth access an a line to get an individual bit from the lane.
+For a state $A$, $A[x,y,z]$ accesses $z^\mathrm{th}$ bit from the 64-bit word on the $x^\mathrm{th}$ column and the $y^\mathrm{th}$ row.
+That is the mapping to a cartesian coordinate system.
+
+\openssl\ declares the state as follows: \texttt{uint64\textunderscore t A[5][5]}.
+The C standard stores multidimensional arrays in contiguous memory in \emph{row-major} order meaning that each row of five 64-bit values appear consecutively in memory.
+Indexing the multidimensional array follows the standard mathematical definition for indexing matrices: $A[x,y]$ is the element at the $x^\mathrm{th}$ row and $y^\mathrm{th}$ column.
+This meaning is just opposite of that in the standard.
+
+Adding to the complexity is that the C standard does not provide array indexing to get a bit from a value.
+For the $A[x,y,z]$ example, there is no array bracket notation to get the $z^\mathrm{th}$ bit in a 64-bit word, so notation in the \fips\ standard such as that seen in the definition of the $rc$ function in \figref{fig:rc}(a) has no direct analogue in C.
+As such, the \openssl\ implementation does everything at the level of the lanes, operating on each lane as a 64-bit entity, and never refers to an individual bit in a lane.
+Finally, bit ordering in the lanes in the \fips\ standard is just opposite the ordering in C meaning that the direction of shifting in standard is just opposite the direction used in C.
+
+The \cryptol\ for the \fips\ model is rewritten to reflect these memory layout differences.
+The $x$ and $y$ indexing is swapped.
+All the inner \keccak\ functions are modified to operate on lanes in their entirety.
+And the the shifts are reversed.
+For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \cryptol\ than matches \openssl's implementation (compare to \figref{fig:pi}(d)).
+Operating on lanes in faster and more efficient.
+That is reflected in the \cryptol\ running times.
+
+\newsavebox{\PiOpenSSL}
+\begin{lrbox}{\PiOpenSSL}
+  \begin{lstlisting}[language=Cryptol]
+    pi a = for [0..4] (&y ->
+             for [0..4] (&x -> 
+                 a @x @((x + 3*y) % 5))
+  \end{lstlisting}
+\end{lrbox}
+
+\begin{figure}
+  \begin{center}
+    \usebox{\PiOpenSSL}
+  \end{center}
+  \caption{The \openssl\ implementation of $\pi$ that reverses indexes and operates on lanes.}
+  \label{fig:piopenssl}
+\end{figure}
+
+
+\subsection{Lookup Tables for Computed Constants}
+
+The second difference is in using a lookup table for constants rather than computing constants.
 
 \lstset{style=customc, firstnumber=177}
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
 \begin{lstlisting}
   void Iota(uint64_t A[5][5], size_t i)
@@ -24,13 +76,13 @@ Because these values are unchanged from run to run, OpenSSL's optimized implemen
 Initially, the Cryptol code followed the NIST standard as closely as possible\textemdash including rc method calls in the Iota function which computed the values every iteration.
 Attempts to prove out such a specification to the OpenSSL code failed however, because SAW was unable to show the computational equivalence between computing values as needed and looking up values in a constant table.
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
 \begin{lstlisting}[language=Cryptol]
   iota : STATE_ARR -> [64] -> STATE_ARR
-  iota a i = for LIST4 (\y ->
-                for LIST4 (\x ->
-                    for LIST63 (\z ->
+  iota a i = for [0..4] (\y ->
+                for [0..4] (\x ->
+                    for [0..63] (\z ->
                         if ((x == 0) && (y == 0))
                             then (a @0 @0 @z) ^ (LISTIOTAS @i @z)
 	                        else a @y @x @z)))
@@ -69,20 +121,8 @@ SAW cannot recognize an assert statement in its symbolic execution engine.
 As a result, that statement was removed and replaced with a comparable if statement which maintained the logic of the function.
 Because the equivalence proof for the Iota function is run with the precondition that the round count must be less than 24 (max rounds), this does not affect the comparison between the C code and the Cryptol code (which does not have that error check).
 
-A second obstacle that blocked a single direct proof is how OpenSSL stores and accesses its state array in memory.  
-The NIST specification outlines the state array as being a 5 by 5 by w 3-dimensional array.
-It denotes x as the horizontal axis, y as the vertical axis, and w as the z axis, like a cartesian coordinate system.
-Because it structures the array this way, any access into the array \texttt{A[x, y, z]} is asking for the element at the x'th column, y'th row, z'th bit.
-OpenSSL defines their state array as a \texttt{uint64\textunderscore t A[5][5]}.
-As is common practice in many programming styles, their array indexes by row and then by column.
-Because of this choice, an index defined by NIST as \texttt{A[x, y, z]} would in OpenSSL's array be indexed as \texttt{bit z of A[y][x]}.
-In comparing C code to Cryptol, SAW relies on the pre and post state of memory for a given function to help determine functional equivalence.
-The difference in memory storage/access choices by NIST and OpenSSL means that SAW cannot show functional equivalence using memory comparison.
 
-OpenSSL's choice in memory storage yields another obstacle because of its array composition.
-The way that bits are ordered and stored in a \texttt{uint64\textunderscore t} in C is strictly defined by the language's semantics.
-Unfortunately, that bit ordering is reversed to the ordering NIST defines.
-This yields yet another way that the memory differs and cannot be directly compared.
+
 
 Between these two significant deviations by the OpenSSL implementation from the NIST standard, an intermediate step was necessary to complete a proof of equivalence.
 The solution is a second Cryptol implementation that matches OpenSSL's code in these memory differences.

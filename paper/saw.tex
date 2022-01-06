@@ -14,7 +14,7 @@ As such the number of iterations in any loop must be statically known at compile
 
 \saw's function, among other things, is to prove input to output equivalence between \sawcore\ models.
 It accomplishes such proofs with equivalence preserving rewrites on the \sawcore\ and with automated reasoning.
-The rewrites simplify the \sawcore\ models as size correlates with complexity in the automated reasoning. 
+The rewrites simplify the \sawcore\ for a models to reduce the cost of automated reasoning. 
 The rewrites also try to structurally reduce one model to the other thus avoiding automated reasoning altogether.
 When rewriting is not sufficient, the equivalence between two models is reduced to a satisfiability problem and dispatched to external backend solvers.
 
@@ -22,9 +22,11 @@ When rewriting is not sufficient, the equivalence between two models is reduced 
 An override replaces one \sawcore\ model with another in the formal analysis.
 As an example, consider a Java method that itself calls another Java method as part of its implementation.
 Suppose that \saw\ is able to prove that a \cryptol\ specification for the called method and the Java implementation of the same method are equivalent.
-If that is possible, then an override is able to replace the called Java method with the \sawcore\ from the \cryptol\ and as a result avoid any symbolic execution of that method when creating the \sawcore\ model of the Java.
+If that is possible, then an override is able to replace the called Java method with the \sawcore\ from the \cryptol;
+thereby, it bypasses the symbolic execution of that called method when creating the \sawcore\ model of the Java by using the \sawcore\ from the \cryptol\ specification directly.
 
-As mentioned previously, \sawcore\ from \cryptol\ is less complex than equivalent models created by symbolic execution from C or Java; thereby overrides reduce the overall complexity of the final extracted \sawcore\ models from C or Java.
+As mentioned previously, \sawcore\ from \cryptol\ is less complex than equivalent models created by symbolic execution from C or Java;
+thereby, the overrides reduce the overall complexity of the final extracted \sawcore\ from C or Java.
 As such, proving a property about a complex C function or Java method generally requires the use of overrides from \cryptol\ in order for the equivalence proof to be successful, and that is regardless of how that proof is accomplished.
 Overrides improve the likelihood of the rewrites showing equivalence and the likelihood of the backend solver being able to show equivalence if the rewrites fail.
 Indeed, the use of overrides are key to the \saw\ proof in this paper showing equivalence between the \shaThree\ specification and the \openssl\ C implementation.

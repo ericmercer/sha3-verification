@@ -1,7 +1,7 @@
 This section illustrates with a few examples how the \fips\ specification is captured in \cryptol. 
-\cryptol's functional folds and list comprehensions do not directly align with the quantification and iteration in the specification. 
-This misalignment made the \cryptol\ specification difficult to read and to manually argue its equivalence relative to the published specification.
-The two specifications are realigned through a library of methods in \cryptol\ that hide the functional folds and list comprehensions so that the \cryptol\ specification reads more like the \fips\ specification. The two library methods are the \emph{for-method} and the \emph{while-method} discussed in this section.
+\cryptol's list comprehensions do not directly align with the quantification and iteration in the specification. 
+This misalignment makes the \cryptol\ specification more difficult to read and to manually argue its equivalence relative to the published specification.
+The two specifications are better aligned through a library of two methods in \cryptol\ that hide the list comprehensions so that the \cryptol\ specification reads more like the \fips\ specification. The two library methods are the \emph{for-method} and the \emph{while-method} discussed in this section.
 
 \subsection{The for-method}
 
@@ -18,7 +18,7 @@ The two specifications are realigned through a library of methods in \cryptol\ t
 \newsavebox{\PiCry}
 \begin{lrbox}{\PiCry}
   \begin{lstlisting}[language=Cryptol, numbers=left, escapeinside={;}{;}]
-    type STATE_ARR = [5][5][64];\label{line:state};
+    type STATE_ARR = [5][5][64];\label{line:pistate};
     pi : STATE_ARR -> STATE_ARR
     pi a = [  [  [a @x @((x + 3*y) % 5) @z;\label{line:pi};
                  | z <- [0..63]];\label{line:list};
@@ -67,7 +67,7 @@ The definition of the $\pi$ function for \keccak\ shown in \figref{fig:pi}(a) is
 Here the quantification is used to define the set of indices that are part of the $\pi$ computation that transforms the state array. The intent is that of a \emph{parallel-for} where order does not matter since the new state array $A^\prime$ only depends on the old state array $A$.
 
 The \cryptol\ definition using list comprehensions is given in \figref{fig:pi}(b).
-\lineref{line:state}) defines the state as a $5 \times 5$ array of 64-bit words.
+\lineref{line:pistate} defines the state as a $5 \times 5$ array of 64-bit words.
 \lineref{line:pi} starts the definition of $\pi$. 
 Here the comprehensions are nested with the list indices appearing in reverse order to follow the nesting.
 \lineref{line:list} gives the domain for $z$ as a list with values from 0 to 63.
@@ -80,7 +80,7 @@ It takes two arguments: a list, \emph{vals}, for the comprehension, and a functi
 Its definition is as expected: it creates a new list that is the result of applying $f$ to each element in \emph{vals}.
 
 \figref{fig:pi}(d) is the rewritten \cryptol\ using the for-method.
-It still requires the indices lists for the comprehension, but it has a more obvious correspondence to the original definition in \figref{fig:pi}(a).
+It still requires the indices lists for the list comprehensions, but it has a more obvious correspondence to the original definition in \figref{fig:pi}(a).
 The for-method reorders and structures the arguments in a very elegant way.
 It hides the list comprehensions to simplify the task of visual inspection for equivalence.
 
@@ -171,7 +171,7 @@ The \emph{rc} function checks the value of the input integer $t$, and returns th
 If not, then Line 2 defines $R$ as the 8-bit value $128$, and Line 3 iteratively transforms $R$ a fixed number of times: $t\ \mathbf{mod}\ 255$.
 The transform is defined on Line 3a through Line 3f.
 Line 3a prepends a $0$ bit to $R$ so that it is now a 9-bit value. The array indexing refers to bit positions from left to right so $R[0]$ is the prepended left-most bit and $R[8]$ is the right-most bit. Each transform on $R$ prepends the 0 (Line 3a), does an exclusive-or with specific bit positions (Line 3b through Line 3e), and then takes the left-most 8 bits for the next round effectively dropping the right-most bit (Line 3f).
-It returns the $R[0]$ at the end.
+It returns the $R[0]$ bit at the end.
 
 The \cryptol\ equivalent for \emph{rc} in \figref{fig:rccry}(a) is considerably more complex with the list comprehensions.
 Returning $1$ when the input is a multiple of $255$ is straightforward.

@@ -28,8 +28,7 @@ The $x$ and $y$ indexing is swapped.
 All the inner \keccak\ functions are modified to operate on lanes in their entirety.
 And the the shifts are reversed.
 For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \cryptol\ than matches \openssl's implementation (compare to \figref{fig:pi}(d)).
-Operating on lanes in faster and more efficient.
-That is reflected in the \cryptol\ running times.
+Operating on lanes in faster and more efficient, and that change is reflected in all of the inner \keccak\ functions.
 
 \newsavebox{\PiOpenSSL}
 \begin{lrbox}{\PiOpenSSL}
@@ -48,91 +47,66 @@ That is reflected in the \cryptol\ running times.
   \label{fig:piopenssl}
 \end{figure}
 
+\subsection{Constant Lookup Tables}
 
-\subsection{Lookup Tables for Computed Constants}
-
-The second difference is in using a lookup table for constants rather than computing constants.
-
-\lstset{style=customc, firstnumber=177}
-\begin{figure}[t]
-  \centering
-\begin{lstlisting}
-  void Iota(uint64_t A[5][5], size_t i)
-  {
-    //assert(i < (sizeof(iotas) / sizeof(iotas[0])));
-    if (i < (sizeof(iotas) / sizeof(iotas[0]))) {
-      A[0][0] ^= iotas[i];
+\newsavebox{\ciota}
+\begin{lrbox}{\ciota}
+  \begin{lstlisting}
+    void Iota(uint64_t A[5][5], size_t i) {
+      //assert(i < (sizeof(iotas) / sizeof(iotas[0])));
+      if (i < (sizeof(iotas) / sizeof(iotas[0]))) {
+        A[0][0] ^= iotas[i];
+      }
     }
-  }
-\end{lstlisting}
-\caption{OpenSSL's Iota Function}
-\label{fig:cIota}
-\end{figure}
+  \end{lstlisting}    
+\end{lrbox}
 
-As per the NIST specification, the Iota function invokes the rc algorithm to generate a constant value specific to the round count to use in exclusive-or operations.
-The rc function inputs are unrelated to the message to be hashed, which means that for any given message, the iteration through the rounds of keccak will produce the same constant values.
-Because these values are unchanged from run to run, OpenSSL's optimized implementation of keccak stores the output values as a constant table and use the current round number to properly index into it as is shown in Figure \ref{fig:cIota}. 
-Initially, the Cryptol code followed the NIST standard as closely as possible\textemdash including rc method calls in the Iota function which computed the values every iteration.
-Attempts to prove out such a specification to the OpenSSL code failed however, because SAW was unable to show the computational equivalence between computing values as needed and looking up values in a constant table.
+% iota : STATE_ARR -> [64] -> STATE_ARR
+% iota a i = for [0..4] (\y ->
+%               for [0..4] (\x ->
+%                   for [0..63] (\z ->
+%                       if ((x == 0) && (y == 0))
+%                           then (a @0 @0 @z) ^ (LISTIOTAS @i @z)
+%                       else a @y @x @z)))
+
+\newsavebox{\cryciota}
+\begin{lrbox}{\cryciota}
+  \begin{lstlisting}[language=Cryptol]
+    LISTIOTAS = [reverse (
+      (while {RC = 0:[W], j = 0} 
+              (\state -> state.j <= `L) 
+              (\state -> { 
+                RC = for [0..63] 
+                  (\z -> if z == index then rc (state.j + 7*i)
+                          else state.RC @z)
+                    where index = ((1:[8]) << state.j) - 1,
+                                    j = state.j + 1})
+      ).RC) | i <- LISTROUNDS:[_][64]]
+
+    LISTIOTAS = [
+      0x0000000000000001, 0x0000000000008082, 0x800000000000808a,
+      0x8000000080008000, 0x000000000000808b, 0x0000000080000001,
+      0x8000000080008081, 0x8000000000008009, 0x000000000000008a,
+      0x0000000000000088, 0x0000000080008009, 0x000000008000000a,
+      0x000000008000808b, 0x800000000000008b, 0x8000000000008089,
+      0x8000000000008003, 0x8000000000008002, 0x8000000000000080,
+      0x000000000000800a, 0x800000008000000a, 0x8000000080008081,
+      0x8000000000008080, 0x0000000080000001, 0x8000000080008008]
+        :[_][64]
+  \end{lstlisting}    
+\end{lrbox}
 
 \begin{figure}[t]
-  \centering
-\begin{lstlisting}[language=Cryptol]
-  iota : STATE_ARR -> [64] -> STATE_ARR
-  iota a i = for [0..4] (\y ->
-                for [0..4] (\x ->
-                    for [0..63] (\z ->
-                        if ((x == 0) && (y == 0))
-                            then (a @0 @0 @z) ^ (LISTIOTAS @i @z)
-	                        else a @y @x @z)))
-
-  LISTIOTAS = [reverse (
-        (while {RC = 0:[W], j = 0} //STATE
-            (\state -> state.j <= `L) //COND
-            (\state -> { //LOOP
-                RC = for LIST63 (\z ->
-                    if z == index
-                        then rc (state.j + 7*i)
-                        else state.RC @z)
-                    where index = ((1:[8]) << state.j) - 1,
-                j = state.j + 1})
-        ).RC) | i <- LISTROUNDS:[_][64]]
-\end{lstlisting}
-\caption{OpenSSL's Iota Function}
-\label{fig:cryptolIota}
+  \begin{center}
+    \begin{tabular}{l}
+      \usebox{\cryciota} \\ \\
+    \end{tabular}
+  \end{center}
+  \caption{Optimized $\iota$ function. (a) \openssl's implementation. (b) Matching \cryptol\ implementation.}
+  \label{fig:iota}
 \end{figure}
 
-The lack of any meaningful trace of computation that comes with pre-computed values, meant that a different approach would be necessary to meet in the middle.
-The solution was to modify the Cryptol specification to also use a lookup table in the Iota function.
-However, the Cryptol code still uses the rc function as defined in Figure \ref{fig:nistRC} to generate that lookup table at the beginning of every run of SHA3, rather than strictly stating constant values in the code.
-By having both the Cryptol and C Iota functions now rely on looking up values in a table, the task of proving them became far simpler.
-SAW only had to show that the table generated by running the rc function all at once at the beginning, was identical to the one hard coded into OpenSSL's implementation.
-Because those match, and both implementations index into the table in the same way, SAW was able to generate the proof.
-
-This approach recognizably added an extra element to the visual inspection between the Cryptol specification and the C code.
-The full rc computation is still used in the Cryptol code, with the only significant difference being that rather than run rc every time Iota is called, rc is run all at once to generate all the needed values.
-The continued inclusion of the rc computation makes it only a much less significant inconvenience to accept the computed table as accurate. 
-It likewise remains simple to see visually that indexing into the table gives back the proper constant value for a given round count.
-
-As a note, one minor adjustment was also made to OpenSSL's Iota function code to allow the proof to complete properly.
-As an error check, OpenSSL uses an assert to ensure that the round count is never greater than it should be (to ensure no indexing out of the array's bounds).
-SAW cannot recognize an assert statement in its symbolic execution engine.
-As a result, that statement was removed and replaced with a comparable if statement which maintained the logic of the function.
-Because the equivalence proof for the Iota function is run with the precondition that the round count must be less than 24 (max rounds), this does not affect the comparison between the C code and the Cryptol code (which does not have that error check).
-
-
-
-
-Between these two significant deviations by the OpenSSL implementation from the NIST standard, an intermediate step was necessary to complete a proof of equivalence.
-The solution is a second Cryptol implementation that matches OpenSSL's code in these memory differences.
-That second Cryptol code can be directly proven as equivalent to OpenSSL's code.
-
-This leaves only the step of proving the two Cryptol specifications as equivalent.
-Because of memory differences, this proof cannot be done on a low function level, as the OpenSSL proof is.
-Instead, it must be done at the top level of the SHA algorithm so that the memory compared (input message and output hash) is identical in structure, notwithstanding the difference in state array implementation.
-As SAW performs equivalence proofs based on defined static types, this proof can only be run on a specific input message size, and a specific output hash size.
-To attain full coverage this proof must be run on all input message sizes that affect the way the code is executed.
-This work determines the input set for full coverage to be all byte counts up to a full single block (200 Bytes), as this covers all padding and sponging operations performed in the creation of the state array.
-
-This approach required significant computation time and resources and cannot be easily replicated, however the artifact repository coupled with this work provides receipts of the output generated by this proof.
-However, with this step included a proof of functional equivalence between the visually reviewed Cryptol specification, and OpenSSL's Keccak function source code is complete.
+The second difference is in hardcoding lookup Tables for constants rather than computing the constants along the way.
+The \fips\ \cryptol\ specification computes the lookup table once for the rounding constants, \emph{rc}, for $\iota$, and it computes the rotate constants for $\rho$ on the fly.
+The \openssl\ specification hardcodes these constants in tables without the provenance of the computation.
+\figref{fig:iota} shows the difference in the two specifications for the rounding constants with the code for the computed table coming directly from \fips.

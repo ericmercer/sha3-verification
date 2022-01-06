@@ -70,6 +70,7 @@ These are equivalent on any state $S$.
 The implementations for each of the five \keccak\ functions in the C implementation are replaced by the corresponding equivalent \cryptol\ specifications in the extracted model from C.
 \saw\ is then able to prove the C implementation of \keccak\ equivalent to the \cryptol\ specification of the \openssl\ implementation of \keccak\ over all twenty-four rounds for any arbitrary input state.
 The equivalence is independent of the digest size, message size, or state.
+As a minor note, the \openssl\ code for the $\iota$ function was modified in one place to remove an assert-statement safe-guarding an index into a table of constants since the assert-statement is not supported by \saw's symbolic execution engine.
 
 %% TODO: update the figure and text with results from the proof of the padding and the squeeze functions.
 

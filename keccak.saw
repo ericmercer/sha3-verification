@@ -26,7 +26,6 @@ let pi_setup = do {
     let res = crucible_term {{ pi arr}};
     crucible_points_to arrp res;
 };
-//pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
 
 
 //Rho Function Comparison
@@ -38,8 +37,6 @@ let rho_setup = do {
     let res = crucible_term {{ rho arr}};
     crucible_points_to arrp res;
 };
-//rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);
-
 
 
 //Theta Function Comparison
@@ -51,7 +48,6 @@ let theta_setup = do {
     let res = crucible_term {{ theta arr}};
     crucible_points_to arrp res;
 };
-//theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup yices);
 
 
 //Chi Function Comparison
@@ -63,8 +59,6 @@ let chi_setup = do {
     let res = crucible_term {{ chi arr}};
     crucible_points_to arrp res;
 };
-//chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup yices);
-
 
 
 //Iota Function Comparison
@@ -78,7 +72,7 @@ let iota_setup = do {
     let res = crucible_term {{ iota arr i}};
     crucible_points_to arrp res;
 };
-//iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup yices);
+
 
 //Keccak Function Comparison
 let keccak_setup = do {
@@ -89,12 +83,9 @@ let keccak_setup = do {
     let res = crucible_term {{ keccakp arr}};
     crucible_points_to arrp res;
 };
-//keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
-
 
 
 /*These commands run the proof*/
-
 pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
 rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);
 theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup yices);

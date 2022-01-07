@@ -1,10 +1,18 @@
-The \keccak\ function in the SHA-3 NIST standard is responsible for the major computations of all SHA-3 hash constructs.
-These constructs form the basis for modern secure hashing.
-This work extends and improves the methodology used to verify Amazon's s2n HMAC and OpenSSL's SHA2-256 inner hash function. 
-It uses the Software Analysis Workbench (SAW) to prove out functional equivalence between OpenSSL's SHA-3 Keccak function and a verified implementation of SHA-3 in Cryptol, a domain-specific language for cryptography. 
-SAW allows for a modular approach to writing proofs through the use of contracts, which define a functions input to output relationship.
-Each contract, also called an override, is an obligation in the full proof.
-This work leverages SAW by creating overrides to decompose computation and create a compositional proof that is within the capacity of an SMT solver. 
-Visual inspection between Cryptol and the NIST standard is simplified through the creation of Cryptol utility functions.
-These utility functions wrap the complex list comprehensions required for looping in Cryptol.
-The results of this work indicates that a modular approach in cryptographic algorithm design greatly simplifies the verification process, as exemplified by SHA-3.
+\shaThree\ is the new standard from \nist\ for computing digests. 
+\openssl\ is one of the most widely used implementations of cryptographic protocols.
+\cryptol\ and the Software Analysis Workbench (\saw) are a language and verification engine to specify cryptographic primitives and prove equivalence to implementations.
+As digests are the basis for all cryptographic protocols, the research in this paper is an automated \saw\ proof of equivalence between the \shaThree\ standard and the actual \openssl\ implementation in C.
+The research contributes \cryptol\ specifications for the published standard and the \openssl\ implementation of the standard with its several changes.
+The equivalence proof shows the importance of overrides in \saw\ to replace C code with \cryptol\ to reduce the complexity of the proof obligations that must be accomplished relative to the implementation in C.
+The research establishes the viability of verifying modern cryptographic primitives and the importance of modularity in their definitions, and implementations, for overrides.
+
+% The \keccak\ function in the SHA-3 NIST standard is responsible for the major computations of all SHA-3 hash constructs.
+% These constructs form the basis for modern secure hashing.
+% This work extends and improves the methodology used to verify Amazon's s2n HMAC and OpenSSL's SHA2-256 inner hash function. 
+% It uses the Software Analysis Workbench (SAW) to prove out functional equivalence between OpenSSL's SHA-3 Keccak function and a verified implementation of SHA-3 in Cryptol, a domain-specific language for cryptography. 
+% SAW allows for a modular approach to writing proofs through the use of contracts, which define a functions input to output relationship.
+% Each contract, also called an override, is an obligation in the full proof.
+% This work leverages SAW by creating overrides to decompose computation and create a compositional proof that is within the capacity of an SMT solver. 
+% Visual inspection between Cryptol and the NIST standard is simplified through the creation of Cryptol utility functions.
+% These utility functions wrap the complex list comprehensions required for looping in Cryptol.
+% The results of this work indicates that a modular approach in cryptographic algorithm design greatly simplifies the verification process, as exemplified by SHA-3.

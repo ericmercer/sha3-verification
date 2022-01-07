@@ -81,15 +81,13 @@ As a minor note, the \openssl\ code for the $\iota$ function was modified in one
 \subsection{Results and Summary}
 
 \tableref{table:stats} is a summary of the cost of the verification in running time and LOCs. These are from fairly banal hardware seen in any laptop.
-The \cryptol\ specification of the \fips\ standard relies on visual inspection and test vectors for equivalence.
+The \cryptol\ specification of the \fips\ standard relies on visual inspection and test vectors for equivalence having to look at around 200 LOC.
 The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of the \openssl specification that reorders the state array is limited to the 256 bit digest on input sizes from $0$ bits to $1,087$ bits and takes around 60 hours of computation time.
 That is a proof that considers all of \algoref{alg:sha3}.
 The equivalence between the \openssl\ \cryptol\ specification that reorders the state array and the actual C implementation is limited to the \keccak\ algorithm only.
 That is a proof that only considers \lineref{line:keccak} in \algoref{alg:sha3} but holds for any state and is independent of the digest size and rate.
 The cost of proving the equivalence for each of the overrides is trivial with the exception of $\iota$.
 $\iota$ is more costly because it uses a lookup table in the C code so every entry in the table had to be proved out (see \secref{sec:openssl}).
-The final cost of proving the equivalence in \keccak with the overrides is less than 15 minutes with the yices solver.
+The final cost of proving the equivalence in \keccak\ with the overrides is less than 15 minutes with the \texttt{yices} solver.
 
 \input{stats}
-
-%% TODO: summarize the cost of the total proof in terms of time and identify the machine used for the proof.

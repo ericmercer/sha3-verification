@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <assert.h>
 
-# define BIT_INTERLEAVE (0)
-
+#define BIT_INTERLEAVE (0)
 #define ROL32(a, offset) (((a) << (offset)) | ((a) >> ((32 - (offset)) & 31)))
+
+
 
 static uint64_t ROL64(uint64_t val, int offset)
 {
@@ -32,6 +33,8 @@ static uint64_t ROL64(uint64_t val, int offset)
         return ((uint64_t)hi << 32) | lo;
     }
 }
+
+
 
 void Theta(uint64_t A[5][5])
 {
@@ -68,6 +71,7 @@ void Theta(uint64_t A[5][5])
 }
 
 
+
 static const unsigned char rhotates[5][5] = {
     {  0,  1, 62, 28, 27 },
     { 36, 44,  6, 55, 20 },
@@ -75,6 +79,8 @@ static const unsigned char rhotates[5][5] = {
     { 41, 45, 15, 21,  8 },
     { 18,  2, 61, 56, 14 }
 };
+
+
 
 void Rho(uint64_t A[5][5])
 {
@@ -88,6 +94,8 @@ void Rho(uint64_t A[5][5])
         A[y][4] = ROL64(A[y][4], rhotates[y][4]);
     }
 }
+
+
 
 void Pi(uint64_t A[5][5])
 {
@@ -127,6 +135,7 @@ void Pi(uint64_t A[5][5])
 }
 
 
+
 void Chi(uint64_t A[5][5])
 {
     uint64_t C[5];
@@ -146,6 +155,8 @@ void Chi(uint64_t A[5][5])
         A[y][4] = C[4];
     }
 }
+
+
 
 static const uint64_t iotas[] = {
     BIT_INTERLEAVE ? 0x0000000000000001ULL : 0x0000000000000001ULL,
@@ -175,6 +186,7 @@ static const uint64_t iotas[] = {
 };
 
 
+
 void Iota(uint64_t A[5][5], size_t i)
 {
     //assert(i < (sizeof(iotas) / sizeof(iotas[0])));
@@ -185,7 +197,6 @@ void Iota(uint64_t A[5][5], size_t i)
         A[0][0] ^= iotas[i];
     }
 }
-
 
 
 
@@ -201,90 +212,4 @@ void KeccakF1600(uint64_t A[5][5])
         Iota(A, i);
         
     }
-}
-
-
-size_t SHA3_absorb(uint64_t A[5][5], const unsigned char *inp, size_t len,
-                   size_t r)
-{
-    uint64_t *A_flat = (uint64_t *)A;
-    size_t i, w = r / 8;
-
-    assert(r < (25 * sizeof(A[0][0])) && (r % 8) == 0);
-
-    while (len >= r) {
-        for (i = 0; i < w; i++) {
-            uint64_t Ai = (uint64_t)inp[0]       | (uint64_t)inp[1] << 8  |
-                          (uint64_t)inp[2] << 16 | (uint64_t)inp[3] << 24 |
-                          (uint64_t)inp[4] << 32 | (uint64_t)inp[5] << 40 |
-                          (uint64_t)inp[6] << 48 | (uint64_t)inp[7] << 56;
-            inp += 8;
-
-            A_flat[i] ^= Ai; //We removed the BitInterleave call on Ai, because we are only considering the code without bit interleave.
-        }
-        KeccakF1600(A);
-        len -= r;
-    }
-
-    return len;
-}
-
-
-void SHA3_squeeze(uint64_t A[5][5], unsigned char *out, size_t len, size_t r)
-{
-    uint64_t *A_flat = (uint64_t *)A;
-    size_t i, w = r / 8;
-
-    //assert(r < (25 * sizeof(A[0][0])) && (r % 8) == 0); //we can take this out because we hard code r to the value for a 256 hash.
-    
-    while (len != 0) {
-        for (i = 0; i < w && len != 0; i++) {
-            uint64_t Ai = A_flat[i]; //Took out BitDeinterleave because we are not considering this case.
-
-            if (len < 8) {
-               for (i = 0; i < len; i++) {
-                    *out++ = (unsigned char)Ai;
-                    Ai >>= 8;
-                }
-                return;
-            }
-
-            out[0] = (unsigned char)(Ai);
-            out[1] = (unsigned char)(Ai >> 8);
-            out[2] = (unsigned char)(Ai >> 16);
-            out[3] = (unsigned char)(Ai >> 24);
-            out[4] = (unsigned char)(Ai >> 32);
-            out[5] = (unsigned char)(Ai >> 40);
-            out[6] = (unsigned char)(Ai >> 48);
-            out[7] = (unsigned char)(Ai >> 56);
-            out += 8;
-            len -= 8;
-        }
-        if (len)
-            KeccakF1600(A);
-    }
-}
-
-
-int main() {
-    uint64_t test[5][5];
-    memset(test, 0, sizeof(test));
-    test[0][3] = 9223372036854775808;
-
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            printf("%lu ",test[i][j]);
-        }
-        printf("\n");
-    }
-    unsigned char out[32];
-
-    SHA3_squeeze(test, out, 32, 136);
-
-    for (int i = 0; i < 32; i++) {
-        printf("0x%x ", out[i]);
-    }
-    printf("\n");
-    size_t i;
-    
 }

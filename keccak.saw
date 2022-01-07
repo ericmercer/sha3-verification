@@ -17,35 +17,6 @@ let ptr_to_fresh name typ = do {
 };
 
 
-let squeeze_setup = do {
-    (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
-    (out, outp) <- ptr_to_fresh "out" (llvm_array 32 (llvm_int 8));
-    
-    crucible_execute_func [arrp, outp, crucible_term {{32:[64]}}, crucible_term {{136:[64]}}];
-
-    let res = crucible_term {{SHA3_squeeze arr}};
-    crucible_points_to outp res;
-};
-squeeze_ov <- time (crucible_llvm_verify keccak_module "SHA3_squeeze" [] false squeeze_setup yices);
-
-
-/*
-let absorb_setup = do {
-    (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
-    (input, inp) <- ptr_to_fresh "input" (llvm_array 32 (llvm_int 8));
-    len <- crucible_fresh_var "len" (llvm_int 64);
-    r <- crucible_fresh_var "r" (llvm_int 64);
-
-    crucible_execute_func [arrp, inp, crucible_term len, crucible_term r];
-    let res = crucible_term {{SHA3_absorb input}};
-    crucible_points_to arrp res;
-};
-absorb_ov <- time (crucible_llvm_verify keccak_module "SHA3_absorb" [keccak_ov] false absorb_setup yices);
-
-*/
-
-
-
 //Pi function comparison
 let pi_setup = do {
     (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
@@ -55,7 +26,7 @@ let pi_setup = do {
     let res = crucible_term {{ pi arr}};
     crucible_points_to arrp res;
 };
-pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
+//pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
 
 
 //Rho Function Comparison
@@ -67,7 +38,7 @@ let rho_setup = do {
     let res = crucible_term {{ rho arr}};
     crucible_points_to arrp res;
 };
-rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);
+//rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);
 
 
 
@@ -80,7 +51,7 @@ let theta_setup = do {
     let res = crucible_term {{ theta arr}};
     crucible_points_to arrp res;
 };
-theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup yices);
+//theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup yices);
 
 
 //Chi Function Comparison
@@ -92,7 +63,7 @@ let chi_setup = do {
     let res = crucible_term {{ chi arr}};
     crucible_points_to arrp res;
 };
-chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup yices);
+//chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup yices);
 
 
 
@@ -107,7 +78,7 @@ let iota_setup = do {
     let res = crucible_term {{ iota arr i}};
     crucible_points_to arrp res;
 };
-iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup yices);
+//iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup yices);
 
 //Keccak Function Comparison
 let keccak_setup = do {
@@ -118,27 +89,24 @@ let keccak_setup = do {
     let res = crucible_term {{ keccakp arr}};
     crucible_points_to arrp res;
 };
-keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
+//keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
 
 
-let absorb_setup = do {
-    (arr, arrp) <- ptr_to_fresh "array" (llvm_array 5 (llvm_array 5 (llvm_int 64)));
-    (input, inp) <- ptr_to_fresh "input" (llvm_array 32 (llvm_int 8));
-    len <- crucible_fresh_var "len" (llvm_int 64);
-    r <- crucible_fresh_var "r" (llvm_int 64);
 
-    crucible_execute_func [arrp, inp, len, r];
-    let res = crucible_term {{SHA3_absorb input}};
-    crucible_points_to arrp res;
-};
-absorb_ov <- time (crucible_llvm_verify keccak_module "SHA3_absorb" [/*keccak_ov*/] false absorb_setup yices);
-/*
 pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup yices);
 rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup yices);
 theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup yices);
 chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup yices);
 iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup yices);
 keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup yices);
+
+/*
+pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup abc);
+rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup abc);
+theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup abc);
+chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup abc);
+iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup abc);
+keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup abc);
 */
 /*
 pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup z3);
@@ -147,12 +115,4 @@ theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setu
 chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup z3);
 iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup z3);
 keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup z3);
-*/
-/*
-pi_ov <- time (crucible_llvm_verify keccak_module "Pi" [] false pi_setup abc);
-rho_ov <- time (crucible_llvm_verify keccak_module "Rho" [] false rho_setup abc);
-theta_ov <- time (crucible_llvm_verify keccak_module "Theta" [] false theta_setup abc);
-chi_ov <- time (crucible_llvm_verify keccak_module "Chi" [] false chi_setup abc);
-iota_ov <- time (crucible_llvm_verify keccak_module "Iota" [] false iota_setup abc);
-keccak_ov <- time (crucible_llvm_verify keccak_module "KeccakF1600" [pi_ov, rho_ov, theta_ov, chi_ov, iota_ov] false keccak_setup abc);
 */

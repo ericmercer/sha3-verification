@@ -1,6 +1,6 @@
 // This is the output for the first time the proof was run on laptop--no caching
 
-[17:01:01.000] Loading file "/home/bdecker/sha3-verification/keccak.saw"
+[17:01:01.000] Loading file
 
 [17:01:01.380] Verifying Pi ...
 [17:01:01.389] Simulating Pi ...

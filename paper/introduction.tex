@@ -10,6 +10,24 @@ This work bridges that gap between optimized c code, and the NIST standard.
 
 Give a brief history of \shaThree. Introduce briefly SAW and Cryptol.
 
+% Contributions:
+
+% (1) A Cryptol specification for SHA3 that passes test vectors and is readily comparable to the FIPS 202 specification
+% (2) A Cpyptol specification for OpenSSL's implementation of SHA3 that passes test vectors and is readily comparable to the the OpenSSL C-code—this specification uses in the Keccak core pre-computed tables and a re-ordered state-vector
+% (3) A SAW proof that the FIPS 202 specification is equivalent to the OpenSSL specification
+% (4) A SAW proof that the OpenSSL Keccak specification is equivalent to the OpenSSL C-implementation of the same function for __**all possible state vectors**__
+
+% Limitations:
+
+% * Visual inspection and limited test vectors for (1) and (2)
+% * Only provide proof certificates for message sizes of X to Y for digest sizes of … for (3)
+% * Visual inspection only for anything above Keccak for (3) in OpenSSLs C-code
+
+% @Ben: will you clarify your second point on the visual inspection for 2? I think what you are saying is that it is the FIPS 202 spec with the modified state vector that is what is used in OpenSSL, so there is no value in “visual inspection” in that sense. It which case I would restate (2) as
+
+% (2) A Cpyptol specification based on OpenSSL implementation of SHA3 that uses a re-ordered state-vector and pre-computed tables in Keccak for performance gains that passes test vectors
+
+% To a much lesser extent, I'd say another contribution is that we've shown that when a cryptographical spec is designed in a modular way (as the modern SHA3 is compared to SHA2) that facilitates formal verification---at least if using Cryptol and SAW. I believe we showed this by the fact that the SHA3 proofs complete successful for Yices, Z3, and ABC, whereas with our proofs for SHA2 only Yices completed.
 
 \noindent \textbf{Contributions}:
 This paper details the following contributions.

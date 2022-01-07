@@ -23,19 +23,17 @@ For the $A[x,y,z]$ example, there is no array bracket notation to get the $z^\ma
 The consequence is that the \openssl\ implementation does everything at the level of the lanes, operating on each lane as a 64-bit entity, and it never refers to an individual bit in a lane.
 Finally, the bit ordering in the lanes in the \fips\ standard is just opposite the ordering in C meaning that the direction of shifting in the standard is opposite the direction used in the C implementation.
 
-The \cryptol\ for the \fips\ model is rewritten to reflect these memory layout and computation differences.
-The $x$ and $y$ indexing is swapped.
-All the inner \keccak\ functions are modified to operate on lanes in their entirety.
-And the the shifts are reversed.
-For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \cryptol\ than matches \openssl's implementation (compare to \figref{fig:pi}(d)).
-Operating on lanes in faster and more efficient, and that change is reflected in all of the inner \keccak\ functions.
+The \cryptol\ for the \fips\ model is rewritten to reflect the memory layout differences but leaves in place the bit-level operations.
+The $x$ and $y$ indexing is swapped, and the shifts are reversed.
+For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \cryptol\ than matches swapping of the indices in \openssl (compare to \figref{fig:pi}(d)).
 
 \newsavebox{\PiOpenSSL}
 \begin{lrbox}{\PiOpenSSL}
   \begin{lstlisting}[language=Cryptol]
     pi a = for [0..4] (&y ->
              for [0..4] (&x -> 
-                 a @x @((x + 3*y) % 5))
+               for [0..63] (&z -> 
+                 a @x @((x + 3*y) % 5) @z)))  
   \end{lstlisting}
 \end{lrbox}
 
@@ -107,6 +105,9 @@ Operating on lanes in faster and more efficient, and that change is reflected in
 \end{figure}
 
 The second difference is in hardcoding lookup Tables for constants rather than computing the constants along the way.
-The \fips\ \cryptol\ specification computes the lookup table once for the rounding constants, \emph{rc}, for $\iota$, and it computes the rotate constants for $\rho$ on the fly.
-The \openssl\ specification hardcodes these constants in tables without the provenance of the computation.
-\figref{fig:iota} shows the difference in the two specifications for the rounding constants with the code for the computed table coming directly from \fips.
+The \fips\ \cryptol\ specification computes each constant on-the-fly as needed in each round.
+This redundant computation is seen with the rounding constants, \emph{rc}, for $\iota$, and the rotate constants for $\rho$. 
+The \openssl\ implementation hardcodes these constants in tables without the provenance of the computation and looks up the constants in the tables.
+The new \cryptol\ specification for the \openssl uses the same lookup tables, but it differs from the \openssl implementation in that it computes the lookup tables once so that the values in the table now have provenance.
+This provenance is sufficient for the equivalence proof with the C code.
+\figref{fig:iota} shows the difference in the two specifications for the rounding constants with the code for the computed table coming directly from \fips\ in the \openssl\ specification.

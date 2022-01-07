@@ -9,9 +9,9 @@ After finishing the proofs on SHA2, we wanted to see if the methodology used the
 
 A significant part of our methodology is to modularize the code and simplify the input/output relationships for functions in order to take advantage of SAW's override system (A more in-depth review of SAW and the override system can be found in the main README of our [previous work](https://bitbucket.org/byu-vv/saw-verified-crypto/src/master/)).  Unlike the SHA2 code, we found that SHA3 was well suited to this methodology, because the Keccak function is simply a for loop running 5 inner functions.  Keccak and all of these inner functions simply take in a single 3d array and modify it, which means we already had something fairly modular, and with a simple input/output relationship.
 
-While the code required much less restructuring because of the way the algorithm was written, the computations that take place in SHA3 are more complex than that of SHA2, which means that the workload on the SMT solver was much heavier.  This increase in complexity is reflected in the times required to run the function proofs as shown in the table below.  These Times to Complete (TTC) are much longer than the times required to complete the SHA2 proof (the full hash block with overrides took only 0.46 seconds).
+While the code required much less restructuring because of the way the algorithm was written, the computations that take place in SHA3 are more complex than that of SHA2, which means that the workload on the SMT solver was much heavier.  This increase in complexity is reflected in the times required to run the function proofs as shown in the table below.  These runtimes (RT) are much longer than the times required to complete the SHA2 proof (the full hash block with overrides took only 0.46 seconds).
 
-Function | yices TTC | abc TTC 
+Function | yices RT | abc RT 
 -----------|-------------|----
 Pi | 0.8951595s | 0.4171096s
 Rho | 4.5090218s | 5.879199s

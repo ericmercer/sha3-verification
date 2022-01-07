@@ -108,6 +108,6 @@ The second difference is in hardcoding lookup Tables for constants rather than c
 The \fips\ \cryptol\ specification computes each constant on-the-fly as needed in each round.
 This redundant computation is seen with the rounding constants, \emph{rc}, for $\iota$, and the rotate constants for $\rho$. 
 The \openssl\ implementation hardcodes these constants in tables without the provenance of the computation and looks up the constants in the tables.
-The new \cryptol\ specification for the \openssl uses the same lookup tables, but it differs from the \openssl implementation in that it computes the lookup tables once so that the values in the table now have provenance.
+The new \cryptol\ specification for the \openssl\ uses the same lookup tables, but it differs from the \openssl\ implementation in that it computes the lookup tables once so that the values in the table now have provenance.
 This provenance is sufficient for the equivalence proof with the C code.
 \figref{fig:iota} shows the difference in the two specifications for the rounding constants with the code for the computed table coming directly from \fips\ in the \openssl\ specification.

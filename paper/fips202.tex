@@ -179,6 +179,21 @@ The list comprehension builds a list of $255$ 8-bit values.
 \lineref{line:return} returns the bit at index 0 ($@0$) from the last 8-bit value in the array ($!0$).
 The computation of the list of 8-bit values follows.
 
+\begin{figure}[t]
+  \begin{center}
+    \begin{tabular}{l}
+      \scalebox{0.7}{\usebox{\RcCry}} \\ \\
+      \multicolumn{1}{c}{(a)} \\ \\
+      \usebox{\whilemethod} \\ \\
+      \multicolumn{1}{c}{(b)} \\ \\ 
+      \scalebox{0.7}{\usebox{\RcCryLib}} \\ \\
+      \multicolumn{1}{c}{(c)}
+    \end{tabular}
+  \end{center}
+  \caption{The \emph{rc} function in \cryptol. (b) The \cryptol\ with list comprehensions. (b) The recursive while-method definition. (c) The \cryptol\ with the while-method.}
+  \label{fig:rccry}
+\end{figure}
+
 \lineref{line:init} is the first entry in the list and it is the initial value of $R$.
 The following entries depend on the value of the input $t$ and the value of $i$ that comes from the list used in the list comprehension on \lineref{line:alliters}.
 \lineref{line:compute} checks if $i$ is within the number of iterations, and if it is, then the new entry in the list is computed from the previous entry as defined by the transform in \figref{fig:rc}.
@@ -190,21 +205,6 @@ As before, \figref{fig:rccry}(a) is not altogether unreadable, but it can be imp
 \figref{fig:rccry}(b) is a recursive definition of a \emph{while-loop}.
 It takes as input a state, a predicate on the state, \emph{cond}, that is true when it should loop and false otherwise, and a function, $f$, that computes a new state from the old state on each iteration.
 The definition makes recursive calls to the while-method until the state predicate is false at which point it returns the current value of \emph{state}.
-
-\begin{figure}[h]
-  \begin{center}
-    \begin{tabular}{l}
-      \usebox{\RcCry} \\ \\
-      \multicolumn{1}{c}{(a)} \\ \\
-      \usebox{\whilemethod} \\ \\
-      \multicolumn{1}{c}{(b)} \\ \\ 
-      \usebox{\RcCryLib} \\ \\
-      \multicolumn{1}{c}{(c)}
-    \end{tabular}
-  \end{center}
-  \caption{The \emph{rc} function in \cryptol. (b) The \cryptol\ with list comprehensions. (b) The recursive while-method definition. (c) The \cryptol\ with the while-method.}
-  \label{fig:rccry}
-\end{figure}
 
 \figref{fig:rccry}(c) is the definition of \emph{rc} using the while-method in \figref{fig:rccry}(b).
 \lineref{line:state} defines the state for the while loop to be both an integer $i$ for a counter and the 8-bit value $R$.

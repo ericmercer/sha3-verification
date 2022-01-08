@@ -37,11 +37,11 @@ For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \crypto
   \end{lstlisting}
 \end{lrbox}
 
-\begin{figure}
+\begin{figure}[t]
   \begin{center}
     \usebox{\PiOpenSSL}
   \end{center}
-  \caption{The \openssl\ implementation of $\pi$ that reverses indexes and operates on lanes.}
+  \caption{The \openssl\ implementation of $\pi$ that reverses indexes.}
   \label{fig:piopenssl}
 \end{figure}
 
@@ -70,6 +70,13 @@ For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \crypto
 \newsavebox{\cryciota}
 \begin{lrbox}{\cryciota}
   \begin{lstlisting}[language=Cryptol]
+    iota a i =  for LIST4 (\y ->
+                  for LIST4 (\x ->
+                    for LIST63 (\z ->
+                      if ((x == 0) && (y == 0))
+                        then (a @0 @0 @z) ^ (LISTIOTAS @i @z)
+	                      else a @y @x @z)))
+
     LISTIOTAS = [reverse (
       (while {RC = 0:[W], j = 0} 
               (\state -> state.j <= `L) 
@@ -80,17 +87,6 @@ For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \crypto
                     where index = ((1:[8]) << state.j) - 1,
                                     j = state.j + 1})
       ).RC) | i <- LISTROUNDS:[_][64]]
-
-    LISTIOTAS = [
-      0x0000000000000001, 0x0000000000008082, 0x800000000000808a,
-      0x8000000080008000, 0x000000000000808b, 0x0000000080000001,
-      0x8000000080008081, 0x8000000000008009, 0x000000000000008a,
-      0x0000000000000088, 0x0000000080008009, 0x000000008000000a,
-      0x000000008000808b, 0x800000000000008b, 0x8000000000008089,
-      0x8000000000008003, 0x8000000000008002, 0x8000000000000080,
-      0x000000000000800a, 0x800000008000000a, 0x8000000080008081,
-      0x8000000000008080, 0x0000000080000001, 0x8000000080008008]
-        :[_][64]
   \end{lstlisting}    
 \end{lrbox}
 
@@ -100,7 +96,7 @@ For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \crypto
       \usebox{\cryciota} \\ \\
     \end{tabular}
   \end{center}
-  \caption{Optimized $\iota$ function. (a) \openssl's implementation. (b) Matching \cryptol\ implementation.}
+  \caption{The computed \emph{rc} table with the lookup in $\iota$.}
   \label{fig:iota}
 \end{figure}
 
@@ -110,4 +106,4 @@ This redundant computation is seen with the rounding constants, \emph{rc}, for $
 The \openssl\ implementation hardcodes these constants in tables without the provenance of the computation and looks up the constants in the tables.
 The new \cryptol\ specification for the \openssl\ uses the same lookup tables, but it differs from the \openssl\ implementation in that it computes the lookup tables once so that the values in the table now have provenance.
 This provenance is sufficient for the equivalence proof with the C code.
-\figref{fig:iota} shows the difference in the two specifications for the rounding constants with the code for the computed table coming directly from \fips\ in the \openssl\ specification.
+\figref{fig:iota} shows the $\iota$ function that uses the computed lookup table.

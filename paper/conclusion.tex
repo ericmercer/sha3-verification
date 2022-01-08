@@ -1,1 +1,25 @@
-Add conclusions and future work.
+This paper presents the proof of the \shaThree\ implementation in \openssl\ using the \saw\ tool.
+The proof is accomplished by writing a \cryptol\ specification for the \nist\ \fips\ publication that defines the \shaThree\ algorithm.
+The \cryptol\ specification is aided with two additional \cryptol\ library functions, the for-method and while-method, to hide the functional list comprehensions.
+The for-method being a parallel-for operating on each element in a list.
+The while-method being iteration over a list.
+The \cryptol\ is shown equivalent to the \fips\ standard though visual inspection and input to output matching on published test vectors.
+
+The proof uses a second \cryptol\ specification based on the actual \openssl\ C implementation of \shaThree.
+This specification reorders arrays in the specification to match the C standard following row major order.
+It also includes table lookups for constant values in the computation but it computes those tables to show the provenance of the constants.
+That povenance is needed later for the proof of equivalence with the C code.
+\saw\ proves the input to output relationship equivalent between the \fips\ specification and this revised specification for the 256-bit digest on any message of size $0$ to $1088$ bits.
+
+The final \saw\ proof shows the \keccak\ function in the revised specification is equivalent to the \keccak\ function in the actual C implementation.
+\keccak\ is the core of the \shaThree\ algorithm and the most complex part.
+The proof relies of the use of overrides.
+\saw\ proves the \cryptol\ specifications of the five inner \keccak functions equivalent to their C counterparts and replaces them in the C code with the \sawcore\ from the \cryptol.
+With the overrides, \saw\ proves the equivalence for \keccak\ in \cryptol\ and C over any input.
+
+Future work is to prove out the equivalence of the input padding and the squeeze part of the \shaThree\ computation.
+These proofs are complicated by the typing in \cryptol\ and the layout of bytes in C.
+There is also some effort to show the equivalence for the other digest sizes.
+Other work looks to accomplish a proof of a Dafny implementation of \shaThree.
+Dafny synthesizes to several different backend languages making a proven \shaThree\ implementation very interesting.
+

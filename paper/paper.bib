@@ -103,6 +103,136 @@ abstract="The Software Analysis Workbench (SAW) is a verification tool that has 
 isbn="978-3-030-76384-8"
 }
 
+@INPROCEEDINGS{crypt-hi,
+  author={Lewis, J.R. and Martin, B.},
+  booktitle={IEEE Military Communications Conference, 2003. MILCOM 2003.}, 
+  title={Cryptol: high assurance, retargetable crypto development and validation}, 
+  year={2003},
+  volume={2},
+  number={},
+  pages={820-825 Vol.2},
+  doi={10.1109/MILCOM.2003.1290218}
+}
+
+@INPROCEEDINGS{hard-soft,
+  author={Erkök, Levent and Carlsson, Magnus and Wick, Adam},
+  booktitle={2009 Formal Methods in Computer-Aided Design}, 
+  title={Hardware/software co-verification of cryptographic algorithms using Cryptol}, 
+  year={2009},
+  volume={},
+  number={},
+  pages={188-191},
+  doi={10.1109/FMCAD.2009.5351121}
+}
+
+@INPROCEEDINGS{design-verif,
+  title={Designing tunable, verifiable cryptographic hardware using Cryptol},
+  author={Browning, Sally and Weaver, Philip},
+  booktitle={Design and Verification of Microprocessor Systems for High-Assurance Applications},
+  pages={89--143},
+  year={2010},
+  publisher={Springer}
+}
+
+@INPROCEEDINGS{pseudorandom,
+  author={Selvakumar, David and Mervin, J and Pattanshetty, Shashikala and Vivian, D},
+  booktitle={2021 25th International Symposium on VLSI Design and Test (VDAT)}, 
+  title={Formal Verification and Analysis of a Pseudo Random Number Generator}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={1-6},
+  doi={10.1109/VDAT53777.2021.9601109}
+}
+
+@InProceedings{stp,
+  author="Ganesh, Vijay
+  and Dill, David L.",
+  editor="Damm, Werner
+  and Hermanns, Holger",
+  title="A Decision Procedure for Bit-Vectors and Arrays",
+  booktitle="Computer Aided Verification",
+  year="2007",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="519--531",
+  isbn="978-3-540-73368-3"
+}
+
+@INPROCEEDINGS{auto,
+  author={Smith, Eric and Dill, David L.},
+  booktitle={2008 Formal Methods in Computer-Aided Design}, 
+  title={Automatic Formal Verification of Block Cipher Implementations}, 
+  year={2008},
+  volume={},
+  number={},
+  pages={1-7},
+  doi={10.1109/FMCAD.2008.ECP.10}
+}
+
+@INPROCEEDINGS{formal-protocols,
+  author={Klenze, Tobias and Sprenger, Christoph and Basin, David},
+  booktitle={2021 IEEE 34th Computer Security Foundations Symposium (CSF)}, 
+  title={Formal Verification of Secure Forwarding Protocols}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={1-16},
+  doi={10.1109/CSF51468.2021.00018}
+}
+
+@inproceedings{verified-correctness,
+  author = {Ye, Katherine Q. and Green, Matthew and Sanguansin, Naphat and Beringer, Lennart and Petcher, Adam and Appel, Andrew W.},
+  title = {Verified Correctness and Security of MbedTLS HMAC-DRBG},
+  year = {2017},
+  isbn = {9781450349468},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi-org.erl.lib.byu.edu/10.1145/3133956.3133974},
+  doi = {10.1145/3133956.3133974},
+  booktitle = {Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security},
+  pages = {2007–2020},
+  numpages = {14},
+  keywords = {hmac-drbg, formal verification, pseudo-random generator, functional specification},
+  location = {Dallas, Texas, USA},
+  series = {CCS '17}
+}
+
+@INPROCEEDINGS{hi-assurance,
+  author={Barthe, Gilles and Cauligi, Sunjay and Grégoire, Benjamin and Koutsos, Adrien and Liao, Kevin and Oliveira, Tiago and Priya, Swarn and Rezk, Tamara and Schwabe, Peter},
+  booktitle={2021 IEEE Symposium on Security and Privacy (SP)}, 
+  title={High-Assurance Cryptography in the Spectre Era}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={1884-1901},
+  doi={10.1109/SP40001.2021.00046}
+}
+
+@inproceedings {vale,
+  author = {Barry Bond and Chris Hawblitzel and Manos Kapritsos and K. Rustan M. Leino and Jacob R. Lorch and Bryan Parno and Ashay Rane and Srinath Setty and Laure Thompson},
+  title = {Vale: Verifying {High-Performance} Cryptographic Assembly Code},
+  booktitle = {26th USENIX Security Symposium (USENIX Security 17)},
+  year = {2017},
+  isbn = {978-1-931971-40-9},
+  address = {Vancouver, BC},
+  pages = {917--934},
+  url = {https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/bond},
+  publisher = {USENIX Association},
+  month = aug,
+}
+
+@ARTICLE{hash-functions,
+  author={Wang, Dexi and Jiang, Yu and Song, Houbing and He, Fei and Gu, Ming and Sun, Jiaguang},
+  journal={IEEE Access}, 
+  title={Verification of Implementations of Cryptographic Hash Functions}, 
+  year={2017},
+  volume={5},
+  number={},
+  pages={7816-7825},
+  doi={10.1109/ACCESS.2017.2697918}
+}
+
 @misc{s2n,
   title  = "Amazon.com, {I}nc. s2n",
   howpublished = "\url{https://github.com/awslabs/s2n}",
@@ -129,4 +259,34 @@ isbn="978-3-030-76384-8"
   url = "https://csrc.nist.gov/publications/detail/fips/202/final",
   year   = "2015",
   note = "Online. Accessed January 2020."
+}
+
+@misc{s2n-blog,
+  key = {s2n-blog},
+  title  = " Verifying s2n HMAC with SAW",
+  url = "https://galois.com/blog/2016/09/verifying-s2n-hmac-with-saw/"
+}
+
+@misc{isabelle,
+  key = {isabelle},
+  title  = "Isabelle",
+  url = "https://isabelle.in.tum.de/"
+}
+
+@misc{coq,
+  key = {coq},
+  title  = "The Coq Proof Assistant",
+  url = "https://coq.inria.fr/"
+}
+
+@misc{jasmin,
+  key = {jasmin},
+  title  = "Jasmin",
+  url = "https://github.com/jasmin-lang/jasmin"
+}
+
+@misc{rhash,
+  key = {rhash},
+  title  = "RHash",
+  url = "https://github.com/rhash/RHash"
 }

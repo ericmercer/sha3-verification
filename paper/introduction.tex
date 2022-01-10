@@ -15,7 +15,7 @@ The \emph{Software Analysis Workbench} (\saw) is a formal verification tool to p
 Recent work emphasizes not just the utility of \saw, but the importance of modular decomposition of cryptographic primitives in their definition as that decomposition lends itself to efficient verification in \saw \cite{nfm-us}. 
 
 This paper details another example of \saw\ verification only this time it is a proof showing the \openssl\ C implementation of \shaThree\ matches a \cryptol\ specification derived from the published \fips\ standard by \nist\ \cite{fips202}.
-The \cryptol\ specifications, \saw\ scripts, and extracted \sawcore\ model from the \openssl\ C implementation are documented, and available, in a public Github repository for independent verification \cite{repo}.
+The \cryptol\ specifications, \saw\ scripts, and extracted \sawcore\ model from the \openssl\ C implementation are documented, and available, in a public GitHub repository for independent verification \cite{repo}.
 The proof relies on two specifications, both created as part of this research, of the \shaThree\ algorithm: one that closely matches the published standard and another incorporating features in the C implementation.
 \saw\ shows an input to output equivalence between these two specifications for the 256 bit digest over a fixed set of message sizes. The proof takes around 60 hours of computation time.
 

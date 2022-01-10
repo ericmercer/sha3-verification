@@ -25,7 +25,7 @@ Finally, the bit ordering in the lanes in the \fips\ standard is just opposite t
 
 The \cryptol\ for the \fips\ model is rewritten to reflect the memory layout differences but leaves in place the bit-level operations.
 The $x$ and $y$ indexing is swapped, and the shifts are reversed.
-For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \cryptol\ than matches swapping of the indices in \openssl (compare to \figref{fig:pi}(d)).
+For reference, \figref{fig:piopenssl} is the rewritten $\pi$ function in \cryptol\ than matches the swapping of the indices in \openssl (compare to \figref{fig:pi}(d)).
 
 \newsavebox{\PiOpenSSL}
 \begin{lrbox}{\PiOpenSSL}
@@ -110,5 +110,5 @@ This provenance is sufficient for the equivalence proof with the C code.
 
 The change to the state array structure and the added provenance giving the computation for lookup constants are the only changes to the \cryptol\ from the \fips.
 These changes are sufficient for \saw\ to prove the input to output equivalence between the two \cryptol\ specifications for a fixed set of message sizes.
-And they are sufficient to prove the equivalence to the actual C code in \openssl\ in the \keccak function for any arbitrary state.
+And they are sufficient to prove the equivalence to the actual C code in \openssl\ in the \keccak\ function for any arbitrary state.
 The result adds more evidence to the ability to prove out implementations of cryptographic primitives when given specifications. 

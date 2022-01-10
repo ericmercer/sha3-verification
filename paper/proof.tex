@@ -38,16 +38,18 @@ The extracted \sawcore\ from the \openssl\ C implementation of \shaThree\ is too
 Adding to the complexity of the equivalence proof is that the \openssl\ implementation changes the meaning of the state $S$ in the algorithm so that it no longer directly matches the meaning defined in the published standard.
 It also changes the computation of the inner \keccak\ functions.
 These changes effectively reorder the matrix definition of the state to be more amenable to memory, and optimize the different functions in \keccak\ to be more efficient when operating on the state.
+This includes using pre-computed constants for $\iota$.
 The changes are significant enough to make it extremely difficult to argue manually that the computation implemented in \openssl\ matches that defined in the standard.
 
 The next step of the equivalence proof creates a \cryptol\ specification that matches the state reordering in the \openssl\ implementation, but still follows the bit-level updates in the \fips\ standard in an effort to show an equivalence between it and the \cryptol\ specification for the standard.
-This new specification is the box in the right middle of \figref{fig:proofStructure} labeled \emph{OpenSSL} with the \emph{CRY} annotation in the upper right corner and is around 129 LOC. \saw\ is not able to reason symbolically about input and digest sizes to construct a general proof of equivalence between the published standard and the \openssl\ \cryptol\ specification with the state reordering, but it is able to prove equivalence between the two specifications given specific sizes for the input and digest.
+It also adds the computation of the constants to the specification.
+This new specification is the box in the right middle of \figref{fig:proofStructure} labeled \emph{OpenSSL} with the \emph{CRY} annotation in the upper right corner and is around 221 LOC. \saw\ is not able to reason symbolically about input and digest sizes to construct a general proof of equivalence between the published standard and the \openssl\ \cryptol\ specification with the state reordering, but it is able to prove equivalence between the two specifications given specific sizes for the input and digest.
 
 A series of \saw\ proofs over a range of input sizes with the digest size fixed at $256$ bits is used to prove the equivalence between the published standard and the \openssl\ \cryptol\ specifications.
-The series of proofs varies the input size from zero bits to $1,087$ bits to reflect the $1,088$ bit rate required for a 256 bit digest.
+The series of proofs varies the input size from zero bits to $1,088$ bits, in one byte increments, to reflect the $1,088$ bit rate required for a 256 bit digest.
 The proofs establish the correctness of the input padding and cover the situation where the padding adds an additional $1,088$ bit block to the input.
 The total running time for these proofs is around 60 hours.
-As such, the meaning of the equivalence arrow between the \emph{Spec} box and the \emph{OpenSSL} box in the middle of the figure is that the two specifications have equivalent computation for a $256$ bit digest for message sizes from $0$ bits to $1,087$ bits.
+As such, the meaning of the equivalence arrow between the \emph{Spec} box and the \emph{OpenSSL} box in the middle of the figure is that the two specifications have equivalent computation for a $256$ bit digest for message sizes from $0$ bits to $1,088$ bits.
 
 \begin{figure*}[t]
   \centering
@@ -67,7 +69,7 @@ The disconnect is largely a result of the C implementation operating in 64-bit w
 The full proof requires overrides.
 
 The proof of equivalence between the specification of \keccak\ and the C implementation of \keccak\ in \openssl\ relies on overrides in \saw\ as shown in \figref{fig:proofStructure2}.
-Here, \saw\ proves equivalence between the bit-level \cryptol\ specifications and the word level C implementation for each of the five functions that comprise one round of \keccak\ given some arbitrary input state.
+Here, \saw\ proves equivalence between the bit-level \cryptol\ specifications and the word level C implementations for each of the five functions that comprise one round of \keccak\ given some arbitrary input state.
 That is the meaning of the left hand side of \figref{fig:proofStructure2}.
 These are equivalent on any state $S$.
 
@@ -82,7 +84,7 @@ As a minor note, the \openssl\ code for the $\iota$ function was modified in one
 
 \tableref{table:stats} is a summary of the cost of the verification in running time and LOCs. These are from fairly banal hardware seen in any laptop.
 The \cryptol\ specification of the \fips\ standard relies on visual inspection and test vectors for equivalence having to look at around 200 LOC.
-The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of the \openssl specification that reorders the state array is limited to the 256 bit digest on input sizes from $0$ bits to $1,087$ bits and takes around 60 hours of computation time.
+The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of the \openssl\ specification that reorders the state array is limited to the 256 bit digest on input sizes from $0$ bits to $1,087$ bits and takes around 60 hours of computation time.
 That is a proof that considers all of \algoref{alg:sha3}.
 The equivalence between the \openssl\ \cryptol\ specification that reorders the state array and the actual C implementation is limited to the \keccak\ algorithm only.
 That is a proof that only considers \lineref{line:keccak} in \algoref{alg:sha3} but holds for any state and is independent of the digest size and rate.

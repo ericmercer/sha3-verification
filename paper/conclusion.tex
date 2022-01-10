@@ -9,7 +9,7 @@ The proof uses a second \cryptol\ specification based on the actual \openssl\ C 
 This specification reorders arrays in the specification to match the C standard following row major order.
 It also includes table lookups for constant values in the computation but it computes those tables to show the provenance of the constants.
 That provenance is needed later for the proof of equivalence with the C code.
-\saw\ proves the input to output relationship equivalent between the \fips\ specification and this revised specification for the 256-bit digest on any message of size $0$ to $1088$ bits.
+\saw\ proves the input to output relationship equivalent between the \fips\ specification and this revised specification for the 256-bit digest on any message of size $0$ to $1,088$ bits.
 
 The final \saw\ proof shows the \keccak\ function in the revised specification is equivalent to the \keccak\ function in the actual C implementation.
 \keccak\ is the core of the \shaThree\ algorithm and the most complex part.

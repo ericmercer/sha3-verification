@@ -1,43 +1,40 @@
-  
-  
-The Secure Hashing Algorithm (SHA) family of cryptography is widely used as a means of providing increased security through generating/verifying digital signatures, deriving keys, and generating pseudorandom bits (\href{https://csrc.nist.gov/publications/detail/fips/202/final}{NIST specification}).  
-The structure and computations of these algorithms is defined by NIST in mathematical specifications.  
-Because these specifications are just figures on a page, any assurance of correctness of an algorithm’s implementation is dependent on a visual review of the code coupled with a small sampling of test vectors.
+This paper discusses an automated proof of the \emph{Secure Hash Algorithm 3} (\shaThree) in \openssl\ using the \emph{Software Analysis Workbench} by Galois.
+\shaThree\ is the latest algorithm for computing \emph{digests}, or hashes, from data to be published by the \emph{National Institute of Standards and Technology} (\nist).
+The algorithm is the successor to \shaTwo.
+Its intent is to address weaknesses in \shaTwo, and it departs from its predecessors in that it is based on the \keccak\ family of cryptographic primitives \cite{fips202}.
 
-The reliability of this correctness check is often weakened because of the difficulty of performing that visual review.  
-Many implementations of the SHA algorithms go through major rewrites and optimizations which make visual inspection of the code nearly impossible. (Not sure if that’s too strong a claim).
-This work bridges that gap between optimized c code, and the NIST standard.
+\openssl\ is a commercial grade free cryptographic library \cite{openssl}.
+Its implementation of the \emph{Secure Sockets Layer} (SSL) and \emph{Transport Layer Security} protocols are widely deployed on internet facing applications.
+Computing digests is a critical operation in these protocols and is the basis to the security guarantees provide by these protocols.
+Widely deployed implementations, such as \openssl, are especially important to be correct because of the available attack surface to hackers if a vulnerability where discovered in such implementations.
+The seriousness of getting these implementations correct is recently seen in the Apache \texttt{log4j} vulnerability affecting virtually all internet facing servers \cite{log4j}.
 
-Give a brief history of \shaThree. Introduce briefly SAW and Cryptol.
+The \emph{Software Analysis Workbench} (\saw) is a formal verification tool to prove equivalence between \sawcore\ models. \sawcore\ models are defined in the \cryptol\ functional language or extracted from C or Java with \emph{symbolic execution}.
+\cryptol\ itself is designed to specify cryptographic primitives at the bit level.
+\saw\ has been shown capable in proving implementation of cryptographic primitives equivalent to hardware and software implementations \cite{crypt-hi,hard-soft,design-verif}.
+Recent work emphasizes not just the utility of \saw, but the importance of modular decomposition of cryptographic primitives in their definition as that decomposition lends itself to efficient verification in \saw \cite{nfm-us}. 
 
-% Contributions:
+This paper details another example of \saw\ verification only this time it is a proof showing the \openssl\ C implementation of \shaThree\ matches a \cryptol\ specification derived from the published \fips\ standard by \nist\ \cite{fips202}.
+The \cryptol\ specifications, \saw\ scripts, and extracted \sawcore\ model from the \openssl\ C implementation are documented, and available, in a public Github repository for independent verification \cite{repo}.
+The proof relies on two specifications, both created as part of this research, of the \shaThree\ algorithm: one that closely matches the published standard and another incorporating features in the C implementation.
+\saw\ shows an input to output equivalence between these two specifications for the 256 bit digest over a fixed set of message sizes. The proof takes around 60 hours of computation time.
 
-% (1) A Cryptol specification for SHA3 that passes test vectors and is readily comparable to the FIPS 202 specification
-% (2) A Cpyptol specification for OpenSSL's implementation of SHA3 that passes test vectors and is readily comparable to the the OpenSSL C-code—this specification uses in the Keccak core pre-computed tables and a re-ordered state-vector
-% (3) A SAW proof that the FIPS 202 specification is equivalent to the OpenSSL specification
-% (4) A SAW proof that the OpenSSL Keccak specification is equivalent to the OpenSSL C-implementation of the same function for __**all possible state vectors**__
+The proof then turns to the inner \keccak\ function that computes the actual bits for the digest.
+Here it shows that the C implementation exactly matches the \cryptol\ specification on any input.
+The proof requires the use of \emph{overrides} in \saw\ to simplify the extracted model from C after symbolic execution.
+The proof of equivalence between the \keccak\ in C and \cryptol\ takes around 15 minutes of computation time.
 
-% Limitations:
-
-% * Visual inspection and limited test vectors for (1) and (2)
-% * Only provide proof certificates for message sizes of X to Y for digest sizes of … for (3)
-% * Visual inspection only for anything above Keccak for (3) in OpenSSLs C-code
-
-% @Ben: will you clarify your second point on the visual inspection for 2? I think what you are saying is that it is the FIPS 202 spec with the modified state vector that is what is used in OpenSSL, so there is no value in “visual inspection” in that sense. It which case I would restate (2) as
-
-% (2) A Cpyptol specification based on OpenSSL implementation of SHA3 that uses a re-ordered state-vector and pre-computed tables in Keccak for performance gains that passes test vectors
-
-% To a much lesser extent, I'd say another contribution is that we've shown that when a cryptographical spec is designed in a modular way (as the modern SHA3 is compared to SHA2) that facilitates formal verification---at least if using Cryptol and SAW. I believe we showed this by the fact that the SHA3 proofs complete successful for Yices, Z3, and ABC, whereas with our proofs for SHA2 only Yices completed.
-
-\noindent \textbf{Contributions}:
-This paper details the following contributions.
+The proof, with its artifacts in the published repository, make the following contributions:
 \begin{compactitem}
-  \item  A Cryptol specification for \shaThree\ that directly corresponds to the \nist\ \fips\ specification and passes the test vectors provided by the same specification.
-  \item A Cryptol specification based on the \openssl\ implementation of \shaThree\ that uses a reordered state vector and precomputed tables in Keccak for performance gains and passes test vectors
-  \item A \saw\ proof that the \fips\ specification is equivalent to the OpenSSL specification
-  \item A \saw\ proof that the \openssl\ \keccak specification is equivalent to the \openssl\ C-implementation of the same function for all possible state vector input
-  \item Early evidence that modular cryptographic specifications such as \shaThree lend themselves to efficient \saw\ verification against C implementations as opposed to flattened specifications such as \shaTwo. 
+  \item \cryptol\ for \shaThree\ that passes the test vectors and correlates with \fips.
+  \item \cryptol\ for \shaThree\ that uses a reordered memory layout and precomputed tables that correlate with C implementations.
+  \item A \saw\ proof showing the two specifications equivalent for the 256 bit digest over a series of message sizes.
+  \item A \saw\ proof that the \keccak\ specification in \cryptol\ is equivalent to the \openssl\ C implementation of the same function for all inputs.
 \end{compactitem}
+The proof shows that \saw\ is capable of proving equivalence to C implementations of modern cryptographic primitives.
+It also shows that the modular definition of \shaThree\ naturally lends itself to formal verification in \saw.
+The work in its entirety argues the importance of using formal languages such as \cryptol\ for the specification of cryptographic primitives rather than English prose and math.
+It also argues the necessity, and viability, of proving at the intermediate representation level equivalence between cryptographic specifications and actual C implementations.
 
 \begin{comment}
 \noindent \textbf{Limitations}

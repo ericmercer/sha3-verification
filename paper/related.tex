@@ -1,23 +1,24 @@
-Cryptol has been used to formally verify different implementations of the same cryptographic algorithm in the past.
-As a demonstration of Cryptol's applications, Lewis et al \cite{crypt-hi} provided an portions of the Advanced Encryption Standard implemented in the language.
+\cryptol\ has been used to formally verify different implementations of the same cryptographic algorithm in the past.
+As a demonstration of \cryptol, Lewis \emph{et al} provided portions of the \emph{Advanced Encryption Standard} (AES) implemented in the language \cite{crypt-hi}.
 The language has also been used to verify equivalence between Skein Hash algorithm implementations \cite{hard-soft}.
-Cryptol is not limited to hardware, as Browning and Weaver \cite{design-verif} have shown that the language can be tuned to rovide an abstraction of hardware.
-They later provided a proof of equivalence between the FIPS AES specificiation and various optimized Cryptol implementations.
+\cryptol\ is not limited to hardware, as Browning and Weaver \cite{design-verif} have shown that the language can be tuned to provide an abstraction of hardware.
+They later provided a proof of equivalence between the FIPS AES specification and various optimized \cryptol\ implementations.
 For certain tables, they initially demonstrated equivalence through mathematical principles.
 These tables were also proven equivalent to less time-intensive statically defined tables used for the rest of their proofs.
 As the OpenSSL implementation was highly optimized with similar static values, this paper mirrored the method Browning and Weaver outlined.
 The language was also used to verify equivalence between the specification and hardware of the Verilog RTL's pseudorandom number generator \cite{pseudorandom}.
 
-Decker et al's verification of OpenSSL's SHA2-256 implementation served as a direct predecessor to this work \cite{nfm-us}.
-While SHA2 is also part of NIST's Secure Hash Algorithms, its internal structure differs vastly from the more complex and resistant SHA3.
-The SHA2 proof, in turn, expanded the methodology by which Amazon's s2n HMAC was verified \cite{s2n-blog}.
-While SHA3 is not implemented in s2n, the HMAC verificatiprovided a on utilized both a high-level and low-level cryptol specification in a similar manner to this work.
-Both works compared equivalent C and Cryptol specification through SAW.
+Decker et al's verification of OpenSSL's \shaTwo-256 implementation served as a direct predecessor to this work \cite{nfm-us}.
+While \shaTwo is also part of the \nist\ Secure Hash Algorithms, its internal structure differs vastly from the more complex and resistant \shaThree.
+The \shaTwo proof, in turn, expanded the methodology by which Amazon's s2n HMAC was verified \cite{chudov,s2n-blog}.
+While \shaThree is not implemented in s2n, the HMAC verification provided utilized both a high-level and low-level \cryptol\ specification in a similar manner to this work.
+Both works compared equivalent C and \cryptol\ specification through \saw.
+Decker's work is inspired by the \openssl verification of HMAC \cite{beringer}.
 
 Other tools have been used on a wide variety of cryptographic algorithms.
-STP \cite{stp}, a SAT-based procedure, has been used to verify implementation of AES, DES, SHA-1, and other block cipher functions \cite{auto}.
+STP \cite{stp}, a SAT-based procedure, has been used to verify implementation of AES, DES, \shaOne, and other block cipher functions \cite{auto}.
 Isabelle \cite{isabelle} has aided in formal verification of networking protocols \cite{formal-protocols}.
 The Coq \cite{coq} Proof assistant was used to prove equivalence between the OpenSSL, mbedTLS, and NIST implementations of HMAC-DRBG \cite{verified-correctness}.
 Using Jasmin \cite{jasmin}, Barthe et al \cite{hi-assurance} showed that implementations of the ChaCha20 and Poly1305 were equivalent to their specifications.
-Vale has been used to verify the SHA-256 and AES implementations \cite{vale}.
+Vale has been used to verify the \shaTwo-256 and AES implementations \cite{vale}.
 More close to home, the VeriHash framework demonstrated a bug in the RHash \cite{rhash} implementation of SHA3-256 \cite{hash-functions}.

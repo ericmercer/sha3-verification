@@ -32,11 +32,11 @@ Give a brief history of \shaThree. Introduce briefly SAW and Cryptol.
 \noindent \textbf{Contributions}:
 This paper details the following contributions.
 \begin{compactitem}
-  \item  A Cryptol specification for \texttt{SHA3} that directly corresponds to the \texttt{FIPS} 202 specification and passes the test vectors provided by the same specification.
-  \item A Cryptol specification based on the OpenSSL implementation of \texttt{SHA3} that uses a reordered state vector and precomputed tables in Keccak for performance gains and passes test vectors
-  \item A \texttt{SAW} proof that the \texttt{FIPS} 202 specification is equivalent to the OpenSSL specification
-  \item A \texttt{SAW} proof that the OpenSSL Keccak specification is equivalent to the OpenSSL C-implementation of the same function for all possible state vector input
-  \item Early evidence that modular cryptographic specifications such as \texttt{SHA3} lend themselves to efficient \texttt{SAW} verification against C implementations as opposed to flattened specifications such as \texttt{SHA2} 
+  \item  A Cryptol specification for \shaThree\ that directly corresponds to the \nist\ \fips\ specification and passes the test vectors provided by the same specification.
+  \item A Cryptol specification based on the \openssl\ implementation of \shaThree\ that uses a reordered state vector and precomputed tables in Keccak for performance gains and passes test vectors
+  \item A \saw\ proof that the \fips\ specification is equivalent to the OpenSSL specification
+  \item A \saw\ proof that the \openssl\ \keccak specification is equivalent to the \openssl\ C-implementation of the same function for all possible state vector input
+  \item Early evidence that modular cryptographic specifications such as \shaThree lend themselves to efficient \saw\ verification against C implementations as opposed to flattened specifications such as \shaTwo. 
 \end{compactitem}
 
 \begin{comment}

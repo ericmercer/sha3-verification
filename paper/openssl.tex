@@ -107,3 +107,8 @@ The \openssl\ implementation hardcodes these constants in tables without the pro
 The new \cryptol\ specification for the \openssl\ uses the same lookup tables, but it differs from the \openssl\ implementation in that it computes the lookup tables once so that the values in the table now have provenance.
 This provenance is sufficient for the equivalence proof with the C code.
 \figref{fig:iota} shows the $\iota$ function that uses the computed lookup table.
+
+The change to the state array structure and the added provenance giving the computation for lookup constants are the only changes to the \cryptol\ from the \fips.
+These changes are sufficient for \saw\ to prove the input to output equivalence between the two \cryptol\ specifications for a fixed set of message sizes.
+And they are sufficient to prove the equivalence to the actual C code in \openssl\ in the \keccak function for any arbitrary state.
+The result adds more evidence to the ability to prove out implementations of cryptographic primitives when given specifications. 

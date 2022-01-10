@@ -14,7 +14,7 @@ That provenance is needed later for the proof of equivalence with the C code.
 The final \saw\ proof shows the \keccak\ function in the revised specification is equivalent to the \keccak\ function in the actual C implementation.
 \keccak\ is the core of the \shaThree\ algorithm and the most complex part.
 The proof relies of the use of overrides.
-\saw\ proves the \cryptol\ specifications of the five inner \keccak functions equivalent to their C counterparts and replaces them in the C code with the \sawcore\ from the \cryptol.
+\saw\ proves the \cryptol\ specifications of the five inner \keccak\ functions equivalent to their C counterparts and replaces them in the C code with the \sawcore\ from the \cryptol.
 With the overrides, \saw\ proves the equivalence for \keccak\ in \cryptol\ and C over any input.
 
 Future work is to prove out the equivalence of the input padding and the squeeze part of the \shaThree\ computation.
@@ -22,4 +22,3 @@ These proofs are complicated by the typing in \cryptol\ and the layout of bytes 
 There is also some effort to show the equivalence for the other digest sizes.
 Other work looks to accomplish a proof of a Dafny implementation of \shaThree.
 Dafny synthesizes to several different backend languages making a proven \shaThree\ implementation very interesting.
-

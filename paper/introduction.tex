@@ -11,7 +11,7 @@ The seriousness of getting these implementations correct is recently seen in the
 
 The \emph{Software Analysis Workbench} (\saw) is a formal verification tool to prove equivalence between \sawcore\ models. \sawcore\ models are defined in the \cryptol\ functional language or extracted from C or Java with \emph{symbolic execution}.
 \cryptol\ itself is designed to specify cryptographic primitives at the bit level.
-\saw\ has been shown capable in proving implementation of cryptographic primitives equivalent to hardware and software implementations \cite{crypt-hi,hard-soft,design-verif}.
+\saw\ has been shown capable in proving implementations of cryptographic primitives equivalent to hardware and software implementations \cite{crypt-hi,hard-soft,design-verif}.
 Recent work emphasizes not just the utility of \saw, but the importance of modular decomposition of cryptographic primitives in their definition as that decomposition lends itself to efficient verification in \saw \cite{nfm-us}. 
 
 This paper details another example of \saw\ verification only this time it is a proof showing the \openssl\ C implementation of \shaThree\ matches a \cryptol\ specification derived from the published \fips\ standard by \nist\ \cite{fips202}.

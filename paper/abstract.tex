@@ -1,10 +1,11 @@
+This paper discusses a proof of \shaThree\ in \openssl.
 \shaThree\ is the new standard from \nist\ for computing digests. 
 \openssl\ is one of the most widely used implementations of cryptographic protocols.
 \cryptol\ and the Software Analysis Workbench (\saw) are a language and verification engine to specify cryptographic primitives and prove equivalence to implementations.
-As digests are the basis for all cryptographic protocols, the research in this paper is an automated \saw\ proof of equivalence between the \shaThree\ standard and the actual \openssl\ implementation in C.
-The research contributes \cryptol\ specifications for the published standard and the \openssl\ implementation of the standard with its several changes.
+As digests are the basis for all cryptographic protocols, the research in this paper is an automated \saw\ proof of equivalence between the \shaThree\ standard and its \openssl\ implementation in C.
+The research contributes \cryptol\ specifications for the standard.
 The equivalence proof shows the importance of overrides in \saw\ that replace models from C code with those from \cryptol\ to reduce the complexity of the proof obligations that must be accomplished relative to the implementation in C.
-The research establishes the viability of verifying modern cryptographic primitives and the importance of modularity in their definitions, and implementations, for overrides.
+The research establishes the viability of verifying modern cryptographic primitives and the importance of modularity in their definitions, and implementations, for overrides to manage complexity.
 
 % The \keccak\ function in the SHA-3 NIST standard is responsible for the major computations of all SHA-3 hash constructs.
 % These constructs form the basis for modern secure hashing.

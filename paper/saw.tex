@@ -21,7 +21,7 @@ When rewriting is not sufficient, the equivalence between two models is reduced 
 \saw\ supports hierarchical reasoning with \emph{overrides}.
 An override replaces one \sawcore\ model with another in the formal analysis.
 As an example, consider a C function \texttt{a}() that itself calls another C function as part of its implementation: \texttt{T a()} \{\texttt{... b() ...}\}.
-The \sawcore\ from symbolic executions for \texttt{a()} of necessity inlines and executes the code for \texttt{b()}, and as a result, yields a model in \sawcore\ that is to big and complex to accomplish the equivalence proof between \texttt{a()} and the \cryptol\ specification of \texttt{a()}.
+The \sawcore\ generated from symbolic executions for \texttt{a()} of necessity inlines and executes the code for \texttt{b()}, and as a result, yields a model in \sawcore\ that is to big and complex to accomplish the equivalence proof between \texttt{a()} and the \cryptol\ specification of \texttt{a()}.
 Now suppose that \texttt{b()} is specified in \cryptol.
 If \saw\ is able to prove that the specification for \texttt{b()} and its C implementation are equivalent, then after symbolic execution an override is able to replace \texttt{b()} in \texttt{a()} with the \sawcore\ from the \cryptol\ for \texttt{b()}.
 

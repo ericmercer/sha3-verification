@@ -310,3 +310,43 @@ isbn="978-3-030-76384-8"
   title  = "Apache Log4j Vulnerability Guidance",
   url = "https://www.cisa.gov/uscert/apache-log4j-vulnerability-guidance"
 }
+
+@INPROCEEDINGS{9152808,
+  author={Protzenko, Jonathan and Parno, Bryan and Fromherz, Aymeric and Hawblitzel, Chris and Polubelova, Marina and Bhargavan, Karthikeyan and Beurdouche, Benjamin and Choi, Joonwon and Delignat-Lavaud, Antoine and Fournet, Cédric and Kulatova, Natalia and Ramananandro, Tahina and Rastogi, Aseem and Swamy, Nikhil and Wintersteiger, Christoph M. and Zanella-Beguelin, Santiago},
+  booktitle={2020 IEEE Symposium on Security and Privacy (SP)}, 
+  title={EverCrypt: A Fast, Verified, Cross-Platform Cryptographic Provider}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={983-1002},
+  doi={10.1109/SP40000.2020.00114}}
+
+@inproceedings{10.1145/3319535.3363211,
+author = {Almeida, Jos\'{e} Bacelar and Baritel-Ruet, C\'{e}cile and Barbosa, Manuel and Barthe, Gilles and Dupressoir, Fran\c{c}ois and Gr\'{e}goire, Benjamin and Laporte, Vincent and Oliveira, Tiago and Stoughton, Alley and Strub, Pierre-Yves},
+title = {Machine-Checked Proofs for Cryptographic Standards: Indifferentiability of Sponge and Secure High-Assurance Implementations of SHA-3},
+year = {2019},
+isbn = {9781450367479},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3319535.3363211},
+doi = {10.1145/3319535.3363211},
+abstract = {We present a high-assurance and high-speed implementation of the SHA-3 hash function. Our implementation is written in the Jasmin programming language, and is formally verified for functional correctness, provable security and timing attack resistance in the EasyCrypt proof assistant. Our implementation is the first to achieve simultaneously the four desirable properties (efficiency, correctness, provable security, and side-channel protection) for a non-trivial cryptographic primitive. Concretely, our mechanized proofs show that: 1) the SHA-3 hash function is indifferentiable from a random oracle, and thus is resistant against collision, first and second preimage attacks; 2) the SHA-3 hash function is correctly implemented by a vectorized x86 implementation. Furthermore, the implementation is provably protected against timing attacks in an idealized model of timing leaks. The proofs include new EasyCrypt libraries of independent interest for programmable random oracles and modular indifferentiability proofs.},
+booktitle = {Proceedings of the 2019 ACM SIGSAC Conference on Computer and Communications Security},
+pages = {1607–1622},
+numpages = {16},
+keywords = {EasyCrypt, SHA-3, Jasmin, indifferentiability, high-assurance cryptography},
+location = {London, United Kingdom},
+series = {CCS '19}
+}
+
+@misc{easycrypt,
+  key = {easycrypt},
+  title  = "EasyCrypt: Computer-Aided Cryptographic Proofs",
+  url = "https://github.com/EasyCrypt/easycrypt"
+}
+
+@misc{fstar,
+  key = {fstar},
+  title  = "F* Programming Language",
+  url = "https://www.fstar-lang.org/"
+}

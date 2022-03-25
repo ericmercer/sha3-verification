@@ -1,3 +1,18 @@
+Almeida et al give a formal specification of \shaThree\ in Jasmin \cite{10.1145/3319535.3363211}.
+They then prove that \shaThree\ is resistant to collisions, correctly implemented by Jasmin in vectorized x86, and that implementation is resistant to side-channel attacks.
+The proofs are mechanized and carried out by the EasyCrypt proof assistant \cite{easycrypt}.
+The vectorized implementation is performant and efficient.
+
+EverCrypt from Protzenko et al is a library of verified cryptographic primitives including several state of art algorithms for computing digests \cite{9152808}.
+Here the algorithms are specified in F* \cite{fstar}.
+Automated proofs of properties of the crypto-primitives are done with a weakest-precondition calculus.
+As subset of F* is compilable to C the library is compiled to different target backends.
+The resulting library is performant and efficient.
+
+The work is this paper differs from the these related efforts in that this work does not prove properties of \shaThree\ itself but rather proves an existing implementation of \shaThree\ is correct relative to the published standard.
+Here the verification effort is to prove \openssl\ correct in its implementation of \shaThree.
+\openssl\ being a widely deployed implementation written for performance not thinking of verification makes it an interesting target for formal verification and an interesting case study for \saw.
+
 \cryptol\ has been used to formally verify different implementations of the same cryptographic algorithm in the past.
 As a demonstration of \cryptol, Lewis \emph{et al} provided portions of the \emph{Advanced Encryption Standard} (AES) implemented in the language \cite{crypt-hi}.
 The language has also been used to verify equivalence between Skein Hash algorithm implementations \cite{hard-soft}.

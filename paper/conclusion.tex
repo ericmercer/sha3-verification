@@ -1,9 +1,8 @@
 This paper presents the proof of the \shaThree\ implementation in \openssl\ using the \saw\ tool.
 The proof is accomplished by writing a \cryptol\ specification for the \nist\ \fips\ publication that defines the \shaThree\ algorithm.
 The \cryptol\ specification is aided with two additional \cryptol\ library functions, the for-method and while-method, to hide the functional list comprehensions.
-The for-method being a parallel-for operating on each element in a list.
-The while-method being iteration over a list.
-The \cryptol\ is shown equivalent to the \fips\ standard though visual inspection and input to output matching on published test vectors.
+The for-method is a parallel-for operating on each element in a list, and the while-method is a list iteration.
+The \cryptol\ is shown equivalent to the \fips\ standard through visual inspection and input to output matching on published test vectors.
 
 The proof uses a second \cryptol\ specification based on the actual \openssl\ C implementation of \shaThree.
 This specification reorders arrays in the specification to match the C standard following row major order.

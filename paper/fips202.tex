@@ -110,13 +110,7 @@ It hides the list comprehensions to simplify the task of visual inspection for e
             else rs !0 @0 where;\label{line:return};
               rs = [0b10000000] #;\label{line:init};
                    [if i <= t % 255 then;\label{line:compute};
-                      (take'{8} ([(r@0) ^ (r@8),
-                                   r@1, r@2, r@3, 
-                                  (r@4) ^ (r@8),
-                                  (r@5) ^ (r@8),
-                                  (r@6) ^ (r@8),
-                                   r@7,r@8])
-                        where r = [0] # (rs @(i - 1)))
+                      ((nextR r) where r = [0] # (rs @(i - 1)))
                     else rs @(i - 1);\label{line:stutter};
                    | i <- [1..254]];\label{line:alliters};
   \end{lstlisting}
@@ -141,13 +135,7 @@ It hides the list comprehensions to simplify the task of visual inspection for e
                         (&state -> state.i <= t % 255);\label{line:cond};
                         (&state -> {
                           i = state.i + 1,;\label{line:inc};
-                          R = (take'{8} ([(r@0) ^ (r@8),
-                                           r@1, r@2, r@3,
-                                          (r@4) ^ (r@8),
-                                          (r@5) ^ (r@8),
-                                          (r@6) ^ (r@8),
-                                           r@7, r@8]) 
-                                where r = [0] # state.R)})
+                          R = (nextR r) where r = [0] # state.R})
                  ).R @0;\label{line:libreturn};
   \end{lstlisting}
 \end{lrbox}
@@ -182,15 +170,15 @@ The computation of the list of 8-bit values follows.
 \begin{figure}[t]
   \begin{center}
     \begin{tabular}{l}
-      \scalebox{0.7}{\usebox{\RcCry}} \\ \\
+      \usebox{\RcCry} \\ \\
       \multicolumn{1}{c}{(a)} \\ \\
       \usebox{\whilemethod} \\ \\
       \multicolumn{1}{c}{(b)} \\ \\ 
-      \scalebox{0.7}{\usebox{\RcCryLib}} \\ \\
+      \usebox{\RcCryLib} \\ \\
       \multicolumn{1}{c}{(c)}
     \end{tabular}
   \end{center}
-  \caption{The \emph{rc} function in \cryptol. (b) The \cryptol\ with list comprehensions. (b) The recursive while-method definition. (c) The \cryptol\ with the while-method.}
+  \caption{The \emph{rc} function in \cryptol. (a) The \cryptol\ with list comprehensions. (b) The recursive while-method definition. (c) The \cryptol\ with the while-method.}
   \label{fig:rccry}
 \end{figure}
 

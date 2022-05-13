@@ -7,11 +7,11 @@
   
 \end{figure*}
 
-The goal of the work presented in this paper is to prove the \openssl\ implementation of \shaThree\ matches the \fips\ publication by \nist.
+The goal of the work presented in this paper is to prove the \openssl\ implementation of \shaThree\ matches the \fips\ specification by \nist.
 \figref{fig:proofStructure} illustrates the proof strategy.
 The proof begins on the left of the figure with the box labeled \emph{NIST Standard}. 
-This box represents the \fips\ standard that defines the \shaThree\ algorithm with English prose and math.
-The standard also provides several test inputs with the corresponding expected digests.
+This box represents the \fips\ specification that defines the \shaThree\ algorithm with English prose and math.
+The specification also provides several test inputs with the corresponding expected digests.
 The first step of the proof reproduces the \fips\ \shaThree\ description in \cryptol.
 That is the box to the right of the \emph{NIST Standard} box labeled \emph{Spec}.
 
@@ -37,7 +37,7 @@ The equivalence arrow between the \emph{NIST Standard} box and the \emph{Spec} b
 The extracted \sawcore\ from the \openssl\ C implementation of \shaThree\ is too big and complex for \saw\ to reason about directly.
 Adding to the complexity of the equivalence proof is that the \openssl\ implementation changes the meaning of the state $S$ in the algorithm so that it no longer directly matches the meaning defined in the published standard.
 It also changes the computation of the inner \keccak\ functions.
-These changes effectively reorder the matrix definition of the state to be more amenable to memory, and optimize the different functions in \keccak\ to be more efficient when operating on the state.
+These changes effectively reorder the matrix definition of the state to be more amenable to memory and optimize the different functions in \keccak\ to be more efficient when operating on the state.
 This includes using pre-computed constants for $\iota$.
 The changes are significant enough to make it extremely difficult to argue manually that the computation implemented in \openssl\ matches that defined in the standard.
 
@@ -84,7 +84,7 @@ As a minor note, the \openssl\ code for the $\iota$ function was modified in one
 
 \tableref{table:stats} is a summary of the cost of the verification in running time and LOCs. These are from fairly banal hardware seen in any laptop.
 The \cryptol\ specification of the \fips\ standard relies on visual inspection and test vectors for equivalence having to look at around 200 LOC.
-The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of the \openssl\ specification that reorders the state array is limited to the 256 bit digest on input sizes from $0$ bits to $1,087$ bits and takes around 60 hours of computation time.
+The equivalence between the \cryptol\ specification of the standard and the \cryptol\ specification of the \openssl\ specification that reorders the state array is limited to the 256 bit digest on input sizes from $0$ bits to $1,088$ bits and takes around 60 hours of computation time.
 That is a proof that considers all of \algoref{alg:sha3}.
 The equivalence between the \openssl\ \cryptol\ specification that reorders the state array and the actual C implementation is limited to the \keccak\ algorithm only.
 That is a proof that only considers \lineref{line:keccak} in \algoref{alg:sha3} but holds for any state and is independent of the digest size and rate.

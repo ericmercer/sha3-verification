@@ -4,7 +4,7 @@
     \Require $n \geq 0$ and $(d,r) \in \{(224, 1152)\ (256, 1088)\ (384, 832)\ (512, 576)\}$
     \Ensure $D =$ \shaThree(N,d,r)
     \State $p_0, \ldots, p_m = \mathtt{pad}(N, r)$\label{line:pad}
-    \State $A = 0_0, \ldots, 0_{1599}$\label{line:init}
+    \State $A = 0_0, \ldots, 0_{1599}$\label{line:initkeccak}
     \For{$p_i = p_0, \dots, p_m$}
       \State $A = A\ \mathbf{xor}\ \mathtt{zeroExtend}(p_i, a-r)$\label{line:absorb}
       \State $A =$ \keccak$(A)$\label{line:keccak}
@@ -15,7 +15,7 @@
 
 \shaThree\ uses \emph{sponge construction} to generate hashes as shown in \algoref{alg:sha3} (see \nist\ \fips\ \cite{fips202}).
 Sponge construction \emph{absorbs} data into an internal state $A$ at a rate of $r$ bits per cycle (\lineref{line:absorb} and \lineref{line:keccak}), transforming the state on each cycle, and once all the data is absorbed, then it \emph{squeezes} out a final $d$-bit digest (\lineref{line:squeeze}).
-The transformation function, \keccak-f[1600], simply \keccak\ in the rest of this presentation, defines the size of the state $A$ to be $a = 1600$ bits, which is initialized to 0 (\lineref{line:init}).
+The transformation function, \keccak-f[1600], simply \keccak\ in the rest of this presentation, defines the size of the state $A$ to be $a = 1600$ bits, which is initialized to 0 (\lineref{line:initkeccak}).
 
 The state itself consists of $r$ bits that are written or read plus a capacity of $c = s - r$ bits that are untouched by input or output.
 The \nist\ standard defines pairs of allowed hash sizes and rates.

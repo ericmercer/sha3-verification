@@ -1,4 +1,4 @@
-This paper discusses an automated proof of the \emph{Secure Hash Algorithm 3} (\shaThree) in \openssl\ using the \emph{Software Analysis Workbench} by Galois.
+This paper discusses an automated proof of the \emph{Secure Hash Algorithm 3} (\shaThree) in \openssl\ using the \emph{Software Analysis Workbench} (\saw) by Galois.
 \shaThree\ is the latest algorithm for computing \emph{digests}, or hashes, from data to be published by the \emph{National Institute of Standards and Technology} (\nist).
 The algorithm is the successor to \shaTwo.
 Its intent is to address weaknesses in \shaTwo, and it departs from its predecessors in that it is based on the \keccak\ family of cryptographic primitives \cite{fips202}.
@@ -9,7 +9,7 @@ Computing digests is a critical operation in these protocols and is the basis to
 Widely deployed implementations, such as \openssl, are especially important to be correct because of the available attack surface to hackers if a vulnerability were discovered in such implementations.
 The seriousness of getting these implementations correct is recently seen in the Apache \texttt{log4j} vulnerability affecting virtually all internet facing servers \cite{log4j}.
 
-The \emph{Software Analysis Workbench} (\saw) is a formal verification tool to prove equivalence between \sawcore\ models. \sawcore\ models are defined in the \cryptol\ functional language or extracted from C or Java with \emph{symbolic execution}.
+\saw\ is a formal verification tool to prove equivalence between \sawcore\ models. \sawcore\ models are defined in the \cryptol\ functional language or extracted from C or Java with \emph{symbolic execution}.
 \cryptol\ itself is designed to specify cryptographic primitives at the bit level.
 \saw\ has been shown capable in proving implementations of cryptographic primitives equivalent to hardware and software implementations \cite{crypt-hi,hard-soft,design-verif}.
 Recent work emphasizes not just the utility of \saw, but the importance of modular decomposition of cryptographic primitives in their definition as that decomposition lends itself to efficient verification in \saw\ \cite{nfm-us}. 
